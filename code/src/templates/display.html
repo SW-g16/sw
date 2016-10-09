@@ -4,14 +4,43 @@
     <meta charset="UTF-8">
     <title>Display Data</title>
     {% include 'shared_head.html' %}
+
+    <script>
+        var STORE_ENDPOINT = "{{store_endpoint}}";
+        var DB_NS = "{{db_ns}}";
+        var PREFIX = "@prefix {{db_ns}}: <http://www.{{website}}/{{db_name}}/>. ";
+        var WEBSITE = "{{ website }}";
+        var DB_NAME = "{{ db_name }}";
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="static/js/d3_interface.js"></script>
     <script src="static/js/display.js"></script>
+
 </head>
 <body>
 
 {% include 'header.html' %}
 <div class="container">
 
+
+
+    <div id="status">loading...</div>
+
+    <script>
+        var triples = parse_triples("{{result}}");
+
+    </script>
+
 <h1>Display Data</h1>
+<div id="buttons" style="display: none;">
+<button onclick="display_list('tabul',triples)">list</button>
+<button onclick="display_network(triples)">network graph</button>
+    <script>
+        document.getElementById('status').style.display = 'none';
+        document.getElementById('buttons').style.display = 'inline-block';</script>
+</div>
+<div id="net"><!--network graph container--></div>
 
 <table class="table-striped">
     <thead>
@@ -24,7 +53,7 @@
     <tbody id="tabul"></tbody>
 </table>
 
-<script>display_stuff('tabul',$('<div/>').html("{{result}}").text().split('\n'))</script>
 </div>
+
 </body>
 </html>

@@ -50,18 +50,15 @@ function send_massive_query(){
 	var uniqueArray = query_parts.filter(function(item, pos) {return query_parts.indexOf(item) == pos;});
 	var q = PREFIX;
 	for (var i in uniqueArray) q += uniqueArray[i];
-	console.log(q)
 	$.post('/store',data={'data': q}, console.log);
 }
 
 function import_data(){
 
-	var stringified, uri;
-
 	// get list of bills
 
 	num_queries_waited_for++;
-	updateCounter()
+	updateCounter();
 	$.getJSON({
 		url:"https://www.govtrack.us/api/v2/vote",
 		success:function(d){
@@ -71,7 +68,7 @@ function import_data(){
 				process_bill(bill_uri,bills[i].question);
 				var votes_url = "https://www.govtrack.us/api/v2/vote_voter?vote="+bills[i].id;
 				num_queries_waited_for++;
-				updateCounter()
+				updateCounter();
 				$.getJSON({
 					url: votes_url,
 					success:function(s){
