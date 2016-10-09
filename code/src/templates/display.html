@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Data</title>
+    {% include 'shared_head.html' %}
+</head>
+<body>
+
+
+{% include 'header.html' %}
+
+<h1>Display Data</h1>
+
+<table class="table-striped">
+
+
+    <thead>
+    <tr>
+        <th>Subject</th>
+        <th>Predicate</th>
+        <th>Object</th>
+    </tr>
+    </thead>
+
+    <tbody id="tabul"></tbody>
+</table>
+
+<script>
+
+    function escapeHtml(unsafe) {
+        return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+    }
+
+    function ce(key){
+        return document.createElement(key);
+    }
+
+    function lol(string){
+        var arr = string.split(' '), result = arr.splice(0,2);
+        result.push(arr.join(' '));
+        return result;
+    }
+
+    var d = $('<div/>').html("{{result}}").text().split('\n');
+    var triples = [];
+    for (var i in d){
+        if (d[i].length>1) {
+
+            triples.push(lol(d[i]));
+        }
+    }
+    for (var r in triples){
+        var tr = ce('tr');
+        for (var c in triples[r]){
+            var td = ce('td');
+            td.className = 'col-sm-4';
+            td.innerHTML = escapeHtml(triples[r][c]);
+            tr.appendChild(td);
+        }
+        console.log(triples[r]);
+        document.getElementById('tabul').appendChild(tr);
+    }
+</script>
+
+</body>
+</html>

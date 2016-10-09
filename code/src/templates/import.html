@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		{% include 'shared_head.html' %}
+
+		<title>Import Data
+        </title>
+
+		<script>
+			var STORE_ENDPOINT = "{{store_endpoint}}";
+			var DB_NS = "{{db_ns}}"
+			var PREFIX = "@prefix {{db_ns}}: <http://www.{{website}}/{{db_name}}/>. ";
+            console.log(STORE_ENDPOINT,DB_NS,PREFIX)
+
+		</script>
+
+		<script src="static/js/import.js"></script>
+
+	</head>
+
+	<body>
+
+		{% include 'header.html' %}
+
+		<div class="container">
+
+			<h1>Custom Database filler</h1>
+
+			<p>
+				This tool gets JSON data from <a href="govtrack.us">govtrack.us</a>
+                and uses it to generate semantic data.
+				<b>Before using this tool,</b> create a stardog database called '{{db_name}}' at {{store_endpoint}}.
+                If your stardog instance runs at a different location,
+                or if you want a different database name, adjust the constants in app.py accordingly.
+            </p>
+
+			<button onclick="init()">Import data from govtrack.us</button>
+
+			<div id="counter-container" style="display:none">
+				<span>Waiting for </span>
+				<span id="count"></span>
+				<span> queries...</span>
+			</div>
+		</div>
+
+	</body>
+
+</html>
