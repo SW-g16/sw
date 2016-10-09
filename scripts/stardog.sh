@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # this script starts stardog, or forces a restart if it's already running
 
 cd ~/Software/stardog-4.1.3
