@@ -78,14 +78,37 @@ function start() {
 
     node.enter()
         .append("g")
+        .on("click",function(d){
+            var l;
+            var type_key = d.id[0]
+            switch (type_key){
+                case 'a':{
+                    // agent
+                    l = 'https://www.govtrack.us/api/v2/person/' + d.id.substring(1);
+                }
+                break;
+                case 'b':{
+                    // bill
+                    l = 'https://www.govtrack.us/api/v2/bill/' + d.id.substring(1);
+                }
+            }
+            window.open(l,'_blank');
+        })
+        .on("mouseover", function(d) {
+            var g = d3.select(this);
+            var info = g.append('text')
+                .classed('info', true)
+                .attr('x', 20)
+                .attr('y', 10)
+                .text(d.id);
+        })
+        .on("mouseout", function() {
+            // Remove the info text on mouse out.
+            d3.select(this).select('text.info').remove();
+        })
         .append("circle")
         .attr("class", function(d) {return "node " + d.id;})
         .attr("r", 8);
-
-    node.append("text")
-        .attr("dx", 12)
-        .attr("dy", ".35em")
-        .text(function(d) {return d.id});
 
     node.exit().remove();
 
