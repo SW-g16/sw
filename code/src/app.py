@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, url_for, request, jsonify
 from SPARQLWrapper import SPARQLWrapper, RDF, JSON
-from os import listdir
-from os.path import isfile, join
 import json
 import requests
 import traceback
@@ -17,12 +15,12 @@ WEBSITE = 'votes.example.com'  # arbitrary
 
 
 def query_our_db(query):
-    sparql = SPARQLWrapper(ENDPOINT + DB_NAME)
-    sparql.setQuery(query)
-    sparql.setReturnFormat('rdf')
-    sparql.addParameter('Accept', 'application/sparql-results+json,')
-    sparql.addParameter('reasoning', 'true')
-    return json.dumps(sparql.query().convert())
+    s = SPARQLWrapper(ENDPOINT + DB_NAME)
+    s.setQuery(query)
+    s.setReturnFormat('rdf')
+    s.addParameter('Accept', 'application/sparql-results+json,')
+    s.addParameter('reasoning', 'true')
+    return json.dumps(s.query().convert())
 
 
 @app.route('/display', methods=['GET'])
@@ -61,25 +59,25 @@ def sparql():
     return_format = request.args.get('format', 'RDF')
 
     if endpoint and query:
-        sparql = SPARQLWrapper(endpoint)
+        s = SPARQLWrapper(endpoint)
 
-        sparql.setQuery(query)
+        s.setQuery(query)
 
         if return_format == 'RDF':
-            sparql.setReturnFormat(RDF)
+            s.setReturnFormat(RDF)
         else:
-            sparql.setReturnFormat(JSON)
-            sparql.addParameter('Accept',
+            s.setReturnFormat(JSON)
+            s.addParameter('Accept',
                                 'application/sparql-results+json')
 
-        sparql.addParameter('reasoning', 'true')
+        s.addParameter('reasoning', 'true')
 
         app.logger.debug('Query:\n{}'.format(query))
 
         app.logger.debug('Querying endpoint {}'.format(endpoint))
 
         try:
-            response = sparql.query().convert()
+            response = s.query().convert()
 
             app.logger.debug('Results were returned, yay!')
 
