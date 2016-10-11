@@ -1,5 +1,18 @@
+/*
+* Visualization
+*
+* This is where we define our visualization(s).
+*
+* todo decide on things to visualize
+* */
 
-var link, node, svg, force, nodes, links, width=1500, height=1500;
+
+var link,
+    node,
+    svg,
+    force,
+    width=2500,
+    height=2500;
 
 function reset() {
 
@@ -11,13 +24,11 @@ function reset() {
         .nodes(nodes)
         .links(links)
         .size([width,height])
-
-        .linkDistance([500])
-        .linkStrength(1)
-
-        .charge([0])
-        .friction(0)
-        .gravity(0.005)
+        .linkStrength(0)
+        .linkDistance(50)
+        .charge(-1)
+        .friction(0.1)
+        .gravity(0)
         .on('tick',tick);
 
     svg = d3.select("body").append("svg")
@@ -46,7 +57,9 @@ function reset() {
         .data(nodes)
         .enter()
         .append('g')
-        .attr('class', 'node');
+        .attr('class', 'node')
+        .attr('stroke',function(d){return d.stroke})
+        .attr('fill',function(d){return d.stroke});
 
     link = svg.selectAll("line")
         .data(links)
@@ -67,7 +80,7 @@ function start() {
         .attr({
             'd': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},
             'class':'link',
-            'stroke-width':'5px',
+            'stroke-width':'1px',
             'stroke':function(d){switch (d.text){case -1:return 'red';case 0:return "grey"; case 1:return 'green'}},
             'id':function(d,i) {return 'edgepath'+i}
         });
@@ -80,17 +93,15 @@ function start() {
         .append("g")
         .on("click",function(d){
             var l;
-            var type_key = d.id[0]
-            switch (type_key){
-                case 'a':{
-                    // agent
-                    l = 'https://www.govtrack.us/api/v2/person/' + d.id.substring(1);
-                }
-                break;
-                case 'b':{
-                    // bill
-                    l = 'https://www.govtrack.us/api/v2/bill/' + d.id.substring(1);
-                }
+            var type_key = d.type
+
+            switch (d.type){
+                case 'person':
+                    l = 'https://www.govtrack.us/api/v2/person/' + d.uri.split('/')[d.uri.split('/').length-1];
+                    break;
+                case 'bill':
+                    l = 'https://www.govtrack.us/api/v2/bill/' + d.uri.split('/')[d.uri.split('/').length-1];
+                    break;
             }
             window.open(l,'_blank');
         })
@@ -108,7 +119,9 @@ function start() {
         })
         .append("circle")
         .attr("class", function(d) {return "node " + d.id;})
-        .attr("r", 8);
+        .attr("r", 2)
+        .attr('stroke',function(d){return d.stroke})
+        .attr('fill',function(d){return d.stroke});
 
     node.exit().remove();
 
@@ -117,7 +130,7 @@ function start() {
 
 function tick() {
 
-    node.attr("transform", function(d) {return 'translate(' + [d.x, d.y] + ')';});
+    node.attr("transform", function(d) {return 'translate(' + [d.x,d.y] + ')';});
 
     link.attr("x1", function(d) {return d.source.x;})
         .attr("y1", function(d) {return d.source.y;})

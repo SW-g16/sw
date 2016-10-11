@@ -1,68 +1,12 @@
 
-function escapeHtml(unsafe) {
+var nodes, links;
 
-    if (isNaN(unsafe))
-        return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    else return unsafe;
-}
+function escapeHtml(unsafe) {return (!isNaN(unsafe))? unsafe: unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");}
 
-function ce(key){
-    return document.createElement(key);
-}
-
-function lol(string){
-    var arr = string.substring(0,string.length-2).split(' '), result = arr.splice(0,2);
-    result.push(arr.join(' '));
-    return result;
-}
-
-function parse_triples(server_response){
-    var d = $('<div/>').html(server_response).text().split('\n');
-    var triples = [];
-    for (var i in d){
-        if (d[i].length>1) {
-            triples.push(lol(d[i]));
-        }
-    }
-
-    var votes = {};
-
-    for (var i=0;i<triples.length;i++){
-        if (triples[i][0][0]=='_'){
-
-            // this is an object with a voter, vote, and stance connected to it.
-            // we shorten the data by saying {voter stance bill}
-            // instead of {obj hasvoter voter, obj hasbill bill, obj hasstance stance}
-
-            // we use the bnode id as an index
-            var index = triples[i][0];
-
-            if (votes[index]==null) votes[index] = [null,null,null];
-
-            if (triples[i][1]=='<http://www.'+WEBSITE+'/'+DB_NAME+'/stance>'){
-                votes[index][1] = parseInt(triples[i][2]);
-            }
-
-            else if (triples[i][1]=='<http://www.'+WEBSITE+'/'+DB_NAME+'/voter>'){
-                var parts = triples[i][2].split('/');
-                votes[index][0] = 'a' + parts[parts.length-1].split('>')[0];
-            }
-
-            else if (triples[i][1]=='<http://www.'+WEBSITE+'/'+DB_NAME+'/bill>') {
-                var parts = triples[i][2].split('=');
-                votes[index][2] = 'b'+parts[parts.length-1].split('>')[0];
-            }
-        }
-    }
-    return votes;
-}
+function ce(key){return document.createElement(key);}
 
 function display_list(table_id, triples){
+    document.getElementById(table_id).style.display='inline-block'
     for (var r in triples){
         var tr = ce('tr');
         for (var c in triples[r]){
@@ -75,25 +19,73 @@ function display_list(table_id, triples){
     }
 }
 
-
-function findOrMake(id,type){
-    // if a node with this id exists, return it
-    // if it doesn't, indicate a new node
-    for (var i in nodes) if (nodes[i].id==id) return nodes[i];
-    return {id:id,type:type};
+function getNode(uri){
+    for (var i in nodes) {
+        if (nodes[i].uri==uri) {
+            return nodes[i];
+        }
+    }
+    return false;
 }
 
-function add_predicate(predicate){
-    var subject = findOrMake(predicate[0],'person'), object = findOrMake(predicate[2],'bill');
-    nodes.push(subject,object);
-    links.push({source:subject,target:object,text:predicate[1]})
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+var id = 0;
+
+function makeNode(uri,type){
+
+    var stroke;
+    switch (type){
+        /* visualization properties for different elements go here */
+        case 'person': stroke='blue';break;
+        case 'bill': stroke='red';break;
+        default:break;
+    }
+
+    var n = {id:id++,uri:uri,type:type,stroke:stroke};
+    nodes.push(n);
+
+    return n;
+}
+
+function getOrMake(uri,type){
+    // if a node with this uri exists, return it.
+
+    var n = getNode(uri);
+    if (n == false) {
+
+        return makeNode(uri,type);
+    }
+    else return n;
+}
+
+function addToVisualization(triple){
+
+    var subject = getOrMake(triple[0],'person'), object = getOrMake(triple[2],'bill');
+    links.push(
+        {
+            source:subject,
+            target:object,
+            text:triple[1]
+        }
+    )
 }
 
 function display_network(triples){
+
+    // (re)set visualizer state
     reset();
-    for (var t in triples) add_predicate(triples[t]);
+
+    // add each triple to the visualization
+    for (var t in triples) addToVisualization(triples[t]);
+
+    // initiate visualization
     start()
 }
+
 
 
 

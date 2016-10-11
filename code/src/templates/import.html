@@ -5,16 +5,15 @@
 
 		{% include 'shared_head.html' %}
 
-		<title>Import Data
-        </title>
+		<title>Import Data</title>
 
 		<script>
-			var STORE_ENDPOINT = "{{store_endpoint}}";
 			var DB_NS = "{{db_ns}}";
-			var PREFIX = "@prefix {{db_ns}}: <http://www.{{website}}/{{db_name}}/>. ";
-            console.log(STORE_ENDPOINT,DB_NS,PREFIX)
+			var PREFIX = "http://www.votes.example.com/votes/";
+            var GT_NS = "{{ gt_ns }}"
+            var GT_PREFIX = "{{ gt_prefix }}"
 
-		</script>
+        </script>
 
 		<script src="static/js/import.js"></script>
 
@@ -29,20 +28,21 @@
 			<h1>Import Data</h1>
 
 			<p>
-				This tool gets JSON data from <a href="govtrack.us">govtrack.us</a>
-                and uses it to generate semantic data.
+				This tool gets JSON data from <a href="govtrack.us">govtrack.us</a> and uses it to generate semantic data.
 				<b>Before using this tool,</b> create a stardog database called '{{db_name}}' at {{store_endpoint}}.
                 If your stardog instance runs at a different location,
                 or if you want a different database name, adjust the constants in app.py accordingly.
             </p>
 
-			<button onclick="init()">Import data from govtrack.us</button>
+			<button class="form-control" id="button" onclick="init()">Import data from govtrack.us</button>
 
 			<div id="counter-container" style="display:none">
 				<span>Waiting for </span>
 				<span id="count"></span>
 				<span> queries...</span>
 			</div>
+
+            <textarea id="q" class="form-control" rows="20">The generated rdf, which is stored to the database, will be printed here. </textarea>
 		</div>
 
 	</body>
