@@ -1,7 +1,7 @@
 # Application Design
 *Semantic Web Course 2016*
 
-*Group 16 - Eirik Kultorp, Ross Chadwick, Ramses IJff*
+*Group 16 - Eirik Kultorp, Ross Chadwick (2533539), Ramses IJff*
 
 ## Goals
 Many governments have began to provide endpoints for their internal data as a way to become more transparent and push for greater public participation.
