@@ -9,22 +9,18 @@
 
         var DB_NS = "{{ db_ns }}";
         var GT_NS = "{{ gt_ns }}";
-
         var GT_PREFIX = "{{ gt_prefix }}";
-        var PREFIXES = [
-            "@prefix {{db_ns}}: <{{ db_prefix }}>. ",
-            "@prefix {{gt_ns}}: <{{ gt_prefix }}>. "
-        ];
 
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-
-    <script src="static/js/d3_interface.js"></script>
-    <script src="static/js/display.js"></script>
+    <script src="static/js/vis/d3_interface.js"></script>
+    <script src="static/js/vis/network-interface.js"></script>
+    <script src="static/js/vis/interaction.js"></script>
     <script src="static/js/parse_triples.js"></script>
 
 </head>
+
 <body>
 
     {% include 'header.html' %}
@@ -37,22 +33,26 @@
 
         <div id="buttons" style="display: none;">
 
-        <button onclick="display_list('tabul',triples)">list</button>
+            <button onclick="display_list('tabul',triples)">list</button>
 
-        <button onclick="display_network(triples)">network graph</button>
+            <button onclick="display_network(triples)">network graph</button>
+
+        </div>
+
+        {% include "network-graph-config.html" %}
+
+        <table class="table-striped" style="display: none">
+            <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Predicate</th>
+                <th>Object</th>
+            </tr>
+            </thead>
+            <tbody id="tabul"></tbody>
+        </table>
 
     </div>
-
-    <table class="table-striped" style="display: none">
-        <thead>
-        <tr>
-            <th>Subject</th>
-            <th>Predicate</th>
-            <th>Object</th>
-        </tr>
-        </thead>
-        <tbody id="tabul"></tbody>
-    </table>
 
     <script>
 
