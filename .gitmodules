@@ -1,0 +1,3 @@
+[submodule "ld-r"]
+	path = ld-r
+	url = https://github.com/ali1k/ld-r.git
