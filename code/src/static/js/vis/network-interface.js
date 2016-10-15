@@ -47,7 +47,3 @@ function display_network(triples){
     // initiate visualization
     d3Network.start()
 }
-
-
-
-

@@ -43,6 +43,7 @@ def display():
 @app.route('/store', methods=['POST'])
 def store():
     import put
+    print request.form['data'].encode('utf-8')
     return put.store(c.ENDPOINT, request.form['data'].encode('utf-8'))
 
 

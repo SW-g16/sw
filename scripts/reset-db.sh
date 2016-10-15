@@ -4,4 +4,4 @@
 
 cd ~/Software/stardog-4.1.3/bin
 ./stardog-admin db drop votes
-./stardog-admin db create -n votes ~/sw-ldr/ontology.ttl
+./stardog-admin db create -n votes ~/sw/ontology.ttl

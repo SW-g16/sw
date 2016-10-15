@@ -44,7 +44,7 @@ def constructData():
 
             text = i['question']
             bill_uri = '<'+GT_PREFIX + 'vote?id='+str(i['id'])+'>'
-            triples.append([bill_uri,'v:text',"\""+text+"\""])
+            triples.append([bill_uri,'v:text',"\""+text.replace('"','').replace('\'','')+"\""])
 
             voting_data = json.loads(urllib2.urlopen(GT_PREFIX+"vote_voter?vote="+str(i['id'])).read())['objects']
 
