@@ -33,12 +33,6 @@ def get_data(endpoint):
 def first_page():
     return render_template('index.html')
 
-
-@app.route('/import')
-def import_():
-    return render_template('import.html', db_prefix=c.DB_PREFIX, db_ns=c.DB_NS, gt_ns=c.GT_NS, gt_prefix=c.GT_PREFIX)
-
-
 @app.route('/display')
 def display():
     r = get_data(c.ENDPOINT)
@@ -49,6 +43,7 @@ def display():
 @app.route('/store', methods=['POST'])
 def store():
     import put
+    print request.form['data'].encode('utf-8')
     return put.store(c.ENDPOINT, request.form['data'].encode('utf-8'))
 
 

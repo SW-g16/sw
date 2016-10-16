@@ -1,0 +1,175 @@
+@prefix : <http://votes.examples.com/ontology/> .
+@prefix v: <http:www.example.com/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://votes.examples.com/ontology/> a owl:Ontology .
+# 
+# 
+# #################################################################
+# #
+# #    Annotation properties
+# #
+# #################################################################
+# 
+# 
+# http:www.example.com/ontology/votesNay
+
+v:votesNay a owl:AnnotationProperty ;
+	rdfs:subPropertyOf v:votesOn .
+
+v:votesOn a owl:AnnotationProperty .
+# 
+# http:www.example.com/ontology/votesYay
+
+v:votesYay a owl:AnnotationProperty ;
+	rdfs:subPropertyOf v:votesOn .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Object Properties
+# #
+# #################################################################
+# 
+# 
+# http://votes.examples.com/ontology/o_00110
+
+:o_00110 a owl:ObjectProperty ;
+	rdfs:domain v:Bill ;
+	rdfs:range _:genid1 .
+
+_:genid1 a owl:Restriction ;
+	owl:onProperty :o_00111 ;
+	owl:someValuesFrom xsd:string .
+
+:o_00110 rdfs:label "text"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00104
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00104> a owl:ObjectProperty ;
+	rdfs:domain v:Voter ;
+	rdfs:range <http://www.co-ode.org/ontologies/ont.owl#o_00088> ;
+	rdfs:label "memberOf"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00105
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00105> a owl:ObjectProperty ;
+	rdfs:label "votesIn"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00106
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00106> a owl:ObjectProperty ;
+	rdfs:domain v:Bill ;
+	rdfs:range <http://www.co-ode.org/ontologies/ont.owl#o_00103> ;
+	rdfs:label "appliesTo"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00107
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00107> a owl:ObjectProperty ;
+	rdfs:domain <http://www.co-ode.org/ontologies/ont.owl#o_00101> ;
+	rdfs:range <http://www.co-ode.org/ontologies/ont.owl#o_00103> ;
+	rdfs:comment "The polity that a voting assembly's can pass legislation onto." ;
+	rdfs:label "legalizesFor"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00108
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00108> a owl:ObjectProperty ;
+	rdfs:subPropertyOf v:votesOn .
+
+v:votesOn a owl:ObjectProperty .
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00108> rdfs:label "votesYay"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00109
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00109> a owl:ObjectProperty ;
+	rdfs:subPropertyOf v:votesOn ;
+	rdfs:label "votesNay"@en .
+# 
+# http:www.example.com/ontology/abstains
+
+v:abstains a owl:ObjectProperty ;
+	rdfs:subPropertyOf v:reactsToVote .
+
+v:reactsToVote a owl:ObjectProperty .
+# 
+# http:www.example.com/ontology/reactsToVote
+
+v:reactsToVote rdfs:domain v:Voter ;
+	rdfs:range v:Bill .
+# 
+# http:www.example.com/ontology/votesOn
+
+v:votesOn rdfs:subPropertyOf v:reactsToVote .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Data properties
+# #
+# #################################################################
+# 
+# 
+# http://votes.examples.com/ontology/o_00111
+
+:o_00111 a owl:DatatypeProperty ;
+	rdfs:label "bill_text"@en .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Classes
+# #
+# #################################################################
+# 
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00088
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00088> a owl:Class ;
+	rdfs:subClassOf <http://www.co-ode.org/ontologies/ont.owl#o_00102> ;
+	rdfs:comment "A collection of relatively likeminded Voters" ;
+	rdfs:label "Party"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00101
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00101> a owl:Class ;
+	rdfs:subClassOf <http://www.co-ode.org/ontologies/ont.owl#o_00102> ;
+	rdfs:comment "A decision-making thing that makes boolean decisions based on the votes of its voters." ;
+	rdfs:label "VotingAssembly"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00102
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00102> a owl:Class ;
+	rdfs:label "Agent"@en .
+# 
+# http://www.co-ode.org/ontologies/ont.owl#o_00103
+
+<http://www.co-ode.org/ontologies/ont.owl#o_00103> a owl:Class ;
+	rdfs:subClassOf <http://www.co-ode.org/ontologies/ont.owl#o_00102> ;
+	rdfs:comment "Something onto which laws are applied" ;
+	rdfs:label "Polity"@en .
+# 
+# http:www.example.com/ontology/Bill
+
+v:Bill a owl:Class .
+# 
+# http:www.example.com/ontology/Voter
+
+v:Voter a owl:Class ;
+	owl:equivalentClass _:genid2 .
+
+_:genid2 a owl:Restriction ;
+	owl:onProperty <http://www.co-ode.org/ontologies/ont.owl#o_00105> ;
+	owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onClass <http://www.co-ode.org/ontologies/ont.owl#o_00101> .
+
+v:Voter rdfs:subClassOf <http://www.co-ode.org/ontologies/ont.owl#o_00102> .
+# 
+# Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi
