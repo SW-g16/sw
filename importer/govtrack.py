@@ -3,58 +3,104 @@ import urllib2
 
 from flask import json
 
-BULK_SIZE = 10 # number of bills to query per bulk
-GT_PREFIX = "https://www.govtrack.us/api/v2/"
+TEST = True
+
+# number of bills to query per bulk
+BULK_SIZE = 100
+if TEST:
+    BULK_SIZE = 3
 
 def constructData():
-    
-    def parseDirection(o):
 
-        if o['value'] == "Yea" or o['key'] == "+":
-            return "v:votesYay"
-        elif o['value'] == "Nay" or o['key'] == "-":
-            return "v:votesNay"
-        elif o['value'] == "Not Voting" or o['key'] == '0':
-            return "v:abstain"
+    def get_data(url):
+        # we get and parse json-encoded data returned by govtrack.
+        return json.loads(urllib2.urlopen(url).read())
 
+    # called once
+    def get_numberOfVoteEvents():
+        return get_data("https://www.govtrack.us/api/v2/vote?limit=0")['meta']['total_count']
+
+    def helloUser(num_voteEvents):
+        print "GovTrack has ", num_voteEvents, " voting events. "
+        print "We get their related data in bulks of ", BULK_SIZE, ' voting events.'
+        print "During testing we limit to 1 bulk. "
+
+    # called numberOfVoters times
+    def get_partyMembership(voter_id):
+        return get_data('https://www.govtrack.us/api/v2/person/' + str(voter_id))['roles'][0]['party']
+
+    # called numberOfVoteEvents / BULK_SIZE times
+    def get_voteEventBulk():
+        return get_data("https://www.govtrack.us/api/v2/vote?offset=" + str(offset) + "&limit=" + str(BULK_SIZE))['objects']
+
+    # called numberOfVoteEvents times
+    def get_votingData(vote_event):
+        return get_data("https://www.govtrack.us/api/v2/vote_voter?vote=" + str(vote_event['id']))['objects']
+
+    def parseVoteEvent(vote_event):
+        return '<https://www.govtrack.us/api/v2/vote?id=' + str(vote_event['id'])+">"
+
+    def cleanString(str):
+        return str.replace('"', '').replace('\'', '')
+
+    def parseBillText(vote_event):
+        return "\"" + cleanString(vote_event['question']) + "\""
+
+    def billTextTriple(vote_event):
+        return [parseVoteEvent(vote_event), 'v:text', parseBillText(vote_event)]
+
+    # called numberOfVoteEvents * numberOfVoters times
     def parseVoter(a):
-        return '<' + GT_PREFIX + 'person/' + str(a) + '>'
+        return '<https://www.govtrack.us/api/v2/person/' + str(a)+">"
 
-    r = urllib2.urlopen(GT_PREFIX+"vote?limit=0").read()
-    number_of_vote_events = json.loads(r)['meta']['total_count']
+    def parseDirection(o):
+        return {'+': 'v:votesYay','-': 'v:votesNay','0': 'v:abstains'}[o['key']]
 
-    print "GovTrack has ", number_of_vote_events , " voting events. "
-    print "We get their related data in bulks of ", BULK_SIZE , ' voting events.'
-    print "During testing we limit to 1 bulk. "
+    def voterVotesTriple(vote,vote_event):
+        return [parseVoter(vote['person']['id']), parseDirection(vote['option']), parseVoteEvent(vote_event)]
+
+
+
+    num_voteEvents = get_numberOfVoteEvents()
+
+    helloUser(num_voteEvents)
+
+
+    bill_text_triples = []
+    voter_vote_triples = []
+    party_membership_dict = {}
 
     offset = 0
 
-    triples = []
+    while (offset < num_voteEvents):
 
-    while (offset<number_of_vote_events):
+        vote_events = get_voteEventBulk()
 
-        r = urllib2.urlopen(GT_PREFIX+"vote?offset="+str(offset)+"&limit="+str(BULK_SIZE)).read()
-        vote_events = json.loads(r)['objects']
+        for vote_event in vote_events:
 
-        triples = []
+            # add the bill text
+            bill_text_triples.append(billTextTriple(vote_event))
 
-        for i in vote_events:
-
-            print i['id']
-
-            text = i['question']
-            bill_uri = '<'+GT_PREFIX + 'vote?id='+str(i['id'])+'>'
-            triples.append([bill_uri,'v:text',"\""+text.replace('"','').replace('\'','')+"\""])
-
-            voting_data = json.loads(urllib2.urlopen(GT_PREFIX+"vote_voter?vote="+str(i['id'])).read())['objects']
+            # get the individual votes
+            voting_data = get_votingData(vote_event)
 
             for vote in voting_data:
-                voter_uri = parseVoter(vote['person']['id'])
-                direction = parseDirection(vote['option'])
-                triples.append([voter_uri,direction,bill_uri])
 
+                if vote['person']['id'] not in party_membership_dict:
+                    party_membership_dict[vote['person']['id']] = get_partyMembership(vote['person']['id'])
+                    print party_membership_dict[vote['person']['id']]
+
+                voter_vote_triples.append(voterVotesTriple(vote, vote_event))
+            break
         offset += BULK_SIZE
-        break
 
+        # to be nice to the data provider during testing
+        if TEST:
+            break
 
-    return triples
+    party_membership_triples = []
+    for k in party_membership_dict:
+        if party_membership_dict[k] is not None:
+            party_membership_triples.append([parseVoter(k),'v:memberOf','"'+party_membership_dict[k]+'"'])
+    print party_membership_triples
+    return bill_text_triples + voter_vote_triples + party_membership_triples
