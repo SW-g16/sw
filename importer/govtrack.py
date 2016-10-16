@@ -25,6 +25,10 @@ def constructData():
         print "We get their related data in bulks of ", BULK_SIZE, ' voting events.'
         print "During testing we limit to 1 bulk. "
 
+    # called numberOfVoters times
+    def get_partyMembership(voter_id):
+        return get_data('https://www.govtrack.us/api/v2/person/' + str(voter_id))['roles'][0]['party']
+
     # called numberOfVoteEvents / BULK_SIZE times
     def get_voteEventBulk():
         return get_data("https://www.govtrack.us/api/v2/vote?offset=" + str(offset) + "&limit=" + str(BULK_SIZE))['objects']
@@ -55,32 +59,48 @@ def constructData():
     def voterVotesTriple(vote,vote_event):
         return [parseVoter(vote['person']['id']), parseDirection(vote['option']), parseVoteEvent(vote_event)]
 
-    offset = 0
 
-    triples = []
 
     num_voteEvents = get_numberOfVoteEvents()
+
+    helloUser(num_voteEvents)
+
+
+    bill_text_triples = []
+    voter_vote_triples = []
+    party_membership_dict = {}
+
+    offset = 0
 
     while (offset < num_voteEvents):
 
         vote_events = get_voteEventBulk()
 
         for vote_event in vote_events:
-            print vote_event['id']
+
             # add the bill text
-            triples.append(billTextTriple(vote_event))
+            bill_text_triples.append(billTextTriple(vote_event))
 
             # get the individual votes
             voting_data = get_votingData(vote_event)
 
             for vote in voting_data:
-                # add individual vote
-                triples.append(voterVotesTriple(vote, vote_event))
 
+                if vote['person']['id'] not in party_membership_dict:
+                    party_membership_dict[vote['person']['id']] = get_partyMembership(vote['person']['id'])
+                    print party_membership_dict[vote['person']['id']]
+
+                voter_vote_triples.append(voterVotesTriple(vote, vote_event))
+            break
         offset += BULK_SIZE
 
         # to be nice to the data provider during testing
         if TEST:
             break
 
-    return triples
+    party_membership_triples = []
+    for k in party_membership_dict:
+        if party_membership_dict[k] is not None:
+            party_membership_triples.append([parseVoter(k),'v:memberOf','"'+party_membership_dict[k]+'"'])
+    print party_membership_triples
+    return bill_text_triples + voter_vote_triples + party_membership_triples
