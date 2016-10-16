@@ -61,6 +61,7 @@ if [ -z "$STARDOG" ]; then
 
   # Add export to profile for persistence
   echo 'export STARDOG='$STARDOG_PATH >> ~/.profile
+  source ~/.profile
 fi
 
 echo 'Stardog directory: '$STARDOG
