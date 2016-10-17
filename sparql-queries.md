@@ -1,9 +1,8 @@
 # SPARQL Queries
 
 ## Endpoints:
-
 ### 1. http://data.consilium.europa.eu/sparql
-**⋅⋅1. Get the act and what each country voted on said act:**
+  1. **Get the act and what each country voted on said act:**
 
 ```
 PREFIX eucodim: <http://data.consilium.europa.eu/data/public_voting/qb/dimensionproperty/>
@@ -18,5 +17,4 @@ where {
   ?observation eucodim:act ?act .
 }
 ORDER BY DESC(?act)
-#LIMIT 50
 ```
