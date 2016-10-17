@@ -43,8 +43,10 @@ echo $ABS_DIR
 
 # If stardog env var is not set...
 if [ -z "$STARDOG" ]; then
-  echo 'Looking for stardog...'
-  find $HOME -iname "*stardog-*" -type d 2> /dev/null
+  if ask "Search for the stardog directory? This may take a while. (default: n)" N; then
+    echo 'Looking for stardog...'
+    find $HOME -iname "*stardog-*" -type d 2> /dev/null
+  fi
 
   answer=0
   while [ $answer == 0 ]
