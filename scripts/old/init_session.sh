@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-cd ~/sw/scripts/
-sh ./stardog.sh &
-sh ./reset-db.sh & 
+cd ~/sw/scripts/old
+sh ./stardog.sh 
+sh ./reset-db.sh 
 sh ./app.sh &
-cd ../ld-r
+cd ../../ld-r
 npm run dev &

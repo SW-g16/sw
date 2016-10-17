@@ -11,7 +11,7 @@ if TEST:
     BULK_SIZE = 3
 
 def constructData():
-
+    
     def get_data(url):
         # we get and parse json-encoded data returned by govtrack.
         return json.loads(urllib2.urlopen(url).read())
@@ -77,7 +77,7 @@ def constructData():
         vote_events = get_voteEventBulk()
 
         for vote_event in vote_events:
-
+            print vote_event['id']
             # add the bill text
             bill_text_triples.append(billTextTriple(vote_event))
 
@@ -85,11 +85,10 @@ def constructData():
             voting_data = get_votingData(vote_event)
 
             for vote in voting_data:
-
                 if vote['person']['id'] not in party_membership_dict:
                     party_membership_dict[vote['person']['id']] = get_partyMembership(vote['person']['id'])
                     print party_membership_dict[vote['person']['id']]
-
+                print 'vote ',vote['id']
                 voter_vote_triples.append(voterVotesTriple(vote, vote_event))
             break
         offset += BULK_SIZE
