@@ -15,17 +15,28 @@ Group 16
 
 // Description of the domain and scope of the ontology, as determined by the application 
 
+Our domain is voting data of official voting assemblies of different countries. 
+We map votes, voters and voting assembly compositions through time. 
+
 ## Ontology Construction Methodology
 
 // 100-200 words
 
 // Description of the methodology that is used in the construction of the ontology 
 
+We construct an ontology which is able to express the information we're interested in. 
+We had an initial data source inspection to see what data is available. 
+Our ontology is not more expressive than what is needed - unused terms would be redundant. 
+See the Conceptualization section for details on the resulting ontology. 
+
+For the practical task of constructing the ontology, we used Protege. 
+
 ## Conceptualization
 
 // 200-300 words
 
-// Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing. The conceptualization should encompass more than 15 classes and at least 5 properties 
+// Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing. 
+// The conceptualization should encompass more than 15 classes and at least 5 properties 
 
 ### Classes
 
