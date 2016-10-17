@@ -9,7 +9,7 @@ TEST = True
 # number of bills to query per bulk
 BULK_SIZE = 100
 if TEST:
-    BULK_SIZE = 5
+    BULK_SIZE = 20
 
 def constructData():
     
@@ -68,20 +68,9 @@ def constructData():
 
     helloUser(num_voteEvents)
 
-
     bill_text_triples = []
     vote_date_triples = []
     voter_vote_triples = []
-    
-    birthday_dict = {}
-    party_membership_dict = {}
-    
-
-    # instead of voter age, we should get birthdays, and deduce age for each VotingEvent
-    #   (as age is different for different VotingEvents).
-    # because this is more complicated, we leave it out for now and do this instead,
-    #   in order to meet the assignment requirements.
-    voter_age_dict = {}
 
     offset = 0
     def parseDate(date):
@@ -90,9 +79,20 @@ def constructData():
     def parseVoteDate(voting_data):
         return [parseVoteEvent(voting_data),'rdfs:date',parseDate(voting_data['created'])]
 
+    def parse_votingAssembly(chamber):
+        if chamber == "house":
+            return "dbr:United_States_House_of_Representatives"
+        elif chamber == "senate":
+            return "dbr:United_States_Senate"
+        else:
+            print "not hosue or senate:",chamber
+
     start_time = time.time()
     times = []
     i = 0
+
+    voter_dict = {}
+
     while (offset < num_voteEvents):
 
         vote_events = get_voteEventBulk()
@@ -106,19 +106,33 @@ def constructData():
             votes = get_votingData(vote_event)
             vote_date_triples.append(parseVoteDate(vote_event))
 
+            votingAssembly = parse_votingAssembly(vote_event['chamber'])
+
             for vote in votes:
+
                 print "Vote #",vote['id']
+
                 voter_id = vote['person']['id']
-                if voter_id not in birthday_dict:
-                    birthday_dict[voter_id] = vote['person']['birthday']
-                if voter_id not in party_membership_dict:
-                    party_membership_dict[voter_id] = get_partyMembership(voter_id)
+
+                if voter_id not in voter_dict:
+                    voter_dict[voter_id] = {
+                        'birthdate':vote['person']['birthday'],
+                        'party':get_partyMembership(voter_id),
+                        'voting_assemblies':[]}
+
+                if votingAssembly not in voter_dict[voter_id]['voting_assemblies']:
+                    voter_dict[voter_id]['voting_assemblies'].append(votingAssembly)
+
                 voter_vote_triples.append(voterVotesTriple(vote, vote_event))
-                if TEST:
+
+                if TEST and False:
                     i+=1
-                    if i>5:break
+                    if i>5:
+                        i=0
+                        break
 
             times.append(time.time() - start_time)
+            start_time = time.time()
 
         offset += BULK_SIZE
 
@@ -126,12 +140,27 @@ def constructData():
         if TEST:
             break
 
-    party_membership_triples = [[parseVoter(k),'v:memberOf','"'+party_membership_dict[k]+'"'] for k in party_membership_dict if party_membership_dict[k] is not None]
-    print birthday_dict
-    #birthday_triples = [dateTriple(parseVoter(k),'foaf:birthday',birthday_dict[k]) for k in birthday_dict]
+    party_membership_triples = []
     birthday_triples = []
-    for i in birthday_dict: birthday_triples.append([parseVoter(k),'dbo:birthDate',parseDate(birthday_dict[k])])
+    voting_assembly_triples = []
+
+    for u in voter_dict:
+        voter = voter_dict[u]
+        voter_uri = parseVoter(u)
+        if voter['birthdate'] is not None:
+            birthday_triples.append([voter_uri,'dbo:birthDate',parseDate(voter['birthdate'])])
+        if voter['party'] is not None:
+
+            party_membership_triples.append([voter_uri,'v:memberOf','"'+voter['party']+'"'])
+        voting_assembly_triples += [[voter_uri,'v:votesIn',va] for va in voter['voting_assemblies']]
+
 
     print 'Times per vote event:',times
 
-    return [['@prefix','dbo:','<http://dbpedia.org/ontology/>'],['@prefix','rdfs:','<http://www.w3.org/2000/01/rdf-schema#>']] + bill_text_triples + voter_vote_triples + party_membership_triples + vote_date_triples + birthday_triples
+    prefixes = [
+        ['@prefix','dbr:','<http://dbpedia.org/resource/>'],
+        ['@prefix','dbo:','<http://dbpedia.org/ontology/>'],
+        ['@prefix','rdfs:','<http://www.w3.org/2000/01/rdf-schema#>']]
+
+    return prefixes + bill_text_triples + voter_vote_triples + party_membership_triples \
+           + vote_date_triples + birthday_triples + voting_assembly_triples
