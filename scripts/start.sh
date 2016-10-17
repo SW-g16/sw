@@ -38,18 +38,19 @@ function ask() {
 }
 
 source ~/.profile
-currentDir=$(pwd)
+ABS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo $ABS_DIR
 
 # If stardog env var is not set...
 if [ -z "$STARDOG" ]; then
   echo 'Looking for stardog...'
-  find / -iname "*stardog-*" -type d 2> /dev/null
+  find $HOME -iname "*stardog-*" -type d 2> /dev/null
 
   answer=0
   while [ $answer == 0 ]
   do
     if (( $answer == 0 )); then
-      read -p 'Please input the correct (parent) path: ' STARDOG_PATH
+      read -p 'Please input the correct (full) path: ' STARDOG_PATH
     fi
 
     echo
@@ -77,7 +78,7 @@ if ask 'Reset votes table?'; then
 fi
 echo
 
-cd $currentDir
+cd $ABS_DIR
 
 # Old framework
 cd ../code
