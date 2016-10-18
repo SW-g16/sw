@@ -6,21 +6,24 @@
 
 ## Domain and Scope
 
-// 185 / 100-200 words
+// ? / 100-200 words
 
 // Description of the domain and scope of the ontology, as determined by the application 
 
 // what's the difference between domain and scope?
 
-
-Our domain consists of the voting data of a number of legislative assemblies, 
-each belonging to a different political entity. For this voting data, we map 
-which bills were voted on, those who vote for these bills and how they voted, 
-and the composition of the legislative assembly over time. The relevant data is 
-drawn from the data made available by the political entities in question, which 
-is then fused into a single, combined ontology. This ontology was designed for 
-those with an interest in the political process, allowing them to look up voting 
-history and patterns. 
+Our domain is the set of Voting Assemblies' Voters votes on Bills around the world,
+    and other immediately relevant and interesting data. 
+Our data is imported from the political entities in question, and
+ is then fused into a single, combined ontology. 
+Assertions we are interested include
+ - Who votes for what?
+ - What features does each Voter have? Income? Education? Board Memberships? ASL?
+For infering results of votes:
+ - What is the threshold for a bill to pass?
+For the relationships between and among Polities, Bills, and VotingAssemblies, 
+ - Which Polities inherit Bills of which other Polities?
+ - Which VotingAssemblies pass Bills onto which Polit(y/ies)?
     
 ### Required Domain Knowledge
 
@@ -43,16 +46,40 @@ assembly voting matches the desires of the populace at a given point in time.
 
 // methodology? we opened protege, then clicked stuff until we were done
 
+/* // outlined in Goals 
 As outlined under 'Domain and Scope' (and detailed in 'Conceptualization'), our 
 goal was to create an ontology that allows a user to look up voting history and 
-patterns for a variety of voting assemblies. For this, we first needed to 
-investigate which legislative assemblies had the relevant data publicly 
-available in a manner that could automatically be extracted. Next, we needed to 
-see what additional data was available for the legislative assembly members, and 
-which of that data would be relevant to looking up voting patterns. Finally, the 
-practical task of ontology construction was done in the Protégé ontology editor.
+patterns for a variety of voting assemblies. */
 
+### Vocabulary Definition Process
 
+Our vocabulary is designed to express voting data and some other related data from a number of different sources. 
+Its construction was enabled by a basic level of domain knowledge. 
+The practical task of ontology construction was done in the Protégé ontology editor.
+
+### Automatic Data Querying and Construction
+
+We acquire large amounts of data and map it to our vocabulary, 
+    before inserting it into our semantic database. 
+
+The process of acquiring this data consists of 
+
+ 1. identifying candidate sources
+ 2. evaluating and accessing candidate 
+ 3. coding custom queriers and data constructors for different data sources
+
+#### Identifying Candidate Sources
+
+#### Evaluating and Accessing Candidate Sources
+
+#### Coding Custom Querier and Data Constructor
+
+##### Issues with Current Implementation
+
+ - We're converting from a custom json-data to a custom ttl vocabulary in Python, 
+    without using helpful libraries where we could. 
+ - We're doing many small queries instead of one large bulk download of the source data. 
+    This should change out of respect to source provider and for efficiency of import task.
 
 ## Conceptualization
 
