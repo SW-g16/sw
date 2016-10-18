@@ -7,332 +7,419 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix stardog: <tag:stardog:api:> .
-@base <http://votes.examples.com/ontology/> .
 
-<http://votes.examples.com/ontology/> rdf:type owl:Ontology .
-
-#################################################################
-#    Datatypes
-#################################################################
-
-###  http://www.w3.org/2001/XMLSchema#date
-xsd:date rdf:type rdfs:Datatype .
-
-
-#################################################################
-#    Object Properties
-#################################################################
-
-###  http://votes.examples.com/ontology/abstains
-:abstains rdf:type owl:ObjectProperty ;
-          rdfs:subPropertyOf :reactsToVote ;
-          owl:propertyDisjointWith :votesNay ,
-                                   :votesYay .
-
-
-###  http://votes.examples.com/ontology/appliesTo
-:appliesTo rdf:type owl:ObjectProperty ;
-           rdfs:domain :Bill ;
-           rdfs:range :Polity ;
-           rdfs:label "appliesTo"@en .
-
-
-###  http://votes.examples.com/ontology/hasAge
-:hasAge rdf:type owl:ObjectProperty ;
-        rdfs:domain foaf:Agent ;
-        rdfs:range [ rdf:type owl:Restriction ;
-                     owl:onProperty foaf:age ;
-                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                     owl:onDataRange xsd:int
-                   ] .
-
-
-###  http://votes.examples.com/ontology/hasBirthdate
-:hasBirthdate rdf:type owl:ObjectProperty ;
-              rdfs:domain :HumanVoter ;
-              rdfs:range [ rdf:type owl:Restriction ;
-                           owl:onProperty dbo:birthDate ;
-                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                           owl:onDataRange xsd:date
-                         ] .
-
-
-###  http://votes.examples.com/ontology/hasGender
-:hasGender rdf:type owl:ObjectProperty ;
-           rdfs:domain foaf:Agent ;
-           rdfs:range [ rdf:type owl:Restriction ;
-                        owl:onProperty foaf:gender ;
-                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                        owl:onDataRange xsd:string
-                      ] .
-
-
-###  http://votes.examples.com/ontology/hasText
-:hasText rdf:type owl:ObjectProperty ;
-         rdfs:domain :Bill ;
-         rdfs:range [ rdf:type owl:Restriction ;
-                      owl:onProperty :bill_text ;
-                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                      owl:onDataRange xsd:string
-                    ] .
-
-
-###  http://votes.examples.com/ontology/legalizesFor
-:legalizesFor rdf:type owl:ObjectProperty ;
-              rdfs:domain :VotingAssembly ;
-              rdfs:range :Polity ;
-              rdfs:comment "The polity that a voting assembly's can pass legislation onto." ;
-              rdfs:label "legalizesFor"@en .
-
-
-###  http://votes.examples.com/ontology/memberOf
-:memberOf rdf:type owl:ObjectProperty ;
-          rdfs:domain :Voter ;
-          rdfs:range :Party .
-
-
-###  http://votes.examples.com/ontology/processed
-:processed rdf:type owl:ObjectProperty ;
-           owl:inverseOf :processedBy ;
-           rdfs:domain :VotingAssembly ;
-           rdfs:range :Bill ;
-           rdfs:label "processed"@en .
-
-
-###  http://votes.examples.com/ontology/processedBy
-:processedBy rdf:type owl:ObjectProperty ;
-             rdfs:domain :Bill ;
-             rdfs:range :VotingAssembly ;
-             rdfs:label "processedBy"@en .
-
-
-###  http://votes.examples.com/ontology/reactsToVote
-:reactsToVote rdf:type owl:ObjectProperty ;
-              rdfs:domain :Voter ;
-              rdfs:range :Bill .
-
-
-###  http://votes.examples.com/ontology/votesIn
-:votesIn rdf:type owl:ObjectProperty ;
-         rdfs:domain :Voter ;
-         rdfs:range :VotingAssembly ;
-         rdfs:label "votesIn"@en .
-
-
-###  http://votes.examples.com/ontology/votesNay
-:votesNay rdf:type owl:ObjectProperty ;
-          rdfs:subPropertyOf :votesOn ;
-          owl:propertyDisjointWith :votesYay .
-
-
-###  http://votes.examples.com/ontology/votesOn
-:votesOn rdf:type owl:ObjectProperty ;
-         rdfs:subPropertyOf :reactsToVote .
-
-
-###  http://votes.examples.com/ontology/votesYay
-:votesYay rdf:type owl:ObjectProperty ;
-          rdfs:subPropertyOf :votesOn .
-
-
-#################################################################
-#    Data properties
-#################################################################
-
-###  http://dbpedia.org/ontology/birthDate
-dbo:birthDate rdf:type owl:DatatypeProperty ;
-              rdfs:domain dbo:Person .
-
-
-###  http://votes.examples.com/ontology/bill_text
-:bill_text rdf:type owl:DatatypeProperty ;
-           rdfs:domain :Bill ;
-           rdfs:range xsd:string ;
-           rdfs:label "bill_text"@en .
-
-
-###  http://xmlns.com/foaf/0.1/age
-foaf:age rdf:type owl:DatatypeProperty ,
-                  owl:FunctionalProperty ;
-         rdfs:domain foaf:Agent .
-
-
-###  http://xmlns.com/foaf/0.1/gender
-foaf:gender rdf:type owl:DatatypeProperty ,
-                     owl:FunctionalProperty ;
-            rdfs:domain foaf:Agent .
-
-
-#################################################################
-#    Classes
-#################################################################
-
-###  http://dbpedia.org/ontology/Person
-dbo:Person rdf:type owl:Class .
-
-
-###  http://votes.examples.com/ontology/Agent
-:Agent rdf:type owl:Class ;
-       owl:equivalentClass foaf:Agent ;
-       rdfs:label "Agent"@en .
-
-
-###  http://votes.examples.com/ontology/Bill
-:Bill rdf:type owl:Class ;
-      owl:equivalentClass [ rdf:type owl:Restriction ;
-                            owl:onProperty :processedBy ;
-                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                            owl:onClass :VotingAssembly
-                          ] .
-
-
-###  http://votes.examples.com/ontology/Commune
-:Commune rdf:type owl:Class ;
-         rdfs:subClassOf :Polity ;
-         rdfs:label "Commune"@en .
-
-
-###  http://votes.examples.com/ontology/County
-:County rdf:type owl:Class ;
-        rdfs:subClassOf :Polity ;
-        rdfs:label "County"@en .
-
-
-###  http://votes.examples.com/ontology/Federation
-:Federation rdf:type owl:Class ;
-            rdfs:subClassOf :Polity ;
-            rdfs:label "Federation"@en .
-
-
-###  http://votes.examples.com/ontology/FemaleVoter
-:FemaleVoter rdf:type owl:Class ;
-             rdfs:subClassOf :HumanVoter ;
-             rdfs:label "FemaleVoter"@en .
-
-
-###  http://votes.examples.com/ontology/HumanVoter
-:HumanVoter rdf:type owl:Class ;
-            owl:equivalentClass [ owl:intersectionOf ( dbo:Person
-                                                       [ rdf:type owl:Restriction ;
-                                                         owl:onProperty :reactsToVote ;
-                                                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                         owl:onClass :Bill
-                                                       ]
-                                                       [ rdf:type owl:Restriction ;
-                                                         owl:onProperty :votesIn ;
-                                                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                         owl:onClass :VotingAssembly
-                                                       ]
-                                                     ) ;
-                                  rdf:type owl:Class
-                                ] ;
-            rdfs:subClassOf dbo:Person ,
-                            :Voter .
-
-
-###  http://votes.examples.com/ontology/MaleVoter
-:MaleVoter rdf:type owl:Class ;
-           rdfs:subClassOf :HumanVoter ;
-           rdfs:label "MaleVoter"@en .
-
-
-###  http://votes.examples.com/ontology/MiddleAgedVoter
-:MiddleAgedVoter rdf:type owl:Class ;
-                 owl:equivalentClass [ owl:intersectionOf ( :HumanVoter
-                                                            [ rdf:type owl:Restriction ;
-                                                              owl:onProperty foaf:age ;
-                                                              owl:someValuesFrom [ rdf:type rdfs:Datatype ;
-                                                                                   owl:onDatatype xsd:integer ;
-                                                                                   owl:withRestrictions ( [ xsd:minInclusive 40
-                                                                                                          ]
-                                                                                                          [ xsd:maxExclusive 60
-                                                                                                          ]
-                                                                                                        )
-                                                                                 ]
-                                                            ]
-                                                          ) ;
-                                       rdf:type owl:Class
-                                     ] ;
-                 rdfs:subClassOf :HumanVoter ;
-                 rdfs:label "MiddleAgedVoter"@en .
-
-
-###  http://votes.examples.com/ontology/OldVoter
-:OldVoter rdf:type owl:Class ;
-          owl:equivalentClass [ rdf:type owl:Restriction ;
-                                owl:onProperty foaf:age ;
-                                owl:someValuesFrom [ rdf:type rdfs:Datatype ;
-                                                     owl:onDatatype xsd:integer ;
-                                                     owl:withRestrictions ( [ xsd:minInclusive 60
-                                                                            ]
-                                                                          )
-                                                   ]
-                              ] ;
-          rdfs:subClassOf :HumanVoter ;
-          rdfs:label "OldVoter"@en .
-
-
-###  http://votes.examples.com/ontology/Party
-:Party rdf:type owl:Class ;
-       rdfs:subClassOf :Agent ;
-       rdfs:comment "A collection of relatively likeminded Voters" ;
-       rdfs:label "Party"@en .
-
-
-###  http://votes.examples.com/ontology/Polity
-:Polity rdf:type owl:Class ;
-        rdfs:subClassOf :Agent ;
-        rdfs:comment "Something onto which laws are applied" ;
-        rdfs:label "Polity"@en .
-
-
-###  http://votes.examples.com/ontology/State
-:State rdf:type owl:Class ;
-       rdfs:subClassOf :Polity ;
-       rdfs:label "State"@en .
-
-
-###  http://votes.examples.com/ontology/Voter
-:Voter rdf:type owl:Class ;
-       owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
-                                                    owl:onProperty :reactsToVote ;
-                                                    owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                    owl:onClass :Bill
-                                                  ]
-                                                  [ rdf:type owl:Restriction ;
-                                                    owl:onProperty :votesIn ;
-                                                    owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                    owl:onClass :VotingAssembly
-                                                  ]
-                                                ) ;
-                             rdf:type owl:Class
-                           ] ;
-       rdfs:subClassOf :Agent .
-
-
-###  http://votes.examples.com/ontology/VotingAssembly
-:VotingAssembly rdf:type owl:Class ;
-                rdfs:subClassOf :Agent ;
-                rdfs:label "VotingAssembly"@en .
-
-
-###  http://votes.examples.com/ontology/YoungVoter
-:YoungVoter rdf:type owl:Class ;
-            owl:equivalentClass [ rdf:type owl:Restriction ;
-                                  owl:onProperty foaf:age ;
-                                  owl:someValuesFrom [ rdf:type rdfs:Datatype ;
-                                                       owl:onDatatype xsd:integer ;
-                                                       owl:withRestrictions ( [ xsd:maxExclusive 40
-                                                                              ]
-                                                                            )
-                                                     ]
-                                ] ;
-            rdfs:subClassOf :HumanVoter ;
-            rdfs:label "YoungVoter"@en .
-
-
-###  http://xmlns.com/foaf/0.1/Agent
-foaf:Agent rdf:type owl:Class .
-
-
-###  Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi
+<http://votes.examples.com/ontology/> a owl:Ontology .
+# 
+# 
+# #################################################################
+# #
+# #    Datatypes
+# #
+# #################################################################
+# 
+# 
+# http://www.w3.org/2001/XMLSchema#date
+
+xsd:date a rdfs:Datatype .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Object Properties
+# #
+# #################################################################
+# 
+# 
+# http://votes.examples.com/ontology/abstains
+
+:abstains a owl:ObjectProperty ;
+	rdfs:subPropertyOf :reactsToVote ;
+	owl:propertyDisjointWith :votesNay , :votesYay .
+# 
+# http://votes.examples.com/ontology/appliesTo
+
+:appliesTo a owl:ObjectProperty ;
+	rdfs:domain :Bill ;
+	rdfs:range :Polity ;
+	rdfs:label "appliesTo"@en .
+# 
+# http://votes.examples.com/ontology/hasAge
+
+:hasAge a owl:ObjectProperty ;
+	rdfs:domain foaf:Agent ;
+	rdfs:range _:genid1 .
+
+_:genid1 a owl:Restriction ;
+	owl:onProperty foaf:age ;
+	owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onDataRange xsd:int .
+# 
+# http://votes.examples.com/ontology/hasBirthdate
+
+:hasBirthdate a owl:ObjectProperty ;
+	rdfs:domain :HumanVoter ;
+	rdfs:range _:genid2 .
+
+_:genid2 a owl:Restriction ;
+	owl:onProperty dbo:birthDate ;
+	owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onDataRange xsd:date .
+# 
+# http://votes.examples.com/ontology/hasGender
+
+:hasGender a owl:ObjectProperty ;
+	rdfs:domain foaf:Agent ;
+	rdfs:range _:genid3 .
+
+_:genid3 a owl:Restriction ;
+	owl:onProperty foaf:gender ;
+	owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onDataRange xsd:string .
+# 
+# http://votes.examples.com/ontology/hasText
+
+:hasText a owl:ObjectProperty ;
+	rdfs:domain :Bill ;
+	rdfs:range _:genid4 .
+
+_:genid4 a owl:Restriction ;
+	owl:onProperty :bill_text ;
+	owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onDataRange xsd:string .
+# 
+# http://votes.examples.com/ontology/legalizesFor
+
+:legalizesFor a owl:ObjectProperty ;
+	rdfs:domain :VotingAssembly ;
+	rdfs:range :Polity ;
+	rdfs:comment "The polity that a voting assembly's can pass legislation onto." ;
+	rdfs:label "legalizesFor"@en .
+# 
+# http://votes.examples.com/ontology/memberOf
+
+:memberOf a owl:ObjectProperty ;
+	rdfs:domain :Voter ;
+	rdfs:range :Party .
+# 
+# http://votes.examples.com/ontology/processed
+
+:processed a owl:ObjectProperty ;
+	owl:inverseOf :processedBy ;
+	rdfs:domain :VotingAssembly ;
+	rdfs:range :Bill ;
+	rdfs:label "processed"@en .
+# 
+# http://votes.examples.com/ontology/processedBy
+
+:processedBy a owl:ObjectProperty ;
+	rdfs:domain :Bill ;
+	rdfs:range :VotingAssembly ;
+	rdfs:label "processedBy"@en .
+# 
+# http://votes.examples.com/ontology/reactsToVote
+
+:reactsToVote a owl:ObjectProperty ;
+	rdfs:domain :Voter ;
+	rdfs:range :Bill .
+# 
+# http://votes.examples.com/ontology/votesIn
+
+:votesIn a owl:ObjectProperty ;
+	rdfs:domain :Voter ;
+	rdfs:range :VotingAssembly ;
+	rdfs:label "votesIn"@en .
+# 
+# http://votes.examples.com/ontology/votesNay
+
+:votesNay a owl:ObjectProperty ;
+	rdfs:subPropertyOf :votesOn ;
+	owl:propertyDisjointWith :votesYay .
+# 
+# http://votes.examples.com/ontology/votesOn
+
+:votesOn a owl:ObjectProperty ;
+	rdfs:subPropertyOf :reactsToVote .
+# 
+# http://votes.examples.com/ontology/votesYay
+
+:votesYay a owl:ObjectProperty ;
+	rdfs:subPropertyOf :votesOn .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Data properties
+# #
+# #################################################################
+# 
+# 
+# http://dbpedia.org/ontology/birthDate
+
+dbo:birthDate a owl:DatatypeProperty ;
+	rdfs:domain dbo:Person .
+# 
+# http://votes.examples.com/ontology/bill_text
+
+:bill_text a owl:DatatypeProperty ;
+	rdfs:domain :Bill ;
+	rdfs:range xsd:string ;
+	rdfs:label "bill_text"@en .
+# 
+# http://xmlns.com/foaf/0.1/age
+
+foaf:age a owl:DatatypeProperty , owl:FunctionalProperty ;
+	rdfs:domain foaf:Agent .
+# 
+# http://xmlns.com/foaf/0.1/gender
+
+foaf:gender a owl:DatatypeProperty , owl:FunctionalProperty ;
+	rdfs:domain foaf:Agent .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Classes
+# #
+# #################################################################
+# 
+# 
+# http://dbpedia.org/ontology/Person
+
+dbo:Person a owl:Class ;
+	rdfs:subClassOf :Agent .
+# 
+# http://votes.examples.com/ontology/Agent
+
+:Agent a owl:Class ;
+	owl:equivalentClass foaf:Agent ;
+	rdfs:label "Agent"@en .
+# 
+# http://votes.examples.com/ontology/Bill
+
+:Bill a owl:Class ;
+	owl:equivalentClass _:genid5 .
+
+_:genid5 a owl:Restriction ;
+	owl:onProperty :processedBy ;
+	owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onClass :VotingAssembly .
+# 
+# http://votes.examples.com/ontology/Commune
+
+:Commune a owl:Class ;
+	rdfs:subClassOf :Polity ;
+	rdfs:label "Commune"@en .
+# 
+# http://votes.examples.com/ontology/County
+
+:County a owl:Class ;
+	rdfs:subClassOf :Polity ;
+	rdfs:label "County"@en .
+# 
+# http://votes.examples.com/ontology/Federation
+
+:Federation a owl:Class ;
+	rdfs:subClassOf :Polity ;
+	rdfs:label "Federation"@en .
+# 
+# http://votes.examples.com/ontology/FemaleVoter
+
+:FemaleVoter a owl:Class ;
+	rdfs:subClassOf :HumanVoter ;
+	rdfs:label "FemaleVoter"@en .
+# 
+# http://votes.examples.com/ontology/HumanVoter
+
+:HumanVoter a owl:Class ;
+	owl:equivalentClass _:genid6 .
+
+_:genid6 owl:intersectionOf _:genid11 .
+
+_:genid11 a rdf:List ;
+	rdf:first dbo:Person ;
+	rdf:rest _:genid9 .
+
+_:genid9 a rdf:List ;
+	rdf:first _:genid10 .
+
+_:genid10 a owl:Restriction ;
+	owl:onProperty :reactsToVote ;
+	owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onClass :Bill .
+
+_:genid9 rdf:rest _:genid7 .
+
+_:genid7 a rdf:List ;
+	rdf:first _:genid8 .
+
+_:genid8 a owl:Restriction ;
+	owl:onProperty :votesIn ;
+	owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onClass :VotingAssembly .
+
+_:genid7 rdf:rest rdf:nil .
+
+_:genid6 a owl:Class .
+
+:HumanVoter rdfs:subClassOf dbo:Person , :Voter .
+# 
+# http://votes.examples.com/ontology/MaleVoter
+
+:MaleVoter a owl:Class ;
+	rdfs:subClassOf :HumanVoter ;
+	rdfs:label "MaleVoter"@en .
+# 
+# http://votes.examples.com/ontology/MiddleAgedVoter
+
+:MiddleAgedVoter a owl:Class ;
+	owl:equivalentClass _:genid12 .
+
+_:genid12 owl:intersectionOf _:genid20 .
+
+_:genid20 a rdf:List ;
+	rdf:first :HumanVoter ;
+	rdf:rest _:genid13 .
+
+_:genid13 a rdf:List ;
+	rdf:first _:genid14 .
+
+_:genid14 a owl:Restriction ;
+	owl:onProperty foaf:age ;
+	owl:someValuesFrom _:genid15 .
+
+_:genid15 a rdfs:Datatype ;
+	owl:onDatatype xsd:integer ;
+	owl:withRestrictions _:genid18 .
+
+_:genid18 a rdf:List ;
+	rdf:first _:genid19 .
+
+_:genid19 xsd:minInclusive "40"^^xsd:integer .
+
+_:genid18 rdf:rest _:genid16 .
+
+_:genid16 a rdf:List ;
+	rdf:first _:genid17 .
+
+_:genid17 xsd:maxExclusive "60"^^xsd:integer .
+
+_:genid16 rdf:rest rdf:nil .
+
+_:genid13 rdf:rest rdf:nil .
+
+_:genid12 a owl:Class .
+
+:MiddleAgedVoter rdfs:subClassOf :HumanVoter ;
+	rdfs:label "MiddleAgedVoter"@en .
+# 
+# http://votes.examples.com/ontology/OldVoter
+
+:OldVoter a owl:Class ;
+	owl:equivalentClass _:genid21 .
+
+_:genid21 a owl:Restriction ;
+	owl:onProperty foaf:age ;
+	owl:someValuesFrom _:genid22 .
+
+_:genid22 a rdfs:Datatype ;
+	owl:onDatatype xsd:integer ;
+	owl:withRestrictions _:genid23 .
+
+_:genid23 a rdf:List ;
+	rdf:first _:genid24 .
+
+_:genid24 xsd:minInclusive "60"^^xsd:integer .
+
+_:genid23 rdf:rest rdf:nil .
+
+:OldVoter rdfs:subClassOf :HumanVoter ;
+	rdfs:label "OldVoter"@en .
+# 
+# http://votes.examples.com/ontology/Party
+
+:Party a owl:Class ;
+	rdfs:subClassOf :Agent ;
+	rdfs:comment "A collection of relatively likeminded Voters" ;
+	rdfs:label "Party"@en .
+# 
+# http://votes.examples.com/ontology/Polity
+
+:Polity a owl:Class ;
+	rdfs:subClassOf :Agent ;
+	rdfs:comment "Something onto which laws are applied" ;
+	rdfs:label "Polity"@en .
+# 
+# http://votes.examples.com/ontology/State
+
+:State a owl:Class ;
+	rdfs:subClassOf :Polity ;
+	rdfs:label "State"@en .
+# 
+# http://votes.examples.com/ontology/Voter
+
+:Voter a owl:Class ;
+	owl:equivalentClass _:genid25 .
+
+_:genid25 owl:intersectionOf _:genid28 .
+
+_:genid28 a rdf:List ;
+	rdf:first _:genid29 .
+
+_:genid29 a owl:Restriction ;
+	owl:onProperty :reactsToVote ;
+	owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onClass :Bill .
+
+_:genid28 rdf:rest _:genid26 .
+
+_:genid26 a rdf:List ;
+	rdf:first _:genid27 .
+
+_:genid27 a owl:Restriction ;
+	owl:onProperty :votesIn ;
+	owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onClass :VotingAssembly .
+
+_:genid26 rdf:rest rdf:nil .
+
+_:genid25 a owl:Class .
+
+:Voter rdfs:subClassOf :Agent .
+# 
+# http://votes.examples.com/ontology/VotingAssembly
+
+:VotingAssembly a owl:Class ;
+	rdfs:subClassOf :Agent ;
+	rdfs:label "VotingAssembly"@en .
+# 
+# http://votes.examples.com/ontology/YoungVoter
+
+:YoungVoter a owl:Class ;
+	owl:equivalentClass _:genid30 .
+
+_:genid30 a owl:Restriction ;
+	owl:onProperty foaf:age ;
+	owl:someValuesFrom _:genid31 .
+
+_:genid31 a rdfs:Datatype ;
+	owl:onDatatype xsd:integer ;
+	owl:withRestrictions _:genid32 .
+
+_:genid32 a rdf:List ;
+	rdf:first _:genid33 .
+
+_:genid33 xsd:maxExclusive "40"^^xsd:integer .
+
+_:genid32 rdf:rest rdf:nil .
+
+:YoungVoter rdfs:subClassOf :HumanVoter ;
+	rdfs:label "YoungVoter"@en .
+# 
+# http://xmlns.com/foaf/0.1/Agent
+
+foaf:Agent a owl:Class .
+# 
+# Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi
