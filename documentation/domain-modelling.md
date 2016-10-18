@@ -74,12 +74,19 @@ The process of acquiring this data consists of
 
 #### Coding Custom Querier and Data Constructor
 
+So far we've programmed one Data Getter. 
+It is written in Python and works by querying govtrack.us, 
+    translating json data in govtrack's format to semantic triples
+    before inserting the the triples to our database. 
+
 ##### Issues with Current Implementation
+
+There are some issues with. 
 
  - We're converting from a custom json-data to a custom ttl vocabulary in Python, 
     without using helpful libraries where we could. 
  - We're doing many small queries instead of one large bulk download of the source data. 
-    This should change out of respect to source provider and for efficiency of import task.
+    This should change out of respect to the data provider and for efficiency of the import task.
 
 ## Conceptualization
 
@@ -168,6 +175,9 @@ A Polity is that to which Bills are applied. It can be put into several subclass
 // Describe the inferences
 
 ### Initial Trivial Inferences
+
+*In this section, we use a pseudo-formal ad-hoc notation to communicate 
+    steps we want to either infer or deduce.*
 
 These inferences are trivial but enrich our dataset,
     helping us construct human-friendly dataviews
