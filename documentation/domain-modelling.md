@@ -6,11 +6,10 @@
 
 ## Domain and Scope
 
-// ? / 100-200 words
+	// 295 / 100-200 words
+	// Description of the domain and scope of the ontology, as determined by the application
 
-// Description of the domain and scope of the ontology, as determined by the application
-
-// what's the difference between domain and scope?
+### Domain
 
 Our domain is the set of Voting Assemblies' Voters votes on Bills around the world,
     and other immediately relevant and interesting data.
@@ -25,38 +24,34 @@ For the relationships between and among Polities, Bills, and Voting Assemblies,
  - Which Polities inherit Bills of which other Polities?
  - Which Voting Assemblies pass Bills onto which Polit(y/ies)?
 
-### Required Domain Knowledge
+#### Required Domain Knowledge
 
 To understand the domain in question, all that is required is a basic
 understanding of voting processes and institutions: Assembly members vote for
 bills in assemblies, with the bills that attain a sufficient percentage of votes
 then being applied to the relevant polity.
 
-## Scope
+### Scope
 
-Due to the quantity and variety of data available on various political entities, the potential of this project is vast. For that reason, we are currently limiting our ontology to the data of a single political entity (The US Government). Mapping it to geographic and demographic information about politicians. The majority of mapping and inferencing will be based on the backgrounds of the politicians and their parties.
+Due to the quantity and variety of data available on various political entities, the potential of this project is vast. 
+For that reason, we are currently limiting our ontology to the data of a single political entity (The US Government). 
+Mapping it to geographic and demographic information about politicians. 
+The majority of mapping and inferencing will be based on the backgrounds of the politicians and their parties.
 
-### Mapping and Inferencing Between Political entities
-If our ontology proves to be robust, we will expand our mapping to be between multiple political entities, creating a higher level of inferencing by comparing the entities themselves.
+#### Mapping and Inferencing Between Political entities
+If our ontology proves to be robust, 
+    we will expand our mapping to be between multiple political entities, 
+    creating a higher level of inferencing by comparing the entities themselves.
 
-### Election and Polling Data
+#### Election and Polling Data
 
-Another promising expansion of our ontology would be to combine it with election
-results and inter-election polls. This would allow for mapping how closely
-assembly voting matches the desires of the populace at a given point in time.
+Another promising expansion of our ontology would be to combine it with election results and inter-election polls. 
+This would allow for mapping how closely assembly voting matches the desires of the populace at a given point in time.
 
 ## Ontology Construction Methodology
 
-// 101 / 100-200 words
-
-// Description of the methodology that is used in the construction of the ontology
-
-// methodology? we opened protege, then clicked stuff until we were done
-
-/* // outlined in Goals
-As outlined under 'Domain and Scope' (and detailed in 'Conceptualization'), our
-goal was to create an ontology that allows a user to look up voting history and
-patterns for a variety of voting assemblies. */
+	// 215 / 100-200 words
+	// Description of the methodology that is used in the construction of the ontology
 
 ### Vocabulary Definition Process
 
@@ -97,12 +92,9 @@ There are some issues with.
 
 ## Conceptualization
 
-// 293 / 200-300 words
-
-// Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing.
-// The conceptualization should encompass more than 15 classes and at least 5 properties
-
-// todo insert screenshot of ontog
+	// 293 / 200-300 words
+	// Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing.
+	// The conceptualization should encompass more than 15 classes and at least 5 properties
 
 First, we need the essential components for describing a set of non-anonymous
 votes. For this, we only need two classes and three relations.
@@ -155,31 +147,45 @@ and date of birth, not specifying the year.
 Combination of a variety of data sources is essential to our application. Large
 quantities of data fitting our ontology are constructed by querying the publicly
 available data of political entities. Currently, data for our ontology is drawn
-from the United States government at http://www.govtrack.us/api/v2, but there
+from the United States government at http:	//www.govtrack.us/api/v2, but there
 are plans to gather data from at least one additional source during the scope of
 this coursework as well. Currently, the data of the European Council is being
 considered.
 
 ## Ontology
 
-// 224 / 200-300 words
+	// 224 / 200-300 words
 
-The four most important classes, around which the ontology is built, are Voter, Voting Assembly, Polity and Bill. All but the latter are subclasses of Actor, as they can be considered to be capable of taking action.
+The four most important classes, around which the ontology is built, 
+    are Voter, Voting Assembly, Polity and Bill. 
+All but the latter are subclasses of Actor, 
+    as they can be considered to be capable of taking action.
+The Voter is a member of a voting assembly, his primary job is to vote on Bills. 
+They can vote either yay or nay on a bill, or abstain from voting, 
+    with each of these tree being expressed by a different object property. 
+Voter has a subclass HumanVoter, defined in anticipation of integrating EU votes into our ontology, 
+    where the Voters are not HumanVoters but Countries. 
+    
+Human Voters have an age, a birth date and a gender property, 
+    each of which has an appropriate data property. 
+Depending on these, they are put in subclasses Young Voter, Old Voter, Middle-Aged Voter, Male Voter and/or Female Voter,
+    inferred from the rules we use assert in our ontology.
+    
+A bill is processed by a voting assembly on a certain date. 
+It of course has a text, which is its own data property. 
+A bill applies to a specific polity.
 
-The Voter is a member of a voting assembly, his primary job is to vote on Bills. He can vote either yay or nay on a bill, or abstain from voting, with each of these tree being expressed by a different object property. Voter has a subclass called HumanVoter. This was included in anticipation of integrating EU votes into our ontology, as in that case you have countries voting. Human Voters have an age, a birth date and a gender properties, each of which has an appropriate data property. Depending on these, they are put in subclasses Young Voter, Old Voter, Middle-Aged Voter, Male Voter and/or Female Voter.
+A voting assembly is that in which Bills are introduced and Voters vote for bills. 
+It legalizes for a specific Polity.
 
-A bill is processed by a voting assembly on a certain date. It of course has a text, which is its own data property. A bill applies to a specific polity.
-
-A voting assembly is that in which Bills are introduced and Voters vote for bills. It legalizes for a specific Polity.
-
-A Polity is that to which Bills are applied. It can be put into several subclasses, , which fit different scopes, organizational types and legislative statuses.
+A Polity is that to which Bills are applied. 
+It can be put into several subclasses, which fit different scopes, organizational types and legislative statuses.
 
 
 ## Inferencing
 
-// 106 / 100-500 words
-
-// Describe the inferences
+	// 316 / 100-500 words
+	// Describe the inferences
 
 ### Initial Trivial Inferences
 
@@ -231,13 +237,13 @@ We have not yet enabled these inferences, but we intend to.
 
 ### Ontology
 
-// Provide the ontology as a separate Turtle file.
+	// Provide the ontology as a separate Turtle file.
 
 ### Evidence of Inference
 
-// The ontology should produce meaningful inferences that are essential for the application.
-// This should be evidenced by a screenshot of e.g. Protege reasoning results.
-// (NB: For the final report: inferences should be on the external data)
+	// The ontology should produce meaningful inferences that are essential for the application.
+	// This should be evidenced by a screenshot of e.g. Protege reasoning results.
+	// (NB: For the final report: inferences should be on the external data)
 
 In this screenshot we see data about a Voter and a Bill it supports.
 All Class memberships are inferred.
@@ -251,4 +257,4 @@ without having to pay.
 
 ### Revised version of Milestone 1
 
-// Combine this with a revised version of milestone 1
+	// Combine this with a revised version of milestone 1
