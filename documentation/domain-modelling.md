@@ -145,16 +145,28 @@ A Polity is that to which Bills are applied. It can be put into several subclass
 These inferences are trivial but enrich our dataset,
     helping us construct human-friendly dataviews
     as well as providing us useful variables we can reference 
-    when computing statistics later on. 
+    when computing statistics later on.
 
     x votes * on y -> ( x is a Voter , y is a Bill )
     y is processed by z -> ( y is a Bill , z is a VotingAssembly ) 
     ( x votes * on y , y is processed by z ) -> ( x is a Voter , y is a Bill , z is a VotingAssembly, x votes in z )
     x is member of p -> (x is a Voter , p is a Party )
 
-### Voter Age Issue
+### Less Trivial Inferences
 
-Voters have a birthday and VoteEvents have a date. 
+The following Inferences involve arithmetics and gives interesting data which we can compute statistics from. 
+We have not yet enabled these inferences, but we intend to. 
+
+    # a voter's age upon a voting event
+    ( x votes * on y , y has date date_1, x has birthdate date_2 ) -> Voter had age (date_1-date_2) at time of vote
+    # a Party is a DominantParty if it has the majority of Voters
+    ( Party p has x voters , x/number of voters > 0.5 ) -> p is a DominantParty
+    # Proportion of yay vs nay
+    ( bill b has x yayvotes, bill b has y nayvotes ) -> yayproportion = x/y
+    # result computation
+    # NB: yayproportion required for a Bill to pass may vary between voting assemblies
+    ( bill has yayproporion >=0.5 ) -> b passed
+    ( bill has yayproporion <0.5 ) -> b failed
 
 ## Appendix
 
@@ -168,9 +180,15 @@ Voters have a birthday and VoteEvents have a date.
 // This should be evidenced by a screenshot of e.g. Protege reasoning results.
 // (NB: For the final report: inferences should be on the external data)
 
-![Screenshot of data about a voter. 
-Some are assertments, some are inferred. 
-Output to LD-R UI components.](images/inference_ld-r.png)
+In this screenshot we see data about a Voter and a Bill it supports. 
+All Class memberships are inferred. 
+![](images/inference_ld-r.png)
+
+### Code Base
+
+For access to our code, we can add you as collaborators in our private GitHub repository upon request. 
+Unfortunately there is no option to share a private repository with read-only access
+without having to pay. 
 
 ### Revised version of Milestone 1
 
