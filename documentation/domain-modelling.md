@@ -6,9 +6,6 @@
 
 ## Domain and Scope
 
-	// 295 / 100-200 words
-	// Description of the domain and scope of the ontology, as determined by the application
-
 ### Domain
 
 Our domain is the set of Voting Assemblies' Voters votes on Bills around the world,
@@ -49,9 +46,6 @@ Another promising expansion of our ontology would be to combine it with election
 This would allow for mapping how closely assembly voting matches the desires of the populace at a given point in time.
 
 ## Ontology Construction Methodology
-
-	// 215 / 100-200 words
-	// Description of the methodology that is used in the construction of the ontology
 
 ### Vocabulary Definition Process
 
@@ -97,10 +91,6 @@ There are some issues with.
     This should change out of respect to the data provider and for efficiency of the import task.
 
 ## Conceptualization
-
-	// 293 / 200-300 words
-	// Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing.
-	// The conceptualization should encompass more than 15 classes and at least 5 properties
 
 First, we need the essential components for describing a set of non-anonymous
 votes. For this, we only need two classes and three relations.
@@ -158,9 +148,6 @@ We intend to gather data from at least one additional source within the scope of
 this coursework as well. 
 
 ## Ontology
-
-	// 224 / 200-300 words
-
 The four most important classes, around which the ontology is built, 
     are Voter, Voting Assembly, Polity and Bill. 
 All but the latter are subclasses of Actor, 
@@ -189,9 +176,6 @@ It can be put into several subclasses, which fit different scopes, organizationa
 
 ## Inferencing
 
-	// 316 / 100-500 words
-	// Describe the inferences
-
 ### Initial Trivial Inferences
 
 *In this section, we use a pseudo-formal ad-hoc notation to communicate 
@@ -209,7 +193,6 @@ These inferences are trivial but enrich our dataset,
 
 Another trivial inference is that a Voter belongs to a certain income class (x%-buckets).
 While the inference is trivial, we don't currently have access to
-    /know about a dataset containing this information for our Voters.
 
     ( Voter x income 291432 , UpperClassVoter is equivalent to ( Voter, numberOfResults(select voter v1 where v1.income > x.income)<num_voters/3*2 ) )
 
@@ -242,13 +225,8 @@ We have not yet enabled these inferences, but we intend to.
 
 ### Ontology
 
-	// Provide the ontology as a separate Turtle file.
 
 ### Evidence of Inference
-
-	// The ontology should produce meaningful inferences that are essential for the application.
-	// This should be evidenced by a screenshot of e.g. Protege reasoning results.
-	// (NB: For the final report: inferences should be on the external data)
 
 In this screenshot we see data about a Voter and a Bill it supports.
 All Class memberships are inferred.
@@ -260,6 +238,3 @@ For access to our code, we can add you as collaborators in our private GitHub re
 Unfortunately there is no option to share a private repository with read-only access
 without having to pay.
 
-### Revised version of Milestone 1
-
-	// Combine this with a revised version of milestone 1
