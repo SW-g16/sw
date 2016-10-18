@@ -1,80 +1,153 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Application Design](#application-design)
+  - [Goals](#goals)
+    - [Primary Goals](#primary-goals)
+    - [Secondary Goals](#secondary-goals)
+  - [Users](#users)
+    - [Satistfaction Requirements](#satistfaction-requirements)
+      - [TG_1: People with domain interest](#tg_1-people-with-domain-interest)
+      - [TG_2: Developers](#tg_2-developers)
+      - [TG_3: People who are attracted to data visualizations](#tg_3-people-who-are-attracted-to-data-visualizations)
+    - [Satisfaction Requirements per Target Group](#satisfaction-requirements-per-target-group)
+      - [Implied Technical Requirements (TRs)](#implied-technical-requirements-trs)
+  - [Design](#design)
+    - [The LD-R Framework](#the-ld-r-framework)
+      - [Code Location / Method](#code-location--method)
+      - [Network Graph Browser](#network-graph-browser)
+      - [Text-based Browser](#text-based-browser)
+    - [Devices](#devices)
+    - [Possible Extensions](#possible-extensions)
+  - [Walkthrough](#walkthrough)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
 # Application Design
 *Semantic Web Course 2016*
 
 *Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
 
-## Introduction
-
-Many governments have began to provide endpoints for their internal data as a way to become more transparent and push for greater public participation, and voting data is amongst the large amount of data available for big data processing. We would like to use this opportunity to mine the (and others) public open database of votes, as provided by some states. We'll be providing the data both as a computer-friendly API and human-friendly visualizations. We will both forward data of the external data sources, and provide new generated semantic data by inference.
-
 ## Goals
 
-The goal of our application is to provide users with a means to efficiently get both an overview and detailed knowledge of voting data provided by states. We want to give users both an intuitive insight into the (mostly machine-readable) governmental data through in-depth visualization, and to provide them with the possibility to browse data tabularly in a way that's more user-friendly than that provided by the original data provider. Furthermore, we aim to apply machine-reasoning (inference) to arrive at information that is fundamentally important and interesting when researching voting systems, but not made explicit in the original dataset. We would also aim to combine and compare data on different voting entities, for example, The British Parliament, American Senate and more (which provide open data). It is (very) difficult to automatically map strings as having equivalent meaning, but we could collect "equivalent-to" or "equivalent-intention-to" between laws of different databases/states. As a meta-goal, we also want to employ our application on the web to share it with others.  
+### Primary Goals
 
+ - Provide an endpoint combining open voting data from different sources
+ - Achieve 5 timbl-stars
+ - Define meaningful Data Views for humans
+ - Output data views to LD-R UI components
+ 
+### Secondary Goals
+ 
+ - Integrate a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists
+ - Analyze the data using machine learning techniques for semantic data
+ - Define Data Views for viewing statistics / interesting output of analyzing machine
+ - Visualize statistics / analyzer output with standard plots and charts within a LD-R UI component. 
+ 
 ## Users
 
-### Target Groups (TG)
+### Satistfaction Requirements
 
-Below, we have identified some target groups:
+We identify some satisfaction requirements that some user may have. 
+
+ - **Facts**: Who voted for what? What passed and what failed, and with what margin? 
+ - **Analysis**: What patterns exist in the behavior of voters, parties and voting assembles? How do entities cluster and how do values correlate?
+ - **Shareability**: possibility of sharing views with others
+ - **visualization**: visualizations make structures in data easier 
+ - **Documentation**: We thoroughly document our app's functionality. 
+ - **Code accessibility**: We make our code readable and available under an open license on GitHub
+ 
+We define some Target Groups. 
+ 
 
 #### TG_1: People with domain interest
 
-This group wants to know
+These users are interested in the data itself, and in any patterns that can be seen in it. 
+They view visualizations as tools to understand the data, and are unlikely to care about the machine's inner workings. 
 
- - Who voted for what?
- - How homogeneous were the party members in their votes?
- - Which clusters of similar voters exist?
+#### TG_2: Developers
 
-This is information that we will infer. We will elaborate on inference further into this document
+These take an interest in how our application works and might want to view or use our code. 
+They inherit the needs of all other users. 
 
-#### TG_2: People with technical interest
+#### TG_3: People who are attracted to data visualizations
 
-This group is interested in how the application achieves its functionality. We satisfy this need by an extensive about-page, documenting it's workings. We may also show steps taken by the reasoner to arrive at different inferred knowledge.
-
-#### TG_3: People who are attracted to aesthetically pleasing visualizations
-
-This group may skip past text and explanations to look at visualizations, regardless of the domain.
+This group may skip past explanatory text to look at visualizations, regardless of the domain.
 This group wants to understand as much information as efficiently as possible from data visualizations.
-To satisfy them, we design our visualizations to be self-explanatory and use graphical features of graph elements (x,y,radius,color,link distance, etc) as keys for different dimensions of data.
+
+### Satisfaction Requirements per Target Group
+
+The TGs have these SRs, in no particular order. 
+
+|Target Group|Fact|Analysis|Sharability|Visualization|Documentation|Code Accessibility|
+|---|---|---|---|---|---|---|
+|TG_1|1|1|1|1|0|0|
+|TG_2|1|1|1|1|1|1|
+|TG_3|0|1|1|1|0|0|
+
+#### Implied Technical Requirements (TRs)
+
+The SRs imply these TRs, in no particular order. 
+
+|TR_id|is essential|description|
+|---|---|---|
+|TR_0|yes|Combine a set of data sources into a single ontology|
+|TR_1|yes|Present semantic data to users through custom Data Views|
+|TR_2|yes|Perform some inference|
+|TR_4|no|Compute and present trivial statistics to users through custom Data Views|
+|TR_5|no|Visualize trivial statistics|
+|TR_6|no|Perform non-trivial analysis on voting data to |
+|TR_7|no|Visualize results of non-trivial analysis|
 
 ## Design
 
-Fundamental components of the application include the means to browse explicit and inferred data tabularly, (network-)graphically, and statistically.
+### The LD-R Framework
 
-### Browsable Data
+We use the LD-R framework to avoid reinventing wheels. 
+Web pages are generated for us, after we apply our custom configurations. 
 
-The following data is available for users to browse by different means.
+#### Code Location / Method
 
-#### Explicit Data
+We design our interface by modifying config files of LD-R. 
 
- - Who voted for what
- - Who belongs to what party
- - Who has which external URI (DBPedia, Wikipedia, government pages)
- - ... And probably more as we go along
+#### Network Graph Browser
 
-#### Inferred data
+We may integrate some semantic network graph browser as an LD-R component. 
+[WebVOWL](http://vowl.visualdataweb.org/webvowl/index.html) seems relevant. 
 
- - What proportion of each party voted for what vote?
- - Proportion of yes/no votes per voter across all bills (to uncover curious cases such as http://www.independent.co.uk/news/world/europe/the-yes-man-romanian-mep-who-has-not-voted-against-anything-in-previous-541-motions-is-accused-of-8899083.html)
- - ... And probably more as we go along
+#### Text-based Browser
 
-### Tabular Browsing
-
- - A simple tabular browser, a (set of) interactive table(s)  
-
-### Network Browsing
-
- - Focus on a node to expand data tool-tip and edges, click again to collapse.
- - Attach meaning to graphical features like color and radius (don't waste dimensions!)
+We create Data Views that generate tabular and object 'profile pages'. 
 
 ### Devices
 
-Some visualizations will be large and sidebars may have many options, and so we want as large window as possible to display information through. We abide by the mobile-first anyway, as it doesn't cost us much. However the application will be best enjoyed on a large screen, and if there should be design conflicts, consideration of desktop users will be put higher than that of mobile users.
+Our application inherits the mobile-first layout of LD-R. 
+However for some visualizations it is sometimes desirable to have a larger screen,
+as it allows for communicating more information at once. 
 
 ### Possible Extensions
 
-We may consider adding our own API functionality through a SPARQL endpoint, allowing technical users to work with our data in their own applications. Finally, the project will all be open source, allowing anyone to understand and expand on our code-base.
+We may consider adding our own API functionality through a SPARQL endpoint, 
+allowing technical users to work with our data in their own applications. 
+Finally, the project will all be open source, 
+allowing anyone to understand and expand on our code-base.
 
 ## Walkthrough
 
-On loading the page, the user is presented with an empty main area, and a sidebar to the right. This sidebar contains two drop-down menus, an "add filter" button and a "generate" button. Initially, only the first drop-down menu is accessible. The first drop-down menu allows the user to select a nation. When a nation is selected, the second drop-down menu becomes accessible, allowing the user to select one of the available chambers of government from that nation. As soon as both of these are selected, the "generate" button becomes enabled. Pressing this button will put the program into motion, generating a visual oversight dependent on the selected filters, toggling whether to show, and what to show, about the chamber of government, the politicians within it, and their votes on bills. The "add filter" button allows the user to add more filters so  to provide a clearer oversight of the data, allowing him to select one of a number of filters, such as only showing politicians of specific parties, only showing bills from a specific period, only showing people that voted a specific way on a specific bill, only showing politicians that fit a particular profile (such as wealth, level of education, nation of birth or gender), etc. These filters are then applied the next time the "generate" button is pressed. To the upper left of the screen are save and export buttons, the former allowing the user to save his current selection and filters, the rather exporting an image file of the currently generated political overview.
+A user lands on the main page and is presented with an overview of the data. 
+The user clicks a link to an entity and sees all relevant data (defined by a Data View) associated with it, 
+    including inferred statements. 
+There is also a set of graphs and statistics available. 
+The user finds these interesting, and copies the url currently in the address bar and posts to their friend.
+ the friend sees the same data in the same way as the first user, and they both like the link on facebook. 
+
+The user wants to generate a graph of data defined by applying user-defined filters on the dataset. 
+The user sets their filters.
+The filters include restrictions like only showing bills from a specific period, only showing people that voted a specific way on a specific bill, 
+     only showing politicians that fit a particular profile (such as wealth, level of education, nation of birth or gender), 
+The user hits submit. 
+Upon a warning, the user realizes they were about to init getting and rendering of a very large amount of data and hit cancel. 
+They modify their filter and retries. 
+A semantic graph is returned, and sent to our WebVowl component for visualization. 
