@@ -47,3 +47,11 @@ The following data is available for users to browse by different means.
 
  - Focus on a node to expand data tool-tip and edges, click again to collapse.
  - Attach meaning to graphical features like color and radius (don't waste dimensions!)
+
+//////////////////////////////////////////
+
+For this voting data, we map who vote for what who vote for these bills and how they voted, 
+and the composition of the legislative assembly over time. The relevant data is 
+drawn This ontology was designed for 
+those with an interest in the political process, allowing them to look up voting 
+history and patterns. 
