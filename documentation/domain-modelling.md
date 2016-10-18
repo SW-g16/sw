@@ -4,52 +4,58 @@
 
 *Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
 
-## Domain and Scope
+## Domain
 
 // 185 / 100-200 words
 
-// Description of the domain and scope of the ontology, as determined by the application 
+// Description of the domain and scope of the ontology, as determined by the application
 
 // what's the difference between domain and scope?
 
-
-Our domain consists of the voting data of a number of legislative assemblies, 
-each belonging to a different political entity. For this voting data, we map 
-which bills were voted on, those who vote for these bills and how they voted, 
-and the composition of the legislative assembly over time. The relevant data is 
-drawn from the data made available by the political entities in question, which 
-is then fused into a single, combined ontology. This ontology was designed for 
-those with an interest in the political process, allowing them to look up voting 
-history and patterns. 
+Our domain consists of the voting data of a number of legislative assemblies,
+each belonging to a different political entity. For this voting data, we map
+which bills were voted on, those who vote for these bills and how they voted,
+and the composition of the legislative assembly over time. The relevant data is
+drawn from the data made available by the political entities in question, which
+is then fused into a single, combined ontology. This ontology was designed for
+those with an interest in the political process, allowing them to look up voting
+history and search for patterns.
     
 ### Required Domain Knowledge
 
-To understand the domain in question, all that is required is a basic 
-understanding of voting processes and institutions: Assembly members vote for 
-bills in assemblies, with the bills that attain a sufficient percentage of votes 
+To understand the domain in question, all that is required is a basic
+understanding of voting processes and institutions: Assembly members vote for
+bills in assemblies, with the bills that attain a sufficient percentage of votes
 then being applied to the relevant polity.
 
-#### Election and Polling Data
+## Scope
 
-A promising expansion of our ontology would be to combine it with election 
-results and inter-election polls. This would allow for mapping how closely 
+Due to the quantity and variety of data available on various political entities, the potential of this project is vast. For that reason, we are currently limiting our ontology to the data of a single political entity (The US Government). Mapping it to geographic and demographic information about politicians. The majority of mapping and inferencing will be based on the backgrounds of the politicians and their parties.
+
+### Mapping and Inferencing Between Political entities
+If our ontology proves to be robust, we will expand our mapping to be between multiple political entities, creating a higher level of inferencing by comparing the entities themselves.
+
+### Election and Polling Data
+
+Another promising expansion of our ontology would be to combine it with election
+results and inter-election polls. This would allow for mapping how closely
 assembly voting matches the desires of the populace at a given point in time.
 
 ## Ontology Construction Methodology
 
 // 101 / 100-200 words
 
-// Description of the methodology that is used in the construction of the ontology 
+// Description of the methodology that is used in the construction of the ontology
 
 // methodology? we opened protege, then clicked stuff until we were done
 
-As outlined under 'Domain and Scope' (and detailed in 'Conceptualization'), our 
-goal was to create an ontology that allows a user to look up voting history and 
-patterns for a variety of voting assemblies. For this, we first needed to 
-investigate which legislative assemblies had the relevant data publicly 
-available in a manner that could automatically be extracted. Next, we needed to 
-see what additional data was available for the legislative assembly members, and 
-which of that data would be relevant to looking up voting patterns. Finally, the 
+As outlined under 'Domain and Scope' (and detailed in 'Conceptualization'), our
+goal was to create an ontology that allows a user to look up voting history and
+patterns for a variety of voting assemblies. For this, we first needed to
+investigate which legislative assemblies had the relevant data publicly
+available in a manner that could automatically be extracted. Next, we needed to
+see what additional data was available for the legislative assembly members, and
+which of that data would be relevant to looking up voting patterns. Finally, the
 practical task of ontology construction was done in the Protégé ontology editor.
 
 
@@ -58,19 +64,19 @@ practical task of ontology construction was done in the Protégé ontology edito
 
 // 293 / 200-300 words
 
-// Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing. 
-// The conceptualization should encompass more than 15 classes and at least 5 properties 
+// Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing.
+// The conceptualization should encompass more than 15 classes and at least 5 properties
 
 // todo insert screenshot of ontog
 
-First, we need the essential components for describing a set of non-anonymous 
+First, we need the essential components for describing a set of non-anonymous
 votes. For this, we only need two classes and three relations.
 
     Voter votes yes on Bill
     Voter votes no on Bill
     Voter abstains on Bill
 
-The date of a voting event is a relevant piece of data, so an additional 
+The date of a voting event is a relevant piece of data, so an additional
 relation is created to describe that.
 
     Bill has date <date>
@@ -80,23 +86,23 @@ Voters have several interesting features, which are also collected.
     Voter has birthday <birthday>
     Voter has party affiliation Party
 
-Voters are further categorized to allow identification of potential voting 
+Voters are further categorized to allow identification of potential voting
 patterns.
-					
+
     Voter has subclasses MiddleAgedVoter, YoungVoter, OldVoter, FemaleVoter, MaleVoter
 
-To expand the ontology to encompass multiple legislative assemblies, an 
+To expand the ontology to encompass multiple legislative assemblies, an
 additional relation is needed to distinguish between them.
 
     Bill is processed by VotingAssembly
 
-For each legislative assembly, there is the relevant data of what polity it 
+For each legislative assembly, there is the relevant data of what polity it
 legislates for.
 
     VotingAssembly legalizes for Polity
 
-Polities can be divided into several subcategories, describing different scopes, 
-organizational types and legislatives statuses. 
+Polities can be divided into several subcategories, describing different scopes,
+organizational types and legislatives statuses.
 
     Polity has subclasses State, Commune, Federation, County
 
@@ -104,19 +110,19 @@ organizational types and legislatives statuses.
 
 #### Reused Semantic Data
 
-DBpedia is used for the URIs of political parties and state actors, such as 
-`dbr:United_States_Congress` and `dbr:Democratic_Party_(United_States)>`. 
-DBpedia is also used for date of birth (`dbp:birthDate`), as foaf only has age 
+DBpedia is used for the URIs of political parties and state actors, such as
+`dbr:United_States_Congress` and `dbr:Democratic_Party_(United_States)>`.
+DBpedia is also used for date of birth (`dbp:birthDate`), as foaf only has age
 and date of birth, not specifying the year.
 
 #### Constructed Semantic Data
 
-Combination of a variety of data sources is essential to our application. Large 
-quantities of data fitting our ontology are constructed by querying the publicly 
-available data of political entities. Currently, data for our ontology is drawn 
-from the United States government at http://www.govtrack.us/api/v2, but there 
-are plans to gather data from at least one additional source during the scope of 
-this coursework as well. Currently, the data of the European Council is being 
+Combination of a variety of data sources is essential to our application. Large
+quantities of data fitting our ontology are constructed by querying the publicly
+available data of political entities. Currently, data for our ontology is drawn
+from the United States government at http://www.govtrack.us/api/v2, but there
+are plans to gather data from at least one additional source during the scope of
+this coursework as well. Currently, the data of the European Council is being
 considered.
 
 ## Ontology
@@ -144,44 +150,44 @@ A Polity is that to which Bills are applied. It can be put into several subclass
 
 These inferences are trivial but enrich our dataset,
     helping us construct human-friendly dataviews
-    as well as providing us useful variables we can reference 
+    as well as providing us useful variables we can reference
     when computing statistics later on.
 
     x votes * on y -> ( x is a Voter , y is a Bill )
-    y is processed by z -> ( y is a Bill , z is a VotingAssembly ) 
+    y is processed by z -> ( y is a Bill , z is a VotingAssembly )
     ( x votes * on y , y is processed by z ) -> ( x is a Voter , y is a Bill , z is a VotingAssembly, x votes in z )
     x is member of p -> (x is a Voter , p is a Party )
 
-Another trivial inference is that a Voter belongs to a certain income class (x%-buckets). 
-While the inference is trivial, we don't currently have access to 
-    /know about a dataset containing this information for our Voters. 
+Another trivial inference is that a Voter belongs to a certain income class (x%-buckets).
+While the inference is trivial, we don't currently have access to
+    /know about a dataset containing this information for our Voters.
 
-    ( Voter x income 291432 , UpperClassVoter is equivalent to ( Voter, numberOfResults(select voter v1 where v1.income > x.income)<num_voters/3*2 ) ) 
+    ( Voter x income 291432 , UpperClassVoter is equivalent to ( Voter, numberOfResults(select voter v1 where v1.income > x.income)<num_voters/3*2 ) )
 
 ### Less Trivial Inferences
 
-The following Inferences involve arithmetics and gives interesting data which we can compute statistics from. 
-We have not yet enabled these inferences, but we intend to. 
+The following Inferences involve arithmetics and gives interesting data which we can compute statistics from.
+We have not yet enabled these inferences, but we intend to.
 
     # a voter's age upon a voting event
     ( x votes * on y , y has date date_1, x has birthdate date_2 ) -> Voter had age (date_1-date_2) at time of vote
-    
+
     # from age we can infer age groups
     ( x has age < 40 ) -> x is a YoungVoter
-    
+
     # ... more bucket categories can be made for other voter features
 
     # a Party is a DominantParty if it has the majority of Voters
     ( Party p has x voters , x/number of voters > 0.5 ) -> p is a DominantParty
-    
+
     # Proportion of yay vs nay
     ( bill b has x yayvotes, bill b has y nayvotes ) -> yayproportion = x/y
-    
+
     # result computation
     # NB: yayproportion required for a Bill to pass may vary between voting assemblies
     ( bill has yayproporion >=0.5 ) -> b passed
     ( bill has yayproporion <0.5 ) -> b failed
-     
+
 
 ## Appendix
 
@@ -191,19 +197,19 @@ We have not yet enabled these inferences, but we intend to.
 
 ### Evidence of Inference
 
-// The ontology should produce meaningful inferences that are essential for the application. 
+// The ontology should produce meaningful inferences that are essential for the application.
 // This should be evidenced by a screenshot of e.g. Protege reasoning results.
 // (NB: For the final report: inferences should be on the external data)
 
-In this screenshot we see data about a Voter and a Bill it supports. 
-All Class memberships are inferred. 
+In this screenshot we see data about a Voter and a Bill it supports.
+All Class memberships are inferred.
 ![](images/inference_ld-r.png)
 
 ### Code Base
 
-For access to our code, we can add you as collaborators in our private GitHub repository upon request. 
+For access to our code, we can add you as collaborators in our private GitHub repository upon request.
 Unfortunately there is no option to share a private repository with read-only access
-without having to pay. 
+without having to pay.
 
 ### Revised version of Milestone 1
 
