@@ -165,17 +165,23 @@ We have not yet enabled these inferences, but we intend to.
 
     # a voter's age upon a voting event
     ( x votes * on y , y has date date_1, x has birthdate date_2 ) -> Voter had age (date_1-date_2) at time of vote
+    
     # from age we can infer age groups
     ( x has age < 40 ) -> x is a YoungVoter
+    
     # ... more bucket categories can be made for other voter features
+
     # a Party is a DominantParty if it has the majority of Voters
     ( Party p has x voters , x/number of voters > 0.5 ) -> p is a DominantParty
+    
     # Proportion of yay vs nay
     ( bill b has x yayvotes, bill b has y nayvotes ) -> yayproportion = x/y
+    
     # result computation
     # NB: yayproportion required for a Bill to pass may vary between voting assemblies
     ( bill has yayproporion >=0.5 ) -> b passed
     ( bill has yayproporion <0.5 ) -> b failed
+     
 
 ## Appendix
 
