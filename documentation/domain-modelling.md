@@ -72,7 +72,13 @@ The process of acquiring this data consists of
 
 #### Identifying Candidate Sources
 
+By Googlin around we find a list of sources, detailed in the table of the next section. 
+
 #### Evaluating and Accessing Candidate Sources
+
+|Provider name|endpoint|timblr-stars|comment|
+|---|---|---|---|
+|GovTrack|http://www.govtrack.us/api/v2/|3|data encoded in their own custom json format|
 
 #### Coding Custom Querier and Data Constructor
 
