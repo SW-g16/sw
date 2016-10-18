@@ -152,6 +152,12 @@ These inferences are trivial but enrich our dataset,
     ( x votes * on y , y is processed by z ) -> ( x is a Voter , y is a Bill , z is a VotingAssembly, x votes in z )
     x is member of p -> (x is a Voter , p is a Party )
 
+Another trivial inference is that a Voter belongs to a certain income class (x%-buckets). 
+While the inference is trivial, we don't currently have access to 
+    /know about a dataset containing this information for our Voters. 
+
+    ( Voter x income 291432 , UpperClassVoter is equivalent to ( Voter, numberOfResults(select voter v1 where v1.income > x.income)<num_voters/3*2 ) ) 
+
 ### Less Trivial Inferences
 
 The following Inferences involve arithmetics and gives interesting data which we can compute statistics from. 
@@ -159,6 +165,9 @@ We have not yet enabled these inferences, but we intend to.
 
     # a voter's age upon a voting event
     ( x votes * on y , y has date date_1, x has birthdate date_2 ) -> Voter had age (date_1-date_2) at time of vote
+    # from age we can infer age groups
+    ( x has age < 40 ) -> x is a YoungVoter
+    # ... more bucket categories can be made for other voter features
     # a Party is a DominantParty if it has the majority of Voters
     ( Party p has x voters , x/number of voters > 0.5 ) -> p is a DominantParty
     # Proportion of yay vs nay
