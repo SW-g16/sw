@@ -168,6 +168,10 @@ Voters have a birthday and VoteEvents have a date.
 // This should be evidenced by a screenshot of e.g. Protege reasoning results.
 // (NB: For the final report: inferences should be on the external data)
 
+![Screenshot of data about a voter. 
+Some are assertments, some are inferred. 
+Output to LD-R UI components.](images/inference_ld-r.png)
+
 ### Revised version of Milestone 1
 
 // Combine this with a revised version of milestone 1
