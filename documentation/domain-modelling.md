@@ -123,14 +123,21 @@ We intend to gather data from at least one other source as well
 *We are currently having technical issues with the actual process of inferencing. 
 This section outlines what we want to infer*
 
-### Trivial Inferences
+### Initial Trivial Inferences
 
-These inferences should be trivial but enrich our dataset. 
-We start with these before considering more sophisticated inferences. 
+These inferences are trivial but enrich our dataset,
+    helping us construct human-friendly dataviews
+    as well as providing us useful variables we can reference 
+    when computing statistics later on. 
 
     x votes * on y -> ( x is a Voter , y is a Bill )
     y is processed by z -> ( y is a Bill , z is a VotingAssembly ) 
     ( x votes * on y , y is processed by z ) -> ( x is a Voter , y is a Bill , z is a VotingAssembly, x votes in z )
+    x is member of p -> (x is a Voter , p is a Party )
+
+### Voter Age Issue
+
+Voters have a birthday and VoteEvents have a date. 
 
 ## Appendix
 
