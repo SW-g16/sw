@@ -5,6 +5,7 @@ import time
 from flask import json
 
 TEST = True
+PREFIX = "votes"
 
 # number of bills to query per bulk
 BULK_SIZE = 100
@@ -12,7 +13,7 @@ if TEST:
     BULK_SIZE = 20
 
 def constructData():
-    
+
     def get_data(url):
         # we get and parse json-encoded data returned by govtrack.
         return json.loads(urllib2.urlopen(url).read())
@@ -48,14 +49,14 @@ def constructData():
         return "\"" + cleanString(vote_event['question']) + "\""
 
     def billTextTriple(vote_event):
-        return [parseVoteEvent(vote_event), ':text', parseBillText(vote_event)]
+        return [parseVoteEvent(vote_event), PREFIX+':bill_text', parseBillText(vote_event)]
 
     # called numberOfVoteEvents * numberOfVoters times
     def parseVoter(a):
         return '<https://www.govtrack.us/api/v2/person/' + str(a)+">"
 
     def parseDirection(o):
-        return {'+': ':votesYay','-': ':votesNay','0': ':abstains'}[o['key']]
+        return {'+': PREFIX+':votesYay','-': PREFIX+':votesNay','0': PREFIX+':abstains'}[o['key']]
 
     def voterVotesTriple(vote,vote_event):
         return [
@@ -77,7 +78,7 @@ def constructData():
         return "\"" + date[:10] + "\"^^xsd:date"
 
     def parseVoteDate(voting_data):
-        return [parseVoteEvent(voting_data),'rdfs:date',parseDate(voting_data['created'])]
+        return [parseVoteEvent(voting_data),'xsd:date',parseDate(voting_data['created'])]
 
     def parse_votingAssembly(chamber):
         if chamber == "house":
@@ -85,7 +86,7 @@ def constructData():
         elif chamber == "senate":
             return "dbr:United_States_Senate"
         else:
-            print "not hosue or senate:",chamber
+            print "not house or senate:",chamber
 
     start_time = time.time()
     times = []
@@ -151,8 +152,8 @@ def constructData():
             birthday_triples.append([voter_uri,'dbo:birthDate',parseDate(voter['birthdate'])])
         if voter['party'] is not None:
 
-            party_membership_triples.append([voter_uri,':memberOf','"'+voter['party']+'"'])
-        voting_assembly_triples += [[voter_uri,':votesIn',va] for va in voter['voting_assemblies']]
+            party_membership_triples.append([voter_uri,PREFIX+':memberOf','"'+voter['party']+'"'])
+        voting_assembly_triples += [[voter_uri,PREFIX+':votesIn',va] for va in voter['voting_assemblies']]
 
 
     print 'Times per vote event:',times
