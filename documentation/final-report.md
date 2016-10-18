@@ -132,11 +132,6 @@ Upon a warning, the user realizes they were about to init getting and rendering 
 They modify their filter and retries.
 A semantic graph is returned, and sent to our WebVowl component for visualization.
 
-
-*Semantic Web Course 2016*
-
-*Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
-
 ## Domain Modeling (Milestone 2)
 
 ### Domain and Scope
