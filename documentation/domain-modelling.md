@@ -146,17 +146,16 @@ organizational types and legislatives statuses.
 DBpedia is used for the URIs of political parties and state actors, such as
 `dbr:United_States_Congress` and `dbr:Democratic_Party_(United_States)>`.
 DBpedia is also used for date of birth (`dbp:birthDate`), as foaf only has age
-and date of birth, not specifying the year.
+and date of birth, not specifying the year. 
 
 #### Constructed Semantic Data
 
 Combination of a variety of data sources is essential to our application. Large
 quantities of data fitting our ontology are constructed by querying the publicly
 available data of political entities. Currently, data for our ontology is drawn
-from the United States government at http:	//www.govtrack.us/api/v2, but there
-are plans to gather data from at least one additional source during the scope of
-this coursework as well. Currently, the data of the European Council is being
-considered.
+exclusively from GovTrack, but the possibility to combine with more sources remains open. 
+We intend to gather data from at least one additional source within the scope of
+this coursework as well. 
 
 ## Ontology
 
