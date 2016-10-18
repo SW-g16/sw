@@ -48,14 +48,14 @@ def constructData():
         return "\"" + cleanString(vote_event['question']) + "\""
 
     def billTextTriple(vote_event):
-        return [parseVoteEvent(vote_event), 'v:text', parseBillText(vote_event)]
+        return [parseVoteEvent(vote_event), ':text', parseBillText(vote_event)]
 
     # called numberOfVoteEvents * numberOfVoters times
     def parseVoter(a):
         return '<https://www.govtrack.us/api/v2/person/' + str(a)+">"
 
     def parseDirection(o):
-        return {'+': 'v:votesYay','-': 'v:votesNay','0': 'v:abstains'}[o['key']]
+        return {'+': ':votesYay','-': ':votesNay','0': ':abstains'}[o['key']]
 
     def voterVotesTriple(vote,vote_event):
         return [
@@ -151,8 +151,8 @@ def constructData():
             birthday_triples.append([voter_uri,'dbo:birthDate',parseDate(voter['birthdate'])])
         if voter['party'] is not None:
 
-            party_membership_triples.append([voter_uri,'v:memberOf','"'+voter['party']+'"'])
-        voting_assembly_triples += [[voter_uri,'v:votesIn',va] for va in voter['voting_assemblies']]
+            party_membership_triples.append([voter_uri,':memberOf','"'+voter['party']+'"'])
+        voting_assembly_triples += [[voter_uri,':votesIn',va] for va in voter['voting_assemblies']]
 
 
     print 'Times per vote event:',times

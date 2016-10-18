@@ -1,5 +1,5 @@
 @prefix : <http://votes.examples.com/ontology/> .
-@prefix v: <http://votes.examples.com/ontology/> .
+@prefix : <http://votes.examples.com/ontology/> .
 @prefix dbo: <http://dbpedia.org/ontology/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -16,20 +16,20 @@
 #################################################################
 
 ###  http://votes.examples.com/ontology/abstains
-v:abstains rdf:type owl:ObjectProperty ;
-           rdfs:subPropertyOf v:reactsToVote .
+:abstains rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :reactsToVote .
 
 
 ###  http://votes.examples.com/ontology/appliesTo
-v:appliesTo rdf:type owl:ObjectProperty ;
-            rdfs:domain v:Bill ;
-            rdfs:range v:Polity ;
+:appliesTo rdf:type owl:ObjectProperty ;
+            rdfs:domain :Bill ;
+            rdfs:range :Polity ;
             rdfs:label "appliesTo"@en .
 
 
 ###  http://votes.examples.com/ontology/hasText
-v:hasText rdf:type owl:ObjectProperty ;
-          rdfs:domain v:Bill ;
+:hasText rdf:type owl:ObjectProperty ;
+          rdfs:domain :Bill ;
           rdfs:range [ rdf:type owl:Restriction ;
                        owl:onProperty <http:www.example.com/ontology/o_00111> ;
                        owl:someValuesFrom xsd:string
@@ -37,60 +37,60 @@ v:hasText rdf:type owl:ObjectProperty ;
 
 
 ###  http://votes.examples.com/ontology/legalizesFor
-v:legalizesFor rdf:type owl:ObjectProperty ;
-               rdfs:domain v:VotingAssembly ;
-               rdfs:range v:Polity ;
+:legalizesFor rdf:type owl:ObjectProperty ;
+               rdfs:domain :VotingAssembly ;
+               rdfs:range :Polity ;
                rdfs:comment "The polity that a voting assembly's can pass legislation onto." ;
                rdfs:label "legalizesFor"@en .
 
 
 ###  http://votes.examples.com/ontology/memberOf
-v:memberOf rdf:type owl:ObjectProperty ;
-           rdfs:domain v:Voter ;
-           rdfs:range v:Party ;
+:memberOf rdf:type owl:ObjectProperty ;
+           rdfs:domain :Voter ;
+           rdfs:range :Party ;
            rdfs:label "memberOf"@en .
 
 
 ###  http://votes.examples.com/ontology/processed
-v:processed rdf:type owl:ObjectProperty ;
-            owl:inverseOf v:processedBy ;
-            rdfs:domain v:VotingAssembly ;
-            rdfs:range v:Bill ;
+:processed rdf:type owl:ObjectProperty ;
+            owl:inverseOf :processedBy ;
+            rdfs:domain :VotingAssembly ;
+            rdfs:range :Bill ;
             rdfs:label "processed"@en .
 
 
 ###  http://votes.examples.com/ontology/processedBy
-v:processedBy rdf:type owl:ObjectProperty ;
-              rdfs:domain v:Bill ;
-              rdfs:range v:VotingAssembly ;
+:processedBy rdf:type owl:ObjectProperty ;
+              rdfs:domain :Bill ;
+              rdfs:range :VotingAssembly ;
               rdfs:label "processedBy"@en .
 
 
 ###  http://votes.examples.com/ontology/reactsToVote
-v:reactsToVote rdf:type owl:ObjectProperty ;
-               rdfs:domain v:Voter ;
-               rdfs:range v:Bill .
+:reactsToVote rdf:type owl:ObjectProperty ;
+               rdfs:domain :Voter ;
+               rdfs:range :Bill .
 
 
 ###  http://votes.examples.com/ontology/votesNay
-v:votesNay rdf:type owl:ObjectProperty ;
-           rdfs:subPropertyOf v:votesOn .
+:votesNay rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :votesOn .
 
 
 ###  http://votes.examples.com/ontology/votesOn
-v:votesOn rdf:type owl:ObjectProperty ;
-          rdfs:subPropertyOf v:reactsToVote .
+:votesOn rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf :reactsToVote .
 
 
 ###  http://votes.examples.com/ontology/votesYay
-v:votesYay rdf:type owl:ObjectProperty ;
-           rdfs:subPropertyOf v:votesOn .
+:votesYay rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :votesOn .
 
 
 ###  http://www.co-ode.org/ontologies/ont.owl#o_00105
 <http://www.co-ode.org/ontologies/ont.owl#o_00105> rdf:type owl:ObjectProperty ;
-                                                   rdfs:domain v:Voter ;
-                                                   rdfs:range v:VotingAssembly ;
+                                                   rdfs:domain :Voter ;
+                                                   rdfs:range :VotingAssembly ;
                                                    rdfs:label "votesIn"@en .
 
 
@@ -112,53 +112,53 @@ foaf:age rdf:type owl:DatatypeProperty .
 #################################################################
 
 ###  http://votes.examples.com/ontology/Agent
-v:Agent rdf:type owl:Class ;
+:Agent rdf:type owl:Class ;
         owl:equivalentClass foaf:Agent ;
         rdfs:label "Agent"@en .
 
 
 ###  http://votes.examples.com/ontology/Bill
-v:Bill rdf:type owl:Class ;
+:Bill rdf:type owl:Class ;
        owl:equivalentClass [ rdf:type owl:Restriction ;
-                             owl:onProperty v:processedBy ;
+                             owl:onProperty :processedBy ;
                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                             owl:onClass v:VotingAssembly
+                             owl:onClass :VotingAssembly
                            ] .
 
 
 ###  http://votes.examples.com/ontology/Commune
-v:Commune rdf:type owl:Class ;
-          rdfs:subClassOf v:Polity ;
+:Commune rdf:type owl:Class ;
+          rdfs:subClassOf :Polity ;
           rdfs:label "Commune"@en .
 
 
 ###  http://votes.examples.com/ontology/County
-v:County rdf:type owl:Class ;
-         rdfs:subClassOf v:Polity ;
+:County rdf:type owl:Class ;
+         rdfs:subClassOf :Polity ;
          rdfs:label "County"@en .
 
 
 ###  http://votes.examples.com/ontology/Federation
-v:Federation rdf:type owl:Class ;
-             rdfs:subClassOf v:Polity ;
+:Federation rdf:type owl:Class ;
+             rdfs:subClassOf :Polity ;
              rdfs:label "Federation"@en .
 
 
 ###  http://votes.examples.com/ontology/FemaleVoter
-v:FemaleVoter rdf:type owl:Class ;
-              rdfs:subClassOf v:Voter ;
+:FemaleVoter rdf:type owl:Class ;
+              rdfs:subClassOf :Voter ;
               rdfs:label "FemaleVoter"@en .
 
 
 ###  http://votes.examples.com/ontology/MaleVoter
-v:MaleVoter rdf:type owl:Class ;
-            rdfs:subClassOf v:Voter ;
+:MaleVoter rdf:type owl:Class ;
+            rdfs:subClassOf :Voter ;
             rdfs:label "MaleVoter"@en .
 
 
 ###  http://votes.examples.com/ontology/MiddleAgedVoter
-v:MiddleAgedVoter rdf:type owl:Class ;
-                  owl:equivalentClass [ owl:intersectionOf ( v:Voter
+:MiddleAgedVoter rdf:type owl:Class ;
+                  owl:equivalentClass [ owl:intersectionOf ( :Voter
                                                              [ rdf:type owl:Restriction ;
                                                                owl:onProperty foaf:age ;
                                                                owl:someValuesFrom [ rdf:type rdfs:Datatype ;
@@ -173,12 +173,12 @@ v:MiddleAgedVoter rdf:type owl:Class ;
                                                            ) ;
                                         rdf:type owl:Class
                                       ] ;
-                  rdfs:subClassOf v:Voter ;
+                  rdfs:subClassOf :Voter ;
                   rdfs:label "MiddleAgedVoter"@en .
 
 
 ###  http://votes.examples.com/ontology/OldVoter
-v:OldVoter rdf:type owl:Class ;
+:OldVoter rdf:type owl:Class ;
            owl:equivalentClass [ rdf:type owl:Restriction ;
                                  owl:onProperty foaf:age ;
                                  owl:someValuesFrom [ rdf:type rdfs:Datatype ;
@@ -188,56 +188,56 @@ v:OldVoter rdf:type owl:Class ;
                                                                            )
                                                     ]
                                ] ;
-           rdfs:subClassOf v:Voter ;
+           rdfs:subClassOf :Voter ;
            rdfs:label "OldVoter"@en .
 
 
 ###  http://votes.examples.com/ontology/Party
-v:Party rdf:type owl:Class ;
-        rdfs:subClassOf v:Agent ;
+:Party rdf:type owl:Class ;
+        rdfs:subClassOf :Agent ;
         rdfs:comment "A collection of relatively likeminded Voters" ;
         rdfs:label "Party"@en .
 
 
 ###  http://votes.examples.com/ontology/Polity
-v:Polity rdf:type owl:Class ;
-         rdfs:subClassOf v:Agent ;
+:Polity rdf:type owl:Class ;
+         rdfs:subClassOf :Agent ;
          rdfs:comment "Something onto which laws are applied" ;
          rdfs:label "Polity"@en .
 
 
 ###  http://votes.examples.com/ontology/State
-v:State rdf:type owl:Class ;
-        rdfs:subClassOf v:Polity ;
+:State rdf:type owl:Class ;
+        rdfs:subClassOf :Polity ;
         rdfs:label "State"@en .
 
 
 ###  http://votes.examples.com/ontology/Voter
-v:Voter rdf:type owl:Class ;
+:Voter rdf:type owl:Class ;
         owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
-                                                     owl:onProperty v:reactsToVote ;
+                                                     owl:onProperty :reactsToVote ;
                                                      owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                     owl:onClass v:Bill
+                                                     owl:onClass :Bill
                                                    ]
                                                    [ rdf:type owl:Restriction ;
                                                      owl:onProperty <http://www.co-ode.org/ontologies/ont.owl#o_00105> ;
                                                      owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                     owl:onClass v:VotingAssembly
+                                                     owl:onClass :VotingAssembly
                                                    ]
                                                  ) ;
                               rdf:type owl:Class
                             ] ;
-        rdfs:subClassOf v:Agent .
+        rdfs:subClassOf :Agent .
 
 
 ###  http://votes.examples.com/ontology/VotingAssembly
-v:VotingAssembly rdf:type owl:Class ;
-                 rdfs:subClassOf v:Agent ;
+:VotingAssembly rdf:type owl:Class ;
+                 rdfs:subClassOf :Agent ;
                  rdfs:label "VotingAssembly"@en .
 
 
 ###  http://votes.examples.com/ontology/YoungVoter
-v:YoungVoter rdf:type owl:Class ;
+:YoungVoter rdf:type owl:Class ;
              owl:equivalentClass [ rdf:type owl:Restriction ;
                                    owl:onProperty foaf:age ;
                                    owl:someValuesFrom [ rdf:type rdfs:Datatype ;
@@ -247,7 +247,7 @@ v:YoungVoter rdf:type owl:Class ;
                                                                              )
                                                       ]
                                  ] ;
-             rdfs:subClassOf v:Voter ;
+             rdfs:subClassOf :Voter ;
              rdfs:label "YoungVoter"@en .
 
 

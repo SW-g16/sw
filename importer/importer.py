@@ -11,7 +11,7 @@ def storeTriples(triples):
     endpoint = "http://localhost:5820/votes"
 
     def to_rdf(triples):
-        rdf_str = "@prefix v: <http://votes.example.com/ontology/>. \n"
+        rdf_str = ""
         for t in triples:
             rdf_str += t[0]+" "+t[1]+" "+t[2]+ ". \n"
         return rdf_str
