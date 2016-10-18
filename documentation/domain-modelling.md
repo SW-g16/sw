@@ -121,6 +121,19 @@ considered.
 
 ## Ontology
 
+// 224 / 200-300 words
+
+The four most important classes, around which the ontology is built, are Voter, Voting Assembly, Polity and Bill. All but the latter are subclasses of Actor, as they can be considered to be capable of taking action.
+
+The Voter is a member of a voting assembly, his primary job is to vote on Bills. He can vote either yay or nay on a bill, or abstain from voting, with each of these tree being expressed by a different object property. Voter has a subclass called HumanVoter. This was included in anticipation of integrating EU votes into our ontology, as in that case you have countries voting. Human Voters have an age, a birth date and a gender properties, each of which has an appropriate data property. Depending on these, they are put in subclasses Young Voter, Old Voter, Middle-Aged Voter, Male Voter and/or Female Voter.
+
+A bill is processed by a voting assembly on a certain date. It of course has a text, which is its own data property. A bill applies to a specific polity.
+
+A voting assembly is that in which Bills are introduced and Voters vote for bills. It legalizes for a specific Polity.
+
+A Polity is that to which Bills are applied. It can be put into several subclasses, , which fit different scopes, organizational types and legislative statuses.
+
+
 ## Inferencing
 
 // 106 / 100-500 words
@@ -154,11 +167,6 @@ Voters have a birthday and VoteEvents have a date.
 // The ontology should produce meaningful inferences that are essential for the application. 
 // This should be evidenced by a screenshot of e.g. Protege reasoning results.
 // (NB: For the final report: inferences should be on the external data)
-
-![Screenshot of data about a voter. 
-Some are assertments, some are inferred. 
-Output to LD-R UI components.](images/inference_ld-r.png)
-
 
 ### Revised version of Milestone 1
 
