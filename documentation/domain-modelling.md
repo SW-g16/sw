@@ -1,32 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Domain Modelling](#domain-modelling)
-  - [Domain and Scope](#domain-and-scope)
-    - [Required Domain Knowledge](#required-domain-knowledge)
-      - [Election and Polling Data](#election-and-polling-data)
-  - [Ontology Construction Methodology](#ontology-construction-methodology)
-  - [Conceptualization](#conceptualization)
-    - [External Vocabularies and Ontologies](#external-vocabularies-and-ontologies)
-      - [Reused Semantic Data](#reused-semantic-data)
-      - [Constructed Semantic Data](#constructed-semantic-data)
-  - [Ontology](#ontology)
-  - [Inferencing](#inferencing)
-    - [Initial Trivial Inferences](#initial-trivial-inferences)
-    - [Voter Age Issue](#voter-age-issue)
-  - [Appendix](#appendix)
-    - [Ontology](#ontology-1)
-    - [Evidence of Inference](#evidence-of-inference)
-    - [Revised version of Milestone 1](#revised-version-of-milestone-1)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-/*
-    this is a stub for tomorrow's delivery. 
-    everything in java-style comments are comments for us, 
-    everything else is part of the doc as we deliver it
-*/
 
 # Domain Modelling
 *Semantic Web Course 2016*
@@ -35,11 +6,12 @@
 
 ## Domain and Scope
 
-// 100-200 words
+// 185 / 100-200 words
 
 // Description of the domain and scope of the ontology, as determined by the application 
 
 // what's the difference between domain and scope?
+
 
 Our domain consists of the voting data of a number of legislative assemblies, 
 each belonging to a different political entity. For this voting data, we map 
@@ -65,7 +37,7 @@ assembly voting matches the desires of the populace at a given point in time.
 
 ## Ontology Construction Methodology
 
-// 100-200 words
+// 101 / 100-200 words
 
 // Description of the methodology that is used in the construction of the ontology 
 
@@ -84,7 +56,7 @@ practical task of ontology construction was done in the Protégé ontology edito
 
 ## Conceptualization
 
-// 200-300 words
+// 293 / 200-300 words
 
 // Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing. 
 // The conceptualization should encompass more than 15 classes and at least 5 properties 
@@ -151,12 +123,9 @@ considered.
 
 ## Inferencing
 
-// 100-500 words
+// 106 / 100-500 words
 
 // Describe the inferences
-
-*We are currently having technical issues with the actual process of inferencing. 
-This section outlines what we want to infer*
 
 ### Initial Trivial Inferences
 
