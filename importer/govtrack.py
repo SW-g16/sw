@@ -5,7 +5,7 @@ import time
 from flask import json
 
 TEST = True
-PREFIX = "votes"
+PREFIX = ""
 
 # number of bills to query per bulk
 BULK_SIZE = 100
