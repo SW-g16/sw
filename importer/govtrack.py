@@ -5,6 +5,7 @@ import time
 from flask import json
 
 TEST = True
+PREFIX = ""
 
 # number of bills to query per bulk
 BULK_SIZE = 100
@@ -48,14 +49,14 @@ def constructData():
         return "\"" + cleanString(vote_event['question']) + "\""
 
     def billTextTriple(vote_event):
-        return [parseVoteEvent(vote_event), ':bill_text', parseBillText(vote_event)]
+        return [parseVoteEvent(vote_event), PREFIX+':bill_text', parseBillText(vote_event)]
 
     # called numberOfVoteEvents * numberOfVoters times
     def parseVoter(a):
         return '<https://www.govtrack.us/api/v2/person/' + str(a)+">"
 
     def parseDirection(o):
-        return {'+': ':votesYay','-': ':votesNay','0': ':abstains'}[o['key']]
+        return {'+': PREFIX+':votesYay','-': PREFIX+':votesNay','0': PREFIX+':abstains'}[o['key']]
 
     def voterVotesTriple(vote,vote_event):
         return [
@@ -151,8 +152,8 @@ def constructData():
             birthday_triples.append([voter_uri,'dbo:birthDate',parseDate(voter['birthdate'])])
         if voter['party'] is not None:
 
-            party_membership_triples.append([voter_uri,':memberOf','"'+voter['party']+'"'])
-        voting_assembly_triples += [[voter_uri,':votesIn',va] for va in voter['voting_assemblies']]
+            party_membership_triples.append([voter_uri,PREFIX+':memberOf','"'+voter['party']+'"'])
+        voting_assembly_triples += [[voter_uri,PREFIX+':votesIn',va] for va in voter['voting_assemblies']]
 
 
     print 'Times per vote event:',times
