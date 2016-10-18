@@ -20,7 +20,16 @@ They need to be written.
 
 ## Less urgent (after next deadline)
 
-### Another Data Getter
+### Redesign Importer
+
+The current data getter makes an avoidable large amount of queries for a task that is intended to be rarely performed. 
+It is currently useful as an api, if we just want a small subset of govtrack's data. 
+But we want all the data, and users will be accessing data often. 
+
+So, we should consider downloading the data in bulk and hosting it ourselves. 
+This would also be polite to the source data provider. 
+
+### Another Data Importer
 
 We should have at least two data getters. Two is enough to force us to handle data from a set of datasets (rather than one) and to have a modular data-getter code base and to show we can align diversely formatted data.
 
