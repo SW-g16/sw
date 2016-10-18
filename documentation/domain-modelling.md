@@ -5,9 +5,9 @@
 */
 
 # Domain Modelling
+*Semantic Web Course 2016*
 
-Group 16
-// names
+*Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
 
 ## Domain and Scope
 
@@ -17,27 +17,29 @@ Group 16
 
 // what's the difference between domain and scope?
 
-Our domain is voting data of official voting assemblies of different countries. 
-We map votes, voters and voting assembly compositions through time. 
-Relevant data is provided by different official actors and is in different formats, 
-    and does not currently exist in a combined ontology. 
-This means both that we have to hand-write aligners/mappers/getters for each different data source, 
-    and that our application will result in production of useful semantic data. 
+Our domain consists of the voting data of a number of legislative assemblies, 
+each belonging to a different political entity. For this voting data, we map 
+which bills were voted on, those who vote for these bills and how they voted, 
+and the composition of the legislative assembly over time. The relevant data is 
+drawn from the data made available by the political entities in question, which 
+is then fused into a single, combined ontology. This ontology was designed for 
+those with an interest in the political process, allowing them to look up voting 
+history and patterns. 
     
 ### Required Domain Knowledge
 
-All we need is a basic understanding of voting processes and institutions:
-voters vote for bills in voting assemblies, and the bills that are passed
-are applied to some polity. 
+To understand the domain in question, all that is required is a basic 
+understanding of voting processes and institutions: Assembly members vote for 
+bills in assemblies, with the bills that attain a sufficient percentage of votes 
+then being applied to the relevant polity.
 
-### Possible Domain Extentions
+### Possible Domain Extensions
 
 #### Election and Polling Data
 
-We could combine our data with election results and inter-election polls. 
-This would allow us to compute more interesting measures, 
-    such as how close voting assembly compositions are to 
-    the population's desired composition at a digen point in time
+A promising expansion of our ontology would be to combine it with election 
+results and inter-election polls. This would allow for mapping how closely 
+assembly voting matches the desires of the populace at a given point in time.
 
 ## Ontology Construction Methodology
 
@@ -47,9 +49,14 @@ This would allow us to compute more interesting measures,
 
 // methodology? we opened protege, then clicked stuff until we were done
 
-We constructed an ontology able to express the information we're interested in
-(generally outlined under Domain and Scope, detailed in Conceptualization).
-For the practical task of constructing the ontology, we used Protege. 
+As outlined under 'Domain and Scope' (and detailed in 'Conceptualization'), our 
+goal was to create an ontology that allows a user to look up voting history and 
+patterns for a variety of voting assemblies. For this, we first needed to 
+investigate which legislative assemblies had the relevant data publicly 
+available in a manner that could automatically be extracted. Next, we needed to 
+see what additional data was available for the legislative assembly members, and 
+which of that data would be relevant to looking up voting patterns. Finally, the 
+practical task of ontology construction was done in the Protégé ontology editor.
 
 ## Conceptualization
 
@@ -58,61 +65,63 @@ For the practical task of constructing the ontology, we used Protege.
 // Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing. 
 // The conceptualization should encompass more than 15 classes and at least 5 properties 
 
+First, we need the essential components for describing a set of non-anonymous 
+votes. For this, we only need two classes and three relations.
 
-### Our Concepts
-
-These are the concepts we use in our application. 
-This is in pseudo-code. 
-They are semantically encoded in the attached ontology.ttl
-
-First we give the essential components of an ontology for a set of votes.
-For this we need only two classes and 3 relations. 
-    
     Voter votes yes on Bill
     Voter votes no on Bill
     Voter abstains on Bill
 
-It's relevant when a voting event took place
+The date of a voting event is a relevant piece of data, so an additional 
+relation is created to describe that.
 
     Bill has date <date>
 
-Features of Voters are interesting, so we collect them. 
+Voters have several interesting features, which are also collected.
 
     Voter has birthday <birthday>
     Voter has party affiliation Party
 
-To expand for multiple voting sets, we need to distinguish between 
-    different VotingAssemblies (parliaments, city councils, etc). 
+Voters are further categorized to allow identification of potential voting 
+patterns.
+					
+    Voter has subclasses MiddleAgedVoter, YoungVoter, OldVoter, FemaleVoter, MaleVoter
+
+To expand the ontology to encompass multiple legislative assemblies, an 
+additional relation is needed to distinguish between them.
 
     Bill is processed by VotingAssembly
-    
-Interesting meta-data includes the property of VotingAssemblies. 
+
+For each legislative assembly, there is the relevant data of what polity it 
+legislates for.
 
     VotingAssembly legalizes for Polity
 
-We can refine the meta-data. 
+Polities can be divided into several subcategories, describing different scopes, 
+organizational types and legislatives statuses. 
 
-    Polity has subclasses State, Commune, ...
+    Polity has subclasses State, Commune, Federation, County
 
 ### External Vocabularies and Ontologies
 
 #### Reused Semantic Data
 
-We use dbpedia for uris of political parties and state actors, 
-such as `dbr:United_States_Congress`
-and `dbr:Democratic_Party_(United_States)>`. 
-
-We also use dbpedia for date of birth (foaf has only age and birthday without year):
-
-    `dbp:birthDate`
+DBpedia is used for the URIs of political parties and state actors, such as 
+`dbr:United_States_Congress` and `dbr:Democratic_Party_(United_States)>`. 
+DBpedia is also used for date of birth (`dbp:birthDate`), as foaf only has age 
+and date of birth, not specifying the year.
 
 #### Constructed Semantic Data
 
-Essential to our application is the combination of different data sources. 
-We construct large amounts of data fitting our ontology by querying theirs. 
-Currently we have data from http://www.govtrack.us/api/v2 . 
-We intend to gather data from at least one other source as well 
-    within the scope of this coursework.
+Combination of a variety of data sources is essential to our application. Large 
+quantities of data fitting our ontology are constructed by querying the publicly 
+available data of political entities. Currently, data for our ontology is drawn 
+from the United States government at http://www.govtrack.us/api/v2, but there 
+are plans to gather data from at least one additional source during the scope of 
+this coursework as well. Currently, the data of the European Council is being 
+considered.
+
+## Ontology
 
 ## Inferencing
 
