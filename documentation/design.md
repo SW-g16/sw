@@ -1,45 +1,80 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Application Design](#application-design)
+  - [Goals](#goals)
+    - [Primary Goals](#primary-goals)
+    - [Secondary Goals](#secondary-goals)
+  - [Users](#users)
+    - [Target Groups (TG)](#target-groups-tg)
+      - [TG_1: People with domain interest](#tg_1-people-with-domain-interest)
+      - [TG_2: People with technical interest](#tg_2-people-with-technical-interest)
+      - [TG_3: People who are attracted to data visualizations](#tg_3-people-who-are-attracted-to-data-visualizations)
+  - [Design](#design)
+    - [Browsable Data](#browsable-data)
+      - [Explicit Data](#explicit-data)
+      - [Inferred data](#inferred-data)
+    - [Tabular Browsing](#tabular-browsing)
+    - [Network Browsing](#network-browsing)
+    - [Devices](#devices)
+    - [Possible Extensions](#possible-extensions)
+  - [Walkthrough](#walkthrough)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
 # Application Design
 *Semantic Web Course 2016*
 
 *Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
 
-## Introduction
-
-Many governments have began to provide endpoints for their internal data as a way to become more transparent and push for greater public participation, and voting data is amongst the large amount of data available for big data processing. We would like to use this opportunity to mine the (and others) public open database of votes, as provided by some states. We'll be providing the data both as a computer-friendly API and human-friendly visualizations. We will both forward data of the external data sources, and provide new generated semantic data by inference.
-
 ## Goals
 
-The goal of our application is to provide users with a means to efficiently get both an overview and detailed knowledge of voting data provided by states. We want to give users both an intuitive insight into the (mostly machine-readable) governmental data through in-depth visualization, and to provide them with the possibility to browse data tabularly in a way that's more user-friendly than that provided by the original data provider. Furthermore, we aim to apply machine-reasoning (inference) to arrive at information that is fundamentally important and interesting when researching voting systems, but not made explicit in the original dataset. We would also aim to combine and compare data on different voting entities, for example, The British Parliament, American Senate and more (which provide open data). It is (very) difficult to automatically map strings as having equivalent meaning, but we could collect "equivalent-to" or "equivalent-intention-to" between laws of different databases/states. As a meta-goal, we also want to employ our application on the web to share it with others.  
+### Primary Goals
 
+ - Provide an endpoint combining open voting data from different sources
+ - Achieve 5 timbl-stars
+ - Define meaningful Data Views for humans
+ - Output data views to LD-R UI components
+ 
+### Secondary Goals
+ 
+ - Integrate a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists
+ - Analyze the data using machine learning techniques for semantic data
+ - Define Data Views for viewing statistics / interesting output of analyzing machine
+ - Visualize statistics / analyzer output with standard plots and charts within a LD-R UI component. 
+ 
 ## Users
 
 ### Target Groups (TG)
 
-Below, we have identified some target groups:
+We identify these target groups
 
 #### TG_1: People with domain interest
 
-This group wants to know
+This group wants: 
 
- - Who voted for what?
- - How homogeneous were the party members in their votes?
- - Which clusters of similar voters exist?
-
-This is information that we will infer. We will elaborate on inference further into this document
+ - **Facts**: Who voted for what? What passed and what failed, and with what margin?
+ - **Analysis**: What patterns exist in the behavior of voters, parties and voting assembles? How do entities cluster and how do values correlate?
 
 #### TG_2: People with technical interest
 
-This group is interested in how the application achieves its functionality. We satisfy this need by an extensive about-page, documenting it's workings. We may also show steps taken by the reasoner to arrive at different inferred knowledge.
+This group is interested in how the application achieves its functionality. 
+We satisfy this need by providing thorough documentation, 
+and perhaps by outputing steps of our reasoner's inference. 
 
-#### TG_3: People who are attracted to aesthetically pleasing visualizations
+#### TG_3: People who are attracted to data visualizations
 
 This group may skip past text and explanations to look at visualizations, regardless of the domain.
 This group wants to understand as much information as efficiently as possible from data visualizations.
-To satisfy them, we design our visualizations to be self-explanatory and use graphical features of graph elements (x,y,radius,color,link distance, etc) as keys for different dimensions of data.
+To satisfy them, we design all our visualizations to be expressive and efficient in communicating data. 
+Ideally, the visualizations should also be pretty. 
 
 ## Design
 
-Fundamental components of the application include the means to browse explicit and inferred data tabularly, (network-)graphically, and statistically.
+Fundamental components of the application include the means to browse 
+explicit and inferred data tabularly, (network-)graphically, and statistically.
 
 ### Browsable Data
 

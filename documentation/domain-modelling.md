@@ -1,3 +1,27 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Domain Modelling](#domain-modelling)
+  - [Domain and Scope](#domain-and-scope)
+    - [Required Domain Knowledge](#required-domain-knowledge)
+      - [Election and Polling Data](#election-and-polling-data)
+  - [Ontology Construction Methodology](#ontology-construction-methodology)
+  - [Conceptualization](#conceptualization)
+    - [External Vocabularies and Ontologies](#external-vocabularies-and-ontologies)
+      - [Reused Semantic Data](#reused-semantic-data)
+      - [Constructed Semantic Data](#constructed-semantic-data)
+  - [Ontology](#ontology)
+  - [Inferencing](#inferencing)
+    - [Initial Trivial Inferences](#initial-trivial-inferences)
+    - [Voter Age Issue](#voter-age-issue)
+  - [Appendix](#appendix)
+    - [Ontology](#ontology-1)
+    - [Evidence of Inference](#evidence-of-inference)
+    - [Revised version of Milestone 1](#revised-version-of-milestone-1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 /*
     this is a stub for tomorrow's delivery. 
     everything in java-style comments are comments for us, 
@@ -33,8 +57,6 @@ understanding of voting processes and institutions: Assembly members vote for
 bills in assemblies, with the bills that attain a sufficient percentage of votes 
 then being applied to the relevant polity.
 
-### Possible Domain Extensions
-
 #### Election and Polling Data
 
 A promising expansion of our ontology would be to combine it with election 
@@ -58,12 +80,16 @@ see what additional data was available for the legislative assembly members, and
 which of that data would be relevant to looking up voting patterns. Finally, the 
 practical task of ontology construction was done in the Protégé ontology editor.
 
+
+
 ## Conceptualization
 
 // 200-300 words
 
 // Conceptualization of the domain (concepts, relations) described, discussed and depicted in a drawing. 
 // The conceptualization should encompass more than 15 classes and at least 5 properties 
+
+// todo insert screenshot of ontog
 
 First, we need the essential components for describing a set of non-anonymous 
 votes. For this, we only need two classes and three relations.
@@ -156,7 +182,9 @@ Voters have a birthday and VoteEvents have a date.
 
 ### Evidence of Inference
 
-// The ontology should produce meaningful inferences that are essential for the application. This should be evidenced by a screenshot of e.g. Protege reasoning results. (NB: For the final report: inferences should be on the external data)
+// The ontology should produce meaningful inferences that are essential for the application. 
+// This should be evidenced by a screenshot of e.g. Protege reasoning results.
+// (NB: For the final report: inferences should be on the external data)
 
 ### Revised version of Milestone 1
 
