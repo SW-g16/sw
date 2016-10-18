@@ -33,19 +33,19 @@ then being applied to the relevant polity.
 
 ### Scope
 
-Due to the quantity and variety of data available on various political entities, the potential of this project is vast. 
-For that reason, we are currently limiting our ontology to the data of a single political entity (The US Government). 
-Mapping it to geographic and demographic information about politicians. 
+Due to the quantity and variety of data available on various political entities, the potential of this project is vast.
+For that reason, we are currently limiting our ontology to the data of a single political entity (The US Government).
+Mapping it to geographic and demographic information about politicians.
 The majority of mapping and inferencing will be based on the backgrounds of the politicians and their parties.
 
 #### Mapping and Inferencing Between Political entities
-If our ontology proves to be robust, 
-    we will expand our mapping to be between multiple political entities, 
+If our ontology proves to be robust,
+    we will expand our mapping to be between multiple political entities,
     creating a higher level of inferencing by comparing the entities themselves.
 
 #### Election and Polling Data
 
-Another promising expansion of our ontology would be to combine it with election results and inter-election polls. 
+Another promising expansion of our ontology would be to combine it with election results and inter-election polls.
 This would allow for mapping how closely assembly voting matches the desires of the populace at a given point in time.
 
 ## Ontology Construction Methodology
@@ -72,28 +72,33 @@ The process of acquiring this data consists of
 
 #### Identifying Candidate Sources
 
-By Googlin around we find a list of sources, detailed in the table of the next section. 
+One of the first steps in our Agile development approach, was to do in-depth research into the the open data provided by governments and political bodies. This research helped us with many of our design choices. After identifying many possibilities, we narrowed our choices (based on the quality and depth of data) to the following:
+  - [US Governmental data (GovTrack)](https://www.govtrack.us/)
+  - [UK Parliament bill progress tracking](http://www.data.parliament.uk/dataset/bills)
+  - [European Council votes on legislative acts](http://data.consilium.europa.eu/)
 
 #### Evaluating and Accessing Candidate Sources
 
 |Provider name|endpoint|timblr-stars|comment|
 |---|---|---|---|
-|GovTrack|http://www.govtrack.us/api/v2/|3|data encoded in their own custom json format|
+|GovTrack|http://www.govtrack.us/api/v2/|3|Data encoded in custom JSON format|
+|UK Parliament|http://lda.data.parliament.uk/bills.json|3|Data encoded in custom JSON/XML/CSV formats|
+|European Council|http://data.consilium.europa.eu/sparql|4|Data available through SPARQL endpoint, but is not linked to any external data|
 
 #### Coding Custom Querier and Data Constructor
 
-So far we've programmed one Data Getter. 
-It is written in Python and works by querying govtrack.us, 
-    translating json data in govtrack's format to semantic triples
-    before inserting the the triples to our database. 
+So far we've programmed one Data Getter.
+It is written in Python and works by querying govtrack.us,
+    translating JSON data in Govtrack's format to semantic triples
+    before inserting the the triples to our database.
 
 ##### Issues with Current Implementation
 
-There are some issues with. 
+There are some issues with.
 
- - We're converting from a custom json-data to a custom ttl vocabulary in Python, 
-    without using helpful libraries where we could. 
- - We're doing many small queries instead of one large bulk download of the source data. 
+ - We're converting from a custom JSON data to a custom TTL vocabulary in Python,
+    without using helpful libraries where we could.
+ - We're doing many small queries instead of one large bulk download of the source data.
     This should change out of respect to the data provider and for efficiency of the import task.
 
 ## Conceptualization
@@ -146,44 +151,44 @@ organizational types and legislatives statuses.
 DBpedia is used for the URIs of political parties and state actors, such as
 `dbr:United_States_Congress` and `dbr:Democratic_Party_(United_States)>`.
 DBpedia is also used for date of birth (`dbp:birthDate`), as foaf only has age
-and date of birth, not specifying the year. 
+and date of birth, not specifying the year.
 
 #### Constructed Semantic Data
 
 Combination of a variety of data sources is essential to our application. Large
 quantities of data fitting our ontology are constructed by querying the publicly
 available data of political entities. Currently, data for our ontology is drawn
-exclusively from GovTrack, but the possibility to combine with more sources remains open. 
+exclusively from GovTrack, but the possibility to combine with more sources remains open.
 We intend to gather data from at least one additional source within the scope of
-this coursework as well. 
+this coursework as well.
 
 ## Ontology
 
 	// 224 / 200-300 words
 
-The four most important classes, around which the ontology is built, 
-    are Voter, Voting Assembly, Polity and Bill. 
-All but the latter are subclasses of Actor, 
+The four most important classes, around which the ontology is built,
+    are Voter, Voting Assembly, Polity and Bill.
+All but the latter are subclasses of Actor,
     as they can be considered to be capable of taking action.
-The Voter is a member of a voting assembly, his primary job is to vote on Bills. 
-They can vote either yay or nay on a bill, or abstain from voting, 
-    with each of these tree being expressed by a different object property. 
-Voter has a subclass HumanVoter, defined in anticipation of integrating EU votes into our ontology, 
-    where the Voters are not HumanVoters but Countries. 
-    
-Human Voters have an age, a birth date and a gender property, 
-    each of which has an appropriate data property. 
+The Voter is a member of a voting assembly, his primary job is to vote on Bills.
+They can vote either yay or nay on a bill, or abstain from voting,
+    with each of these tree being expressed by a different object property.
+Voter has a subclass HumanVoter, defined in anticipation of integrating EU votes into our ontology,
+    where the Voters are not HumanVoters but Countries.
+
+Human Voters have an age, a birth date and a gender property,
+    each of which has an appropriate data property.
 Depending on these, they are put in subclasses Young Voter, Old Voter, Middle-Aged Voter, Male Voter and/or Female Voter,
     inferred from the rules we use assert in our ontology.
-    
-A bill is processed by a voting assembly on a certain date. 
-It of course has a text, which is its own data property. 
+
+A bill is processed by a voting assembly on a certain date.
+It of course has a text, which is its own data property.
 A bill applies to a specific polity.
 
-A voting assembly is that in which Bills are introduced and Voters vote for bills. 
+A voting assembly is that in which Bills are introduced and Voters vote for bills.
 It legalizes for a specific Polity.
 
-A Polity is that to which Bills are applied. 
+A Polity is that to which Bills are applied.
 It can be put into several subclasses, which fit different scopes, organizational types and legislative statuses.
 
 
@@ -194,7 +199,7 @@ It can be put into several subclasses, which fit different scopes, organizationa
 
 ### Initial Trivial Inferences
 
-*In this section, we use a pseudo-formal ad-hoc notation to communicate 
+*In this section, we use a pseudo-formal ad-hoc notation to communicate
     steps we want to either infer or deduce.*
 
 These inferences are trivial but enrich our dataset,
