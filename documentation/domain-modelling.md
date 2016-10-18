@@ -120,6 +120,18 @@ We intend to gather data from at least one other source as well
 
 // Describe the inferences
 
+*We are currently having technical issues with the actual process of inferencing. 
+This section outlines what we want to infer*
+
+### Trivial Inferences
+
+These inferences should be trivial but enrich our dataset. 
+We start with these before considering more sophisticated inferences. 
+
+    x votes * on y -> ( x is a Voter , y is a Bill )
+    y is processed by z -> ( y is a Bill , z is a VotingAssembly ) 
+    ( x votes * on y , y is processed by z ) -> ( x is a Voter , y is a Bill , z is a VotingAssembly, x votes in z )
+
 ## Appendix
 
 ### Ontology
