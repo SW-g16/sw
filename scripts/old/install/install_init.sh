@@ -6,11 +6,11 @@
 cd ~
 
 sudo apt-get install git
-git clone https://github.com/Ysgorg/sw.git
+git clone https://github.com/SW-g16/sw.git
 cd sw
 git submodule init
 git submodule update
 
 cd scripts/old/install
-sudo ./install-dependencies.sh
-sudo ./install-ldr.sh
+sudo sh ./install-dependencies.sh
+sudo sh ./install-ldr.sh
