@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Final Report](#final-report)
+  - [Table of Contents](#table-of-contents)
   - [Abstract](#abstract)
   - [Introduction](#introduction)
   - [Application Design (Milestone 1)](#application-design-milestone-1)
@@ -53,11 +54,68 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+
 # Final Report
 
 *Semantic Web Course 2016*
 
 *Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
+
+*Find [source of this document at GitHub](https://github.com/SW-g16/sw/blob/master/documentation/final-report.md).*
+
+## Table of Contents
+
+- [Final Report](#final-report)
+  - [Table of Contents](#table-of-contents)
+  - [Abstract](#abstract)
+  - [Introduction](#introduction)
+  - [Application Design (Milestone 1)](#application-design-milestone-1)
+    - [Goals](#goals)
+      - [Primary Goals](#primary-goals)
+      - [Secondary Goals](#secondary-goals)
+    - [Users](#users)
+      - [Satistfaction Requirements](#satistfaction-requirements)
+        - [TG_1: People with domain interest](#tg_1-people-with-domain-interest)
+        - [TG_2: Developers](#tg_2-developers)
+        - [TG_3: People who are attracted to data visualizations](#tg_3-people-who-are-attracted-to-data-visualizations)
+      - [Satisfaction Requirements per Target Group](#satisfaction-requirements-per-target-group)
+        - [Implied Technical Requirements (TRs)](#implied-technical-requirements-trs)
+    - [Design](#design)
+      - [The LD-R Framework](#the-ld-r-framework)
+        - [Code Location / Method](#code-location--method)
+        - [Network Graph Browser](#network-graph-browser)
+        - [Text-based Browser](#text-based-browser)
+      - [Devices](#devices)
+      - [Possible Extensions](#possible-extensions)
+    - [Walkthrough](#walkthrough)
+  - [Domain Modeling (Milestone 2)](#domain-modeling-milestone-2)
+    - [Domain and Scope](#domain-and-scope)
+      - [Domain](#domain)
+        - [Required Domain Knowledge](#required-domain-knowledge)
+      - [Scope](#scope)
+      - [Mapping and Inferencing Between Political entities](#mapping-and-inferencing-between-political-entities)
+        - [Election and Polling Data](#election-and-polling-data)
+    - [Ontology Construction Methodology](#ontology-construction-methodology)
+      - [Vocabulary Definition Process](#vocabulary-definition-process)
+      - [Automatic Data Querying and Construction](#automatic-data-querying-and-construction)
+        - [Identifying Candidate Sources](#identifying-candidate-sources)
+        - [Evaluating and Accessing Candidate Sources](#evaluating-and-accessing-candidate-sources)
+        - [Coding Custom Querier and Data Constructor](#coding-custom-querier-and-data-constructor)
+          - [Issues with Current Implementation](#issues-with-current-implementation)
+    - [Conceptualization](#conceptualization)
+      - [External Vocabularies and Ontologies](#external-vocabularies-and-ontologies)
+        - [Reused Semantic Data](#reused-semantic-data)
+        - [Constructed Semantic Data](#constructed-semantic-data)
+    - [Ontology](#ontology)
+    - [Inferencing](#inferencing)
+      - [Initial Trivial Inferences](#initial-trivial-inferences)
+      - [Less Trivial Inferences](#less-trivial-inferences)
+- [Appendix](#appendix)
+  - [Ontology](#ontology-1)
+  - [Evidence of Inference](#evidence-of-inference)
+  - [Code Base](#code-base)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Abstract
 
@@ -417,7 +475,7 @@ Find [our ontology at GitHub](http://www.github.com/SW-g16/ontology)
 ## Evidence of Inference
 
 In this screenshot we see data about a Voter and a Bill it supports.
-All Class memberships are inferred.
+All Class memberships are inferred. 
 ![](images/inference_ld-r.png)
 
 ## Code Base

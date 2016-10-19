@@ -1,10 +1,30 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Development Guide for Milestone 3](#development-guide-for-milestone-3)
+  - [Raw Assignment Description](#raw-assignment-description)
+  - [Practical Requirements](#practical-requirements)
+    - [Incoporate external data](#incoporate-external-data)
+    - [Deliver Working Prototype](#deliver-working-prototype)
+  - [Documentation Skeleton](#documentation-skeleton)
+    - [External Data Sources](#external-data-sources)
+      - [Review of Data Sources](#review-of-data-sources)
+      - [Choice of Data Sources](#choice-of-data-sources)
+    - [Integration methodology](#integration-methodology)
+    - [Querying](#querying)
+      - [Relevant Complex SPARQL Queries](#relevant-complex-sparql-queries)
+      - [Query Results Discussion](#query-results-discussion)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Development Guide for Milestone 3
 
 *This doc is intended to help us get going early for the next deadline. Empty checkboxes are todo's that aren't done yet. Some subtasks remain unidentified. *
 
  - [ ] identify all tasks, denote them like this
  
-This milestone corresponds to the rubrics Data reuse and Queries, totaling 20 of 90 points. 
+See also todo.md, for todo's not required for the next deadline
 
 ## Raw Assignment Description
 
