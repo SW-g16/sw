@@ -7,19 +7,7 @@ triple_sets = [
 ]
 
 def storeTriples(triples):
-
-    endpoint = "http://localhost:5820/votes"
-
-    def to_rdf(triples):
-        rdf_str = ""
-        for t in triples:
-            rdf_str += t[0]+" "+t[1]+" "+t[2]+ ". \n"
-        return rdf_str
-
-    data = to_rdf(triples)
-    # print data # this should output valid turtle. validate at http://www.easyrdf.org/converter
-    return requests.post('http://localhost:5000/store',data={'data':data})
-
+    return requests.post('http://localhost:5000/store',data={'data':[t[0]+" "+t[1]+" "+t[2]+ ". \n" for t in triples]})
 
 for i in triple_sets:
     print storeTriples(i)
