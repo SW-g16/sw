@@ -3,19 +3,6 @@
 This document is intended to help guide our efforts.
 If you don't know what to do, you can pick a task from here.
 If there's something that should be done but isn't written here, please write it.
-
-## Urgent (next deadline)
-
- - [x] Infer something relevant and include screenshot
- - [x] Revise previous submission
- - [ ] write and deliver domain-modelling.md
-     - [ ] Achieve deliverability: have 4 sections meeting specified minimum requirements
-         - [x] Domain and Scope
-         - [ ] Ontology Construction Methodology
-         - [x] Conceptualization 
-         - [ ] Ontology and Inferencing
-     - [ ] Revise aggressively until midnight, guided by the rubrics (important: have rubrics in mind)
- 
  
 ## Less urgent (not required for next deadline)
 
@@ -49,6 +36,7 @@ We should have at least two data getters. Two is enough to force us to handle da
 ### Data View Configuration in LD-R
 
  - [ ] Figure where/how to configure Data Views
+     - [ ] Play around with options in reactor.js
  - [ ] Configure some Data Views
 
 We want to configure the views of our data.
@@ -62,3 +50,19 @@ We want to compute, cache and display statistics (such as proportion of democrat
 
 ### Advanced Analysis
  - [ ] 
+ 
+ 
+## Past
+
+### Milestone 2
+
+ - [x] Infer something relevant and include screenshot
+ - [x] Revise previous submission
+ - [x] write and deliver domain-modelling.md
+     - [x] Achieve deliverability: have 4 sections meeting specified minimum requirements
+         - [x] Domain and Scope
+         - [x] Ontology Construction Methodology
+         - [x] Conceptualization 
+         - [x] Ontology and Inferencing
+     - [x] Revise aggressively until midnight, guided by the rubrics (important: have rubrics in mind)
+ 

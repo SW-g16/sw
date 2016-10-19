@@ -20,11 +20,9 @@
 
 # Development Guide for Milestone 3
 
-*This doc is intended to help us get going early for the next deadline. Empty checkboxes are todo's that aren't done yet. Some subtasks remain unidentified. *
+*This doc is intended to help us get going early for the next deadline. Empty checkboxes are todo's that aren't done yet. Some subtasks remain unidentified. See also todo.md, for todo's not required for the next deadline.*
 
  - [ ] identify all tasks, denote them like this
- 
-See also todo.md, for todo's not required for the next deadline
 
 ## Raw Assignment Description
 
