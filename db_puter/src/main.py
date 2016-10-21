@@ -1,11 +1,19 @@
-
-# only requested asynchronously by import.js
-
 import requests
+from flask import Flask, request
 
-def store(endpoint,data):
+import constants as c
+
+app = Flask(__name__)
+
+@app.route('/store', methods=['POST'])
+def store():
 
     # copied and trimmed from course tutorial
+
+    endpoint = c.ENDPOINT
+    data = request.form['data'].encode('utf-8')
+
+    # print data
 
     transaction_begin_url = endpoint + '/transaction/begin'
 
@@ -26,3 +34,8 @@ def store(endpoint,data):
 
     if response.status_code != 200: return str(response.content)
     else: return 'Ok!'
+
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run()
