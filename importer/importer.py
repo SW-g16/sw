@@ -7,7 +7,9 @@ triple_sets = [
 ]
 
 def storeTriples(triples):
-    return requests.post('http://localhost:5000/store',data={'data':[t[0]+" "+t[1]+" "+t[2]+ ". \n" for t in triples]})
+    rdf = [t[0]+" "+t[1]+" "+t[2]+ ". \n" for t in triples]
+    return requests.post('http://localhost:5000/store',data={'data':rdf})
 
 for i in triple_sets:
-    print storeTriples(i)
+   # print storeTriples(i)
+    pass
