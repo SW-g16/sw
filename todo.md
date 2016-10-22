@@ -15,17 +15,20 @@ If there's something that should be done but isn't written here, please write it
 - [ ] Map another dataset (EU, UK, ?)
 - [ ] Make more inferences
 
-
 ### Redesign Importer
 
  - [ ] Redesign importer
- 
-The current data getter makes an avoidable large amount of queries for a task that is intended to be rarely performed. 
-It is currently useful as an api, if we just want a small subset of govtrack's data. 
-But we want all the data, and users will be accessing data often. 
 
-So, we should consider downloading the data in bulk and hosting it ourselves. 
-This would also be polite to the source data provider. 
+#### Acquiring Bulk Data
+
+- [x] acquire bulk data
+
+The first version of the importer made intolerably many http queries (see complexity annotation within code) for tiny slices of data. 
+It was rewritten to dig through data from govtrack's bulk data, which is structured differently than the data at the http endpoint.  
+Refinement remains for the rewritten querier.
+
+- [x] set up framework enabling extraction of all interesting triples
+- [ ] configure to perform exctraction of all interesting triples
 
 ### Another Data Importer
 
