@@ -1,5 +1,5 @@
 .idea/*
 *.pyc
 catalog-v001.xml
-converters/data/*
-!converters/data/README.md
+data/*
+!data/README.md
