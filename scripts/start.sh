@@ -69,10 +69,14 @@ fi
 
 echo 'Stardog directory: '$STARDOG
 cd $STARDOG/bin
-echo
-sudo ./stardog-admin server stop
-sudo ./stardog-admin server start --disable-security
-echo
+
+if ask 'Use sudo for stardog? (default: n)' N; then
+    sudo ./stardog-admin server stop
+    sudo ./stardog-admin server start --disable-security
+else
+    ./stardog-admin server stop
+    ./stardog-admin server start --disable-security
+fi
 
 # Create table
 if ask 'Reset votes table?'; then
@@ -103,6 +107,12 @@ if ask 'Download/Sync new vote data? (default: y)' Y; then
 fi
 
 echo 'Please stop any data downloads before proceeding'
+
+
+if ask 'Reset Semantifier state? (=forget which sessions are tagged "done" and thus skipped) (default: y)' Y; then
+  python $ABS_DIR/../data-getters/govtrack/src/resetdb.py
+fi
+
 
 if ask 'Import new vote data? (default: y)' Y; then
   guake -n guake -e 'python '$ABS_DIR'/../data-getters/govtrack' guake -r "Semantifier"
