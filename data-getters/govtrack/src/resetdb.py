@@ -25,7 +25,7 @@ def clean():
     wipe_working_tags(session_ids)
     wipe_done_tags(session_ids)
     from subprocess import call
-    call(["sh", "sw/scripts/other/reset-db.sh"])
+    call(["sh", "sw/scripts/reset-db.sh"])
 
 
 clean()

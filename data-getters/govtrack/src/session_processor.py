@@ -20,13 +20,13 @@ def process_session(session_id, empty_threshold):
     # this is done to avoid a too large memory usage.
 
     def send_to_db(triples):
-        print'senting to db'
+        #print'senting to db'
         s = ''
         for t in triples: s += "%s %s %s .\n" % t
         # print 'put %d triples in db' %len(triples)
-        r = requests.post('http://localhost:5000/store', data={'data': s})
-        print 'back'
-        return r
+        return requests.post('http://localhost:5000/store', data={'data': s})
+        #print 'back'
+        #return r
 
     # every session's bills and votes are available within data/congress/<session_id>/votes .
     # the votes folders have a variable number of subfolders, which we call vote_groups.
@@ -50,7 +50,7 @@ def process_session(session_id, empty_threshold):
         for b in bills:
 
             triples += bill_processor.process_bill(session_id, g, b)
-            print b
+            #print b
             # when we have enough triples, empty them into stardog
             if len(triples) > empty_threshold:
                 send_to_db(triples)

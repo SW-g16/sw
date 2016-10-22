@@ -70,7 +70,10 @@ fi
 echo 'Stardog directory: '$STARDOG
 cd $STARDOG/bin
 echo
-./stardog-admin server start --disable-security
+cd ~/Software/stardog-4.2
+rm system.lock -f
+cd bin
+sudo ./stardog-admin server start --disable-security
 echo
 
 # Create table
@@ -98,13 +101,13 @@ echo 'LD-R started in new terminal window'
 echo
 
 if ask 'Download/Sync new vote data? (default: y)' Y; then
-  guake -n guake -e 'echo && echo Hit ctrl-c at any point to stop the downloading! && sleep 2 && cd '$ABS_DIR'/../converters && govtrack/import-bulk-govtrack.sh '$ABS_DIR'/../converters/data/' guake -r 'GovTrack download'
+  guake -n guake -e 'echo && echo Hit ctrl-c at any point to stop the downloading! && sleep 2 && sh '$ABS_DIR'/../data-getters/govtrack/import-bulk-govtrack.sh '$ABS_DIR'/../data/govtrack/' guake -r "GovTrack synch" 
 fi
 
 echo 'Please stop any data downloads before proceeding'
 
 if ask 'Import new vote data? (default: y)' Y; then
-  python ../converters/govtrack/handle.py
+  guake -n guake -e 'python '$ABS_DIR'/../data-getters/govtrack' guake -r "Semantifier"
 fi
 
 echo
