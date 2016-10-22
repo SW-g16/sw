@@ -11,8 +11,9 @@ def get_dirnames(path):
     try:
         for (dirpath, dirnames, filenames) in walk(path): return dirnames
     except:
-        print 'Path existed but caused error: ',path
+        print 'Path existed but caused error: ', path
         return None
+
 
 def is_int_only_str(s):
     try:
@@ -20,6 +21,7 @@ def is_int_only_str(s):
         return True
     except ValueError:
         return None
+
 
 def get_int_dirnames(path):
     # returns names of all directories within path
@@ -29,13 +31,13 @@ def get_int_dirnames(path):
     try:
         return sorted([int(d) for d in get_dirnames(path) if is_int_only_str(d)])
     except:
-        print  '(get_int_dirnames) Path existed but caused error: ',path
+        print  '(get_int_dirnames) Path existed but caused error: ', path
         return None
 
 
 def loadJsonFile(path):
     if not os.path.isfile(path):
-        #print "(loadJsonfile) File doesn't exist",path
+        # print "(loadJsonfile) File doesn't exist",path
         return None
     try:
         f = open(path)
@@ -43,5 +45,5 @@ def loadJsonFile(path):
         f.close()
         return r
     except:
-        #print  '(loadJsonFile) Path existed but caused error: ',path
+        # print  '(loadJsonFile) Path existed but caused error: ',path
         return None

@@ -3,9 +3,9 @@
 ## to use
 
  1. make sure db_putter is running
- 2. sh import-bulk-govtrack.sh
+ 2. sh sw/converters/secondary/import-bulk-govtrack.sh
  3. wait
- 4. python handle.py
+ 4. python sw/converters/govtrack
  5. wait
  
 ## features
