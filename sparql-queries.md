@@ -9,12 +9,20 @@ PREFIX eucodim: <http://data.consilium.europa.eu/data/public_voting/qb/dimension
 PREFIX eucoprop: <http://data.consilium.europa.eu/data/public_voting/qb/measureproperty/>
 PREFIX eucovote: <http://data.consilium.europa.eu/data/public_voting/consilium/vote/>
 
-SELECT ?act ?country ?vote
+SELECT (STR(?actnumber) as ?actnumber) (STR(?description) as ?description) (STR(?countryName) as ?countryName) (STR(?voted) as ?voted) 
 from <http://data.consilium.europa.eu/id/dataset/votingresults>
 where {
   ?observation eucodim:country ?country .
   ?observation eucoprop:vote ?vote .
   ?observation eucodim:act ?act .
+  ?country <http://www.w3.org/2004/02/skos/core#prefLabel> ?countryName .
+  ?vote <http://www.w3.org/2004/02/skos/core#prefLabel> ?voted .
+  ?act <http://www.w3.org/2004/02/skos/core#definition> ?description .
+  ?act <http://www.w3.org/2004/02/skos/core#prefLabel> ?actnumber .
 }
 ORDER BY DESC(?act)
-```
+```	
+
+# As far as I can tell, there is no place in the endpoint that says whether the act passed, the number of votes per country (by which we could have calculated it ourselves)*, or full description of acts. 
+
+# * it does interlink with dbpedia, but that doesn't have the info either
