@@ -4,16 +4,23 @@ Using LD-R
 
 ## Installation
 
-1. clone the repository and its submodules:
-```
-git clone https://github.com/Ysgorg/sw.git
-cd sw
-git submodule init
-git submodule update
-```
-2. make sure you have stardog installed
-3. run /scripts/start.sh and follow the instructions (chmod 750 start.sh if you get permission denied)
-4. Open LD-R in your browser (localhost Port 3000 for dev mode, 4000 for build mode), click datasets -> votes. You should now see the data of ontology.ttl!
+    # Requirements: Linux with stardog 4.2 installed
+    
+    cd ~
+    sudo apt-get install git
+    git clone https://github.com/SW-g16/sw.git
+    sudo sh sw/scripts/install.sh
+    # yes to all prompts
+
+## Running
+
+    sh sw/scripts/start.sh
+
+## Checking 
+
+There should be stuff at localhost:5820 and localhost:3000. 
+If you've run start.sh and said yes to the last two prompts, 
+you should see some data in localhost:3000->datasets->\[...\]votes\[...\]
 
 ## About
 
