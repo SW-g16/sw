@@ -70,9 +70,7 @@ fi
 echo 'Stardog directory: '$STARDOG
 cd $STARDOG/bin
 echo
-cd ~/Software/stardog-4.2
-rm system.lock -f
-cd bin
+sudo ./stardog-admin server stop
 sudo ./stardog-admin server start --disable-security
 echo
 
@@ -86,7 +84,7 @@ echo
 cd $ABS_DIR
 
 # Old framework
-guake -n guake -e 'cd '$ABS_DIR'/../db_puter && python src/main.py' guake -r 'App'
+guake -n guake -e 'cd '$ABS_DIR'/../db_puter && python src/main.py' guake -r 'DB Interface'
 echo 'Old framework started in new terminal window'
 echo
 

@@ -44,7 +44,7 @@ def store():
     endpoint = c.ENDPOINT
     data = request.form['data'].encode('utf-8')
 
-    print data
+    #print data
 
     transaction_begin_url = endpoint + '/transaction/begin'
 
