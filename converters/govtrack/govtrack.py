@@ -20,7 +20,7 @@ def wipe_working_tags(session_ids):
     # the tags are used to navigate worker threads
 
     for s_id in session_ids:
-        path = '%s/%d/working' % (c.ROOT, s_id)
+        path = '%s/%d/working' % (c.CONGRESS_PATH, s_id)
         if os.path.isfile(path): os.remove(path)
 
 
@@ -28,7 +28,7 @@ def wipe_done_tags(session_ids):
     # clears all 'working' tags within the source data set
     # the tags are used to navigate worker threads
     for s_id in session_ids:
-        path = '%s/%d/done' % (c.ROOT, s_id)
+        path = '%s/%d/done' % (c.CONGRESS_PATH, s_id)
         if os.path.isfile(path): os.remove(path)
 
 def mark_session(session_id,key):
@@ -36,16 +36,16 @@ def mark_session(session_id,key):
     if key == 'working':
         # the thread is starting work on this branch
         # we mark it so other threads stay away from this session
-        f = open("%s%d/%s" % (c.ROOT, session_id, key), 'w')
+        f = open("%s%d/%s" % (c.CONGRESS_PATH, session_id, key), 'w')
         f.close()
         return True
     elif key == 'done':
         # the thread is done with this branch
         # we mark it as done so other threads stay away from this session, also upon a later run of this program
-        f = open("%s%d/%s" % (c.ROOT, session_id, key), 'w')
+        f = open("%s%d/%s" % (c.CONGRESS_PATH, session_id, key), 'w')
         f.close()
-        if (os.path.isfile("%s%d/working"%(c.ROOT, session_id))):
-            os.remove("%s%d/working" % (c.ROOT, session_id))
+        if (os.path.isfile("%s%d/working"%(c.CONGRESS_PATH, session_id))):
+            os.remove("%s%d/working" % (c.CONGRESS_PATH, session_id))
 
         return True
 
@@ -114,7 +114,7 @@ def terminalUpdate():
 
 
 def get_session_ids():
-    return helpers.get_int_dirnames(c.ROOT)
+    return helpers.get_int_dirnames(c.CONGRESS_PATH)
 
 def constructData():
 
@@ -130,7 +130,7 @@ def constructData():
     wipe_working_tags(session_ids)
 
     def session_needs_worker(s_id):
-        return not os.path.isfile('%s%d/working'%(c.ROOT, s_id)) and not os.path.isfile('%s%d/done'%(c.ROOT, s_id))
+        return not os.path.isfile('%s%d/working' % (c.CONGRESS_PATH, s_id)) and not os.path.isfile('%s%d/done' % (c.CONGRESS_PATH, s_id))
 
     for s_id in session_ids:
 

@@ -1,19 +1,50 @@
 import requests
+import time
 from flask import Flask, request
 
 import constants as c
 
 app = Flask(__name__)
 
+
+global num_requests
+num_requests=0
+
+global start_time
+start_time = time.time()
+
+import threading
+
+def set_interval(func, sec):
+    def func_wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
+
+INTERVAL = 30
+
+def terminal_update():
+
+    global num_requests
+    print 'received', num_requests,'requests in the last %d seconds' % INTERVAL
+    num_requests = 0
+
+set_interval(terminal_update,INTERVAL)
+
 @app.route('/store', methods=['POST'])
 def store():
 
     # copied and trimmed from course tutorial
 
+    global num_requests
+    num_requests +=1
+
     endpoint = c.ENDPOINT
     data = request.form['data'].encode('utf-8')
 
-    # print data
+    print data
 
     transaction_begin_url = endpoint + '/transaction/begin'
 
