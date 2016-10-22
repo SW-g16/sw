@@ -6,9 +6,9 @@
 
 # TODO rewrite to --include only what we want instead of to --exclude all we don't want
 
-cd ~
-mkdir 'govtrack-data'
+cd $1
+echo "Download path: "$1
+mkdir -p 'govtrack-data'
 cd govtrack-data
 
 rsync -avz --delete-excluded --exclude='**amendments**' --exclude='**hjres**' --exclude='**sconres**' --exclude='**sjres**' --exclude='**.xml' --exclude='**hconres**' --exclude='**samdt**' --exclude='**hres**' --exclude='**sres**' --exclude='**/text-versions/' --exclude="**committee**" govtrack.us::govtrackdata/congress .
-
