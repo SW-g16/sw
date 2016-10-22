@@ -99,8 +99,29 @@ _:genid4 a owl:Restriction ;
 # http://votes.examples.com/ontology/memberOf
 
 :memberOf a owl:ObjectProperty ;
+	owl:inverseOf :hasMember ;
 	rdfs:domain :Voter ;
 	rdfs:range :Party .
+# 
+# http://votes.examples.com/ontology/hasMember
+
+:hasMember a owl:ObjectProperty ;
+	rdfs:label "hasMember"@en .
+# 
+# http://votes.examples.com/ontology/representedBy
+
+:representedBy a owl:ObjectProperty ;
+	owl:inverseOf :represents ;
+	rdfs:domain :Polity ;
+	rdfs:range :Voter ;
+	rdfs:label "representedBy"@en .
+# 
+# http://votes.examples.com/ontology/represents
+
+:represents a owl:ObjectProperty ;
+	rdfs:domain :Voter ;
+	rdfs:range :Polity ;
+	rdfs:label "represents"@en .
 # 
 # http://votes.examples.com/ontology/processed
 
@@ -363,7 +384,17 @@ _:genid23 rdf:rest rdf:nil .
 :Voter a owl:Class ;
 	owl:equivalentClass _:genid25 .
 
-_:genid25 owl:intersectionOf _:genid28 .
+_:genid25 owl:intersectionOf _:genid30 .
+
+_:genid30 a rdf:List ;
+	rdf:first _:genid31 .
+
+_:genid31 a owl:Restriction ;
+	owl:onProperty :represents ;
+	owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+	owl:onClass :Polity .
+
+_:genid30 rdf:rest _:genid28 .
 
 _:genid28 a rdf:List ;
 	rdf:first _:genid29 .
@@ -398,22 +429,22 @@ _:genid25 a owl:Class .
 # http://votes.examples.com/ontology/YoungVoter
 
 :YoungVoter a owl:Class ;
-	owl:equivalentClass _:genid30 .
+	owl:equivalentClass _:genid32 .
 
-_:genid30 a owl:Restriction ;
+_:genid32 a owl:Restriction ;
 	owl:onProperty foaf:age ;
-	owl:someValuesFrom _:genid31 .
+	owl:someValuesFrom _:genid33 .
 
-_:genid31 a rdfs:Datatype ;
+_:genid33 a rdfs:Datatype ;
 	owl:onDatatype xsd:integer ;
-	owl:withRestrictions _:genid32 .
+	owl:withRestrictions _:genid34 .
 
-_:genid32 a rdf:List ;
-	rdf:first _:genid33 .
+_:genid34 a rdf:List ;
+	rdf:first _:genid35 .
 
-_:genid33 xsd:maxExclusive "40"^^xsd:integer .
+_:genid35 xsd:maxExclusive "40"^^xsd:integer .
 
-_:genid32 rdf:rest rdf:nil .
+_:genid34 rdf:rest rdf:nil .
 
 :YoungVoter rdfs:subClassOf :HumanVoter ;
 	rdfs:label "YoungVoter"@en .

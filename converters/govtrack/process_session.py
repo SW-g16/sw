@@ -2,13 +2,14 @@ import requests
 import helpers
 import constants as c
 
-def process_session(session_id, empty_threshold):
 
-    # this is where most of the adaption to the endpoint happens.
-    # this function processes a 'session' - a piece of the totality of congress'
-    #   bills and laws, delimited by time.
-    # there is currently a total of 114 historic sessions,
-    #  and this function processes all the bills and votes for one of them.
+# this is where most of the adaption to the endpoint happens.
+# this function processes a 'session' - a piece of the totality of congress'
+#   bills and laws, delimited by time.
+# there is currently a total of 114 historic sessions,
+#  and this function processes all the bills and votes for one of them.
+
+def process_session(session_id, empty_threshold):
 
     # we declare an array of triples which we will fill while traversing the data directory
 
@@ -19,7 +20,7 @@ def process_session(session_id, empty_threshold):
     # this is done to avoid a too large memory usage.
 
     def send_to_db(triples):
-        s = '@prefix : <http://www.votes.example.com/> .\n'
+        s = ''
         for t in triples: s += "%s %s %s .\n" % t
         #print 'put %d triples in db' %len(triples)
         return requests.post('http://localhost:5000/store',data={'data':s})
@@ -27,15 +28,11 @@ def process_session(session_id, empty_threshold):
     # every session's bills and votes are available within data/congress/<session_id>/votes .
     # the votes folders have a variable number of subfolders, which we call vote_groups.
 
-    vote_groups = helpers.get_int_dirnames('%s%d/votes' % (c.ROOT, session_id))
+    vote_groups = helpers.get_int_dirnames('%s%d/votes' % (c.CONGRESS_PATH, session_id))
 
     # check if vote_groups is ok
 
     if vote_groups is None: return []
-
-    # cache the number of triples
-
-    num_triples = 0
 
     # navigate through all the vote_groups.
 
@@ -43,14 +40,15 @@ def process_session(session_id, empty_threshold):
 
         # get pointers to bill data (yes, contained within the votes/g folder)
 
-        bills = helpers.get_dirnames('%s%d/votes/%d' % (c.ROOT, session_id , g))
+        bills = helpers.get_dirnames('%s%d/votes/%d' % (c.CONGRESS_PATH, session_id , g))
 
         # for all the bills
 
         for b in bills:
 
+            # when we have enough triples, empty them into stardog
 
-            if len(triples)>empty_threshold:
+            if len(triples) > empty_threshold:
                 send_to_db(triples)
                 triples = []
 
@@ -60,24 +58,27 @@ def process_session(session_id, empty_threshold):
 
             # get the individual bills' data from a json file
 
-            bill_data = helpers.loadJsonFile('%s%d/votes/%d/%s/data.json' % (c.ROOT, session_id , g, b))
+            bill_data = helpers.loadJsonFile('%s%d/votes/%d/%s/data.json' % (c.CONGRESS_PATH, session_id , g, b))
 
             # if the bill data is no good, ignore it
 
             if bill_data is None or 'votes' not in bill_data: continue
 
-            # we generate a uri for the bill
+            # construct bill uri from retrieved bill id
 
-            bill_uri = '<gt_b/%d>' % bill_data['number']
+            bill_uri = '<gt_b/%d_%d>' % (session_id,bill_data['number'])
 
-            # retrieve the bill text
+            # get and clean bill text
 
             bill_text = '"%s"' % bill_data['question'].replace('"', '').replace('\'', '')
 
-            # add the bill and it's text to our graph
+            # add bill text triple
 
-            triples.append((bill_uri,':text',bill_text))
-            #num_triples+=1
+            triples.append((bill_uri,':hasText',bill_text))
+
+            # bill was processed by either the senate or the house of representatives
+            if b[0]=='s':   triples.append((bill_uri,':processedBy','<va/AmericanSenate>'))
+            elif b[1]=='h': triples.append((bill_uri,':processedBy','<va/AmericanHouseOfRepresentatives>'))
 
             for k in range(0,3):
 
@@ -118,17 +119,8 @@ def process_session(session_id, empty_threshold):
                     # fortunately stardog detects and prunes away duplicate triples,
                     #  so we don't need to worry about polluting our database
 
-                    triples.append((voter_uri, ':partyMemberOf', party_uri))
-                    triples.append((voter_uri, ':representsState', state_uri))
-                    """
-                    num_triples+=3
-
-                    if num_triples > empty_threshold:
-                        send_to_db(triples)
-                        triples = []
-                    """
-                    # if we have a certain amount of triples already,
-                    #   empty them into stardog
+                    triples.append((voter_uri, ':memberOf', party_uri))
+                    triples.append((voter_uri, ':represents', state_uri))
 
 
     send_to_db(triples)
