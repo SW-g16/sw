@@ -83,24 +83,28 @@ echo
 cd $ABS_DIR
 
 # Old framework
-cd ../code
-x-terminal-emulator -e "python src/main.py &"
+guake -n guake -e 'cd '$ABS_DIR'/../db_puter && python src/main.py' guake -r 'App'
 echo 'Old framework started in new terminal window'
 echo
 
 # start ld-r
-cd ../ld-r
 if ask 'start LD-R in dev mode? (default: n)' N; then
-  x-terminal-emulator -e "npm run dev &"
+  guake -n guake -e 'cd '$ABS_DIR'/../ld-r && npm run dev' guake -r 'LD-R Dev'
 else
-  x-terminal-emulator -e "npm run build &"
+  guake -n guake -e 'cd '$ABS_DIR'/../ld-r && npm run build' guake -r 'LD-R Build'
 fi
 
 echo 'LD-R started in new terminal window'
 echo
 
+if ask 'Download/Sync new vote data? (default: y)' Y; then
+  guake -n guake -e 'echo && echo Hit ctrl-c at any point to stop the downloading! && sleep 2 && cd '$ABS_DIR'/../converters && govtrack/import-bulk-govtrack.sh '$ABS_DIR'/../converters/data/' guake -r 'GovTrack download'
+fi
+
+echo 'Please stop any data downloads before proceeding'
+
 if ask 'Import new vote data? (default: y)' Y; then
-  python ../importer/importer.py
+  python ../converters/govtrack/handle.py
 fi
 
 echo
