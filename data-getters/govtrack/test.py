@@ -1,46 +1,34 @@
 import time
 
-from src import get_session_ids, session_processor, resetdb
+from src import session_processor, resetdb, bill_processor, votes_processor
 
-
-def test_session_processor(empty_threshold, s_id):
-    session_ids = get_session_ids.get_session_ids()
-    resetdb.wipe_working_tags(session_ids)
-    resetdb.wipe_done_tags(session_ids)
+def test_votes_processor(votes, bill_uri):
+    resetdb.clean()
     start = time.time()
-    session_processor.process_session(s_id, empty_threshold)
+    print votes_processor.process_votes(votes,bill_uri)
     return time.time() - start
 
-def find_best_value():
-    # ~1500 seems good
+def test_bill_processor(s_id,g,b_id):
+    resetdb.clean()
+    start = time.time()
+    print bill_processor.process_bill(s_id,g,b_id)
+    return time.time() - start
 
-    min_ = 750
-    interval = 250
+def test_session_processor(s_id):
+    start = time.time()
+    session_processor.process_session(s_id)
+    return time.time() - start
 
-    results = []
+#print test_votes_processor({'Yea':[{'id':'test_voter'},{'id':'other_test_voter'}],'Nay':[{'id':'test_voter_2'},{'id':'other_test_voter_2'}],'Not Voting':[{'id':'test_voter_3'},{'id':'other_test_voter_3'}] },"<test_bill>")
 
-    session_ids_to_test = [n * 15 for n in range(1, 6)]
+#print test_bill_processor(3,1,'s3')
+"""
+TEST_SESSION_ID = 14
+for threshold in [1000,2000,3000] :
+    print threshold, test_session_processor(TEST_SESSION_ID,threshold)
+"""
 
-    for s in range(0, 5):
-        results.append([])
-        session_id = session_ids_to_test[s]
-        for i in range(0, 10):
-            v = min_ + interval * i
-            r = test_session_processor(v, session_id)
-            results[s].append([v, r])
-            print "%d\t%f" % (v, r)
+resetdb.clean()
 
-    averages = []
-
-    for i in range(0, 10):
-        sum_ = 0
-        for j in range(0, len(results)):
-            sum_ += results[j][i]
-        averages.append(sum_ / len(session_ids_to_test))
-        print('avg', averages[len(averages) - 1])
-
-    return [results, averages]
-
-
-print test_session_processor(1500, 50)
-# print find_best_value()
+for i in range(10,40):
+    print i,test_session_processor(i)

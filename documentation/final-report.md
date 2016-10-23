@@ -61,7 +61,7 @@
 
 *Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
 
-*Find [source of this document at GitHub](https://github.com/SW-g16/sw/blob/master/documentation/final-report.md).*
+*[latest version of this document on GitHub](https://github.com/SW-g16/sw/blob/master/documentation/final-report.md).*
 
 ## Table of Contents
 
