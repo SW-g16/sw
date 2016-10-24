@@ -11,8 +11,12 @@ print 'Govtrack Data Importer'
 start = time.time()
 session_ids = get_session_ids.get_session_ids()
 
-start_index = int(sys.argv[1])
-govtrack_processor.init(session_ids[start_index*5:start_index*5 + 5])
+if len(sys.argv)>1:
+    start_index = int(sys.argv[1])
+    govtrack_processor.init(session_ids[start_index*5:start_index*5 + 5])
+
+else:
+    govtrack_processor.init(session_ids)
 
 print 'all workers are done. the entire govtrack dataset should now have been mined'
 print 'took ', time.time() - start, 'seconds'
