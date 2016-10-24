@@ -79,6 +79,13 @@ else
     ./stardog-admin server start --disable-security
 fi
 
+# Create table
+if ask 'Reset votes table?'; then
+  ./stardog-admin db drop votes
+  ./stardog-admin db create -n votes $ABS_DIR/../ontology.ttl
+fi
+echo
+
 cd $ABS_DIR
 
 # Old framework
