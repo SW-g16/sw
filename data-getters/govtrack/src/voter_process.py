@@ -1,4 +1,3 @@
-
 """
 # here we get data from govtacks' congress-legislators-(current|historic).csv files.
 # the files do not overlap - no voters appear in both files
@@ -37,85 +36,176 @@
 28  :wikipedia <http://www.wikipedia.org/wiki/wikipedia_id>
 
 """
-from pprint import pprint
 
 import send_to_db
 import os
 
-
-
 import csv
+
+states = {'AK': 'Alaska', 'AL': 'Alabama', 'AR': 'Arkansas', 'AS': 'American Samoa', 'AZ': 'Arizona',
+          'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DC': 'District of Columbia', 'DE': 'Delaware',
+          'FL': 'Florida', 'GA': 'Georgia', 'GU': 'Guam', 'HI': 'Hawaii', 'IA': 'Iowa', 'ID': 'Idaho', 'IL': 'Illinois',
+          'IN': 'Indiana', 'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'MA': 'Massachusetts', 'MD': 'Maryland',
+          'ME': 'Maine', 'MI': 'Michigan', 'MN': 'Minnesota', 'MO': 'Missouri', 'MP': 'Northern Mariana Islands',
+          'MS': 'Mississippi', 'MT': 'Montana', 'NA': 'National', 'NC': 'North Carolina', 'ND': 'North Dakota',
+          'NE': 'Nebraska', 'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico', 'NV': 'Nevada',
+          'NY': 'New York', 'OH': 'Ohio', 'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'PR': 'Puerto Rico',
+          'RI': 'Rhode Island', 'SC': 'South Carolina', 'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas',
+          'UT': 'Utah', 'VA': 'Virginia', 'VI': 'Virgin Islands', 'VT': 'Vermont', 'WA': 'Washington',
+          'WI': 'Wisconsin', 'WV': 'West Virginia', 'WY': 'Wyoming'}
+
+fail_states = []
+
+
+def make_safe(string):
+    return ''.join(e for e in string if e.isalnum() or e == ' ')
+
+
+def represents_triple(voter_uri, state_acronym, i, path):
+    # some state acronyms be bad
+    try:
+        return voter_uri, ':represents', 'dbr:' + states[state_acronym].replace(' ', '_')
+    except:
+        fail_states.append((state_acronym, i, path[len(path)-12:]))
+        return None
+
+
+def get_voter_uri(param):
+    if param == '' or param == None: return None
+    return '<http://www.govtrack.us/api/v2/person/%s>' % param
+
+
+party_uri_map = {
+    'Democrat': 'dbr:Democratic_Party_\(United_States\)',
+    'Republican':'dbr:Republican_Party_\(United_States\)',
+    'Independent':'dbr:Independent_politician',
+    'Anti-Administration':'dbr:Anti-Administration_Party',
+    'Pro-Administration':'dbr:Pro-Administration_Party',
+    'Federalist':'dbr:Federalist_Party',
+    'American':'dbr:Know_Nothing',
+    'Whig':'dbr:Whig_Party_\(United_States\)',
+    'Adams':'dbr:National_Republican_Party',
+    'Adams Democrat':'dbr:National_Republican_Party',
+    # jesus fucking christ
+    'Anti-Jacksonian':'dbr:National_Republican_Party',
+    'Anti-Jackson':'dbr:National_Republican_Party',
+    'Anti Jacksonian':'dbr:National_Republican_Party',
+    'Anti Jackson':'dbr:National_Republican_Party',
+    'Democratic-Republican':'dbr:Democratic-Republican_Party',
+    'Jakson':'dbr:Democratic-Republican_Party',
+    'Jackson Republican':'dbr:Democratic-Republican_Party',
+    'Crawford Republican':'dbr:Democratic-Republican_Party',
+    'Jacksonian':'dbr:Democratic-Republican_Party',
+    'Nullifier':'<https://en.wikipedia.org/wiki/Nullifier_Party>',
+    'Anti Masonic':'dbr:Anti-Masonic_Party',
+    'Union Democrat':'<https://en.wikipedia.org/wiki/Union_Democratic_Party>'
+}
+
+"""
+'Conservative':'dbr:',
+'Ind. Democrat':'dbr:',
+'Law and Order':'dbr:',
+'Liberty':'dbr:',
+'Free Soil':'dbr:',
+'Ind. Republican-Democrat':'dbr:',
+'Ind. Whig':'dbr:',
+'Unionist':'dbr:',
+'States Rights':'dbr:',
+'Anti-Lecompton Democrat':'dbr:',
+'Constitutional Unionist':'dbr:',
+'Independent Democrat':'dbr:',
+'Unconditional Unionist':'dbr:',
+'Conservative Republican':'dbr:',
+'Ind. Republican':'dbr:',
+'Liberal Republican':'dbr:',
+'National Greenbacker':'dbr:',
+'Readjuster Democrat':'dbr:',
+'Readjuster':'dbr:',
+'Union':'dbr:',
+'Union Labor':'dbr:',
+'Populist':'dbr:',
+'Silver Republican':'dbr:',
+'Free Silver':'dbr:',
+'Democratic and Union Labor':'dbr:',
+'Progressive Republican':'dbr:',
+'Progressive':'dbr:',
+'Prohibitionist':'dbr:',
+'Socialist':'dbr:',
+'Farmer-Labor':'dbr:',
+'Nonpartisan':'dbr:',
+'Coalitionist':'dbr:',
+'Popular Democrat':'dbr:',
+'American Labor':'dbr:',
+'New Progressive':'dbr:',
+'Republican-Conservative':'dbr:',
+'Democrat-Liberal':'dbr:'
+
+"""
+
+def get_party(key):
+    if key in party_uri_map: return party_uri_map[key]
+    else: return '"%s"' % key
+
+
+def gender_triple(voter_uri, gender_key):
+    k = None
+    if gender_key == 'M': k = '"male"'
+    elif gender_key == 'F': k = '"female"'
+    else: return None
+    return voter_uri, 'foaf:gender', k
+
+
+def votesIn_triple(voter_uri, voting_assembly_key):
+    va_uri = None
+    if voting_assembly_key == 'rep': va_uri = 'dbr:United_States_House_of_Representatives'
+    elif voting_assembly_key == 'sen': va_uri = 'dbr:United_States_Senate'
+    else: return None
+    return voter_uri, ':votesIn', va_uri
+
+
+def parse_row(row, i, path):
+    # voter uri, using govtrack id.
+    # advantage: can be used to access govtrack voter obects,
+    #   like https://www.govtrack.us/api/v2/person/411931
+    voter_uri = get_voter_uri(row[23])
+    if voter_uri == None: return []
+
+    possibles = [
+        gender_triple(voter_uri, row[3]),
+        votesIn_triple(voter_uri, row[4]),
+        represents_triple(voter_uri, row[5], i, path)
+    ]
+
+    return [
+        (voter_uri, 'foaf:lastName', '"%s"' % make_safe(row[0])),
+        (voter_uri, 'foaf:firstName', '"%s"' % make_safe(row[1])),
+        (voter_uri, ':memberOf', "%s" % get_party(row[7])),
+        (voter_uri, 'owl:sameAs', '<http://api.stardog.com/gt_v/%s>' % row[18]),
+        (voter_uri, ':wikipedia', '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
+    ] + [p for p in possibles if p is not None]
+
+
+def get_paths():
+    file_suffixes = ['current.csv','historic.csv']
+    root = os.path.dirname(os.path.realpath(__file__)) + '/../../../data/govtrack/congress-legislators/legislators-'
+    return [root + s for s in file_suffixes]
 
 
 def process():
 
-    states = {'AK': 'Alaska','AL': 'Alabama','AR': 'Arkansas','AS': 'American Samoa','AZ': 'Arizona','CA': 'California','CO': 'Colorado','CT': 'Connecticut','DC': 'District of Columbia','DE': 'Delaware','FL': 'Florida','GA': 'Georgia','GU': 'Guam','HI': 'Hawaii','IA': 'Iowa','ID': 'Idaho','IL': 'Illinois','IN': 'Indiana','KS': 'Kansas','KY': 'Kentucky','LA': 'Louisiana','MA': 'Massachusetts','MD': 'Maryland','ME': 'Maine','MI': 'Michigan','MN': 'Minnesota','MO': 'Missouri','MP': 'Northern Mariana Islands','MS': 'Mississippi','MT': 'Montana','NA': 'National','NC': 'North Carolina','ND': 'North Dakota','NE': 'Nebraska','NH': 'New Hampshire','NJ': 'New Jersey','NM': 'New Mexico','NV': 'Nevada','NY': 'New York','OH': 'Ohio','OK': 'Oklahoma','OR': 'Oregon','PA': 'Pennsylvania','PR': 'Puerto Rico','RI': 'Rhode Island','SC': 'South Carolina','SD': 'South Dakota','TN': 'Tennessee','TX': 'Texas','UT': 'Utah','VA': 'Virginia','VI': 'Virgin Islands','VT': 'Vermont','WA': 'Washington','WI': 'Wisconsin','WV': 'West Virginia','WY': 'Wyoming'}
+    paths = get_paths()
 
-    def get_voter_uri(param):
-        return '<http://www.govtrack.us/api/v2/person/%s>'% param
+    triples = [('@prefix', ':', '<http://www.votes.example.com/ontology/>'),
+               ('@prefix', 'dbr:', '<http://dbpedia.org/resource/>'),
+               ('@prefix', 'owl:', '<http://www.w3.org/2002/07/owl#>'),
+               ('@prefix', 'foaf:', '<http://xmlns.com/foaf/0.1/>')]
 
-    def get_party(key):
-        # todo parse properly and return dbpedia uri
-        return '"%s"'%key
-
-    fail_states = []
-
-    interesting_indices = [0,1,2,4,5,7,18,23,28]
-    paths = [
-        os.path.dirname(os.path.realpath(__file__))+'/../../../data/govtrack/congress-legislators/legislators-current.csv',
-        os.path.dirname(os.path.realpath(__file__))+'/../../../data/govtrack/congress-legislators/legislators-historic.csv'
-    ]
     for path in paths:
-        print 'now',path
         with open(path, 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            next(reader)  # ignore headers
+            for i, row in enumerate(reader): triples += parse_row(row, i, path)
 
-            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-
-            i=0
-
-            triples = [
-                ('@prefix',':','<http://www.votes.example.com/ontology/>'),
-                ('@prefix','dbr:','<http://dbpedia.org/resource/>'),
-                ('@prefix','owl:','<http://www.w3.org/2002/07/owl#>'),
-                ('@prefix','foaf:','<http://xmlns.com/foaf/0.1/>')
-            ]
-            for row in spamreader:
-                if i==0:
-                    # ignore header
-                    i+=1
-                    continue
-                #print 'ya'
-                i+=1
-                #print i
-
-                # voter uri, using govtrack id.
-                # advantage: can be used to access govtrack voter obects,
-                #   like https://www.govtrack.us/api/v2/person/411931
-                voter_uri = get_voter_uri(row[23])
-
-                first_name_triple = (voter_uri, 'foaf:firstName', '"%s"'% row[0])
-
-                last_name_triple = (voter_uri,'foaf:lastName','"%s"'%row[1])
-
-                gender_triple = (voter_uri,'foaf:gender','"male"' if row[2]=='M' else '"female"')
-
-                votesIn_triple = (voter_uri,':votesIn','dbr:United_States_House_of_Representatives' if row[4] == 'rep' else 'dbr:United_States_Senate')
-
-                try: # there's some bad data
-                    representsState_triple = (voter_uri,':represents','dbr:'+states[row[5]].replace(' ','_'))
-                except:
-                    fail_states.append((row[5],i,path))
-                    continue
-
-                party_triple = (voter_uri,':memberOf' , "%s" % get_party(row[7]))
-
-                bioguide_id_triple = (voter_uri,'owl:sameAs','<http://api.stardog.com/gt_v/%s>'%row[18]) # associate with reviously stored voters
-
-                wikipedia_id_triple = (voter_uri,':wikipedia','<http://www.wikipedia.org/wiki/%s>'%row[28].replace(' ','_'))
-
-                triples += [first_name_triple, last_name_triple, gender_triple,votesIn_triple,representsState_triple, party_triple,bioguide_id_triple,wikipedia_id_triple]
-
-        print 'Got these bad state acronyms: (acronym, row number, file path)'
-        pprint(fail_states)
-        print send_to_db.send_to_db(triples[:len(triples)])
-        print len(triples)
+    print 'Got these bad state acronyms: (acronym, row number, file):', fail_states
+    print 'db response:', send_to_db.send_to_db(triples)
+    print 'total number of triples:', len(triples)
