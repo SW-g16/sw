@@ -237,7 +237,7 @@ def convert_mep(path, dataset, graph_uri):
             #elif organisationRole = mep['Groups'][0]['role'] == 'xxx':
                 # xxx
 
-            organisation_title = name_to_dbr(mep['Groups'][0]['Organisation'])
+            organisation_title = name_to_dbr(mep['Groups'][0]['Organization'])
             graph.add((mep_uri, MEMBER_OF, organisation_title))
 
             #organisationId = mep['Groups'][0]['groupid']
