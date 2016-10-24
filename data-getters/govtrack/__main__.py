@@ -1,22 +1,22 @@
 import time
-
 import sys
-
 from src import get_session_ids
-
-from src import govtrack_processor, resetdb
+from src import govtrack_processor
 
 print 'Govtrack Data Importer'
-#if raw_input("Reset state first? (y/n): ") == 'y': resetdb.clean()
+
 start = time.time()
+
+# get the list of session ids
 session_ids = get_session_ids.get_session_ids()
 
-if len(sys.argv)>1:
+if len(sys.argv) > 1:
+    # num_session/5 threads (== 114/5 == 23 threads)
     start_index = int(sys.argv[1])
-    govtrack_processor.init(session_ids[start_index*5:start_index*5 + 5])
+    govtrack_processor.init(session_ids[start_index * 5:start_index * 5 + 5])
 
 else:
+    # single thread
     govtrack_processor.init(session_ids)
 
-print 'all workers are done. the entire govtrack dataset should now have been mined'
-print 'took ', time.time() - start, 'seconds'
+print 'Done after', time.time() - start, 'seconds'
