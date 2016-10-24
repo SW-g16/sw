@@ -107,9 +107,6 @@ fi
 echo 'Please stop any data downloads before proceeding'
 
 if ask 'Import new Govtrack vote data? (default: y)' Y; then
-  if ask 'Reset importer state first? (default: y)' Y; then
-    guake -n guake -e 'python '$ABS_DIR'/../data-getters/govtrack/clean.py'
-  fi
   if ask 'Reset database first? (default: y)' Y; then
     guake -n guake -e 'python '$ABS_DIR'/../scripts/reset-db.sh'
   fi

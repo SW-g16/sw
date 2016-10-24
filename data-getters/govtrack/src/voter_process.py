@@ -36,6 +36,7 @@
 28  :wikipedia <http://www.wikipedia.org/wiki/wikipedia_id>
 
 """
+import time
 
 import send_to_db
 import os
@@ -66,39 +67,39 @@ def represents_triple(voter_uri, state_acronym, i, path):
     try:
         return voter_uri, ':represents', 'dbr:' + states[state_acronym].replace(' ', '_')
     except:
-        fail_states.append((state_acronym, i, path[len(path)-12:]))
+        fail_states.append((state_acronym, i, path[len(path) - 12:]))
         return None
 
 
 def get_voter_uri(param):
-    if param == '' or param == None: return None
+    if param == '' or param is None: return None
     return '<http://www.govtrack.us/api/v2/person/%s>' % param
 
 
 party_uri_map = {
     'Democrat': 'dbr:Democratic_Party_\(United_States\)',
-    'Republican':'dbr:Republican_Party_\(United_States\)',
-    'Independent':'dbr:Independent_politician',
-    'Anti-Administration':'dbr:Anti-Administration_Party',
-    'Pro-Administration':'dbr:Pro-Administration_Party',
-    'Federalist':'dbr:Federalist_Party',
-    'American':'dbr:Know_Nothing',
-    'Whig':'dbr:Whig_Party_\(United_States\)',
-    'Adams':'dbr:National_Republican_Party',
-    'Adams Democrat':'dbr:National_Republican_Party',
+    'Republican': 'dbr:Republican_Party_\(United_States\)',
+    'Independent': 'dbr:Independent_politician',
+    'Anti-Administration': 'dbr:Anti-Administration_Party',
+    'Pro-Administration': 'dbr:Pro-Administration_Party',
+    'Federalist': 'dbr:Federalist_Party',
+    'American': 'dbr:Know_Nothing',
+    'Whig': 'dbr:Whig_Party_\(United_States\)',
+    'Adams': 'dbr:National_Republican_Party',
+    'Adams Democrat': 'dbr:National_Republican_Party',
     # jesus fucking christ
-    'Anti-Jacksonian':'dbr:National_Republican_Party',
-    'Anti-Jackson':'dbr:National_Republican_Party',
-    'Anti Jacksonian':'dbr:National_Republican_Party',
-    'Anti Jackson':'dbr:National_Republican_Party',
-    'Democratic-Republican':'dbr:Democratic-Republican_Party',
-    'Jakson':'dbr:Democratic-Republican_Party',
-    'Jackson Republican':'dbr:Democratic-Republican_Party',
-    'Crawford Republican':'dbr:Democratic-Republican_Party',
-    'Jacksonian':'dbr:Democratic-Republican_Party',
-    'Nullifier':'<https://en.wikipedia.org/wiki/Nullifier_Party>',
-    'Anti Masonic':'dbr:Anti-Masonic_Party',
-    'Union Democrat':'<https://en.wikipedia.org/wiki/Union_Democratic_Party>'
+    'Anti-Jacksonian': 'dbr:National_Republican_Party',
+    'Anti-Jackson': 'dbr:National_Republican_Party',
+    'Anti Jacksonian': 'dbr:National_Republican_Party',
+    'Anti Jackson': 'dbr:National_Republican_Party',
+    'Democratic-Republican': 'dbr:Democratic-Republican_Party',
+    'Jakson': 'dbr:Democratic-Republican_Party',
+    'Jackson Republican': 'dbr:Democratic-Republican_Party',
+    'Crawford Republican': 'dbr:Democratic-Republican_Party',
+    'Jacksonian': 'dbr:Democratic-Republican_Party',
+    'Nullifier': '<https://en.wikipedia.org/wiki/Nullifier_Party>',
+    'Anti Masonic': 'dbr:Anti-Masonic_Party',
+    'Union Democrat': '<https://en.wikipedia.org/wiki/Union_Democratic_Party>'
 }
 
 """
@@ -142,24 +143,31 @@ party_uri_map = {
 
 """
 
+
 def get_party(key):
-    if key in party_uri_map: return party_uri_map[key]
-    else: return '"%s"' % key
+    if key in party_uri_map:
+        return party_uri_map[key]
+    else:
+        return '"%s"' % key
 
 
 def gender_triple(voter_uri, gender_key):
-    k = None
-    if gender_key == 'M': k = '"male"'
-    elif gender_key == 'F': k = '"female"'
-    else: return None
+    if gender_key == 'M':
+        k = '"male"'
+    elif gender_key == 'F':
+        k = '"female"'
+    else:
+        return None
     return voter_uri, 'foaf:gender', k
 
 
-def votesIn_triple(voter_uri, voting_assembly_key):
-    va_uri = None
-    if voting_assembly_key == 'rep': va_uri = 'dbr:United_States_House_of_Representatives'
-    elif voting_assembly_key == 'sen': va_uri = 'dbr:United_States_Senate'
-    else: return None
+def votes_in_triple(voter_uri, voting_assembly_key):
+    if voting_assembly_key == 'rep':
+        va_uri = 'dbr:United_States_House_of_Representatives'
+    elif voting_assembly_key == 'sen':
+        va_uri = 'dbr:United_States_Senate'
+    else:
+        return None
     return voter_uri, ':votesIn', va_uri
 
 
@@ -168,31 +176,31 @@ def parse_row(row, i, path):
     # advantage: can be used to access govtrack voter obects,
     #   like https://www.govtrack.us/api/v2/person/411931
     voter_uri = get_voter_uri(row[23])
-    if voter_uri == None: return []
+    if voter_uri is None: return []
 
     possibles = [
         gender_triple(voter_uri, row[3]),
-        votesIn_triple(voter_uri, row[4]),
+        votes_in_triple(voter_uri, row[4]),
         represents_triple(voter_uri, row[5], i, path)
     ]
 
     return [
-        (voter_uri, 'foaf:lastName', '"%s"' % make_safe(row[0])),
-        (voter_uri, 'foaf:firstName', '"%s"' % make_safe(row[1])),
-        (voter_uri, ':memberOf', "%s" % get_party(row[7])),
-        (voter_uri, 'owl:sameAs', '<http://api.stardog.com/gt_v/%s>' % row[18]),
-        (voter_uri, ':wikipedia', '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
-    ] + [p for p in possibles if p is not None]
+               (voter_uri, 'foaf:lastName', '"%s"' % make_safe(row[0])),
+               (voter_uri, 'foaf:firstName', '"%s"' % make_safe(row[1])),
+               (voter_uri, ':memberOf', "%s" % get_party(row[7])),
+               (voter_uri, 'owl:sameAs', '<http://api.stardog.com/gt_v/%s>' % row[18]),
+               (voter_uri, ':wikipedia', '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
+           ] + [p for p in possibles if p is not None]
 
 
 def get_paths():
-    file_suffixes = ['current.csv','historic.csv']
+    file_suffixes = ['current.csv', 'historic.csv']
     root = os.path.dirname(os.path.realpath(__file__)) + '/../../../data/govtrack/congress-legislators/legislators-'
     return [root + s for s in file_suffixes]
 
 
 def process():
-
+    start = time.time()
     paths = get_paths()
 
     triples = [('@prefix', ':', '<http://www.votes.example.com/ontology/>'),
@@ -209,3 +217,4 @@ def process():
     print 'Got these bad state acronyms: (acronym, row number, file):', fail_states
     print 'db response:', send_to_db.send_to_db(triples)
     print 'total number of triples:', len(triples)
+    print 'time per triple:', len(triples) / (time.time() - start)
