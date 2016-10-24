@@ -117,7 +117,7 @@ if ask 'Import new Govtrack vote data? (default: y)' Y; then
 fi
 
 echo
-echo 'Parltrack scripts do not currently handle importing, they will save a .trig file in the data dir.'
+echo 'Parltrack scripts do not currently handle importing, it will save a .trig file in the data dir.'
 if ask 'Create new Parltrack vote data? (default: y)' Y; then
   guake -n guake -e 'python '$ABS_DIR'/../data-getters/parltrack/src/main.py' guake -r "Parltrack Semantifier"
 fi
