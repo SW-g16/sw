@@ -97,6 +97,8 @@ def name_to_dbr(name):
     uriref = URIRef(iri)
     return uriref
 
+# TODO: See if there is a better dossier url to use instead of dossier['meta']['source']
+# TODO: See if there is a better dossier text to use instead of dossier['procedure']['title']
 def convert_dossier(path, dataset, graph_uri):
     json_data = load_json(path)
 
@@ -134,51 +136,45 @@ def convert_votes(path, dataset, graph_uri):
     graph = dataset.graph(graph_uri)
 
     for votes in islice(json_data, 0, VOTES_LIMIT):
-        #id = votes['dossierid']
-        dossier_id = votes['_id']
+        if 'dossierid' in votes:
+            dossier_id = votes['dossierid']
 
-        # If this dossier is in our dictionary of useful dossiers, continue
-        if dict_dossier[dossier_id]:
-            #print 'Dict Contents:', dict_dossier[dossier_id]
-            dossier_uri = dict_dossier[dossier_id][0]
-            #title = votes['title']
-            #url = dossier['url']
-            #ep_title = dossier['eptitle']
+            # If this dossier is in our dictionary of useful dossiers, continue
+            if dossier_id in dict_dossier:
+                dossier_uri = dict_dossier[dossier_id][0]
+                #title = votes['title']
+                #url = dossier['url']
+                #ep_title = dossier['eptitle']
 
-            if 'Abstain' in votes:
-                for group in votes['Abstain']['groups']:
-                    #group_name = group['group']
-                    for vote in group['votes']:
-                        #user_id = vote['userid']
-                        voter_id = vote['ep_id']
-                        if dict_mep[voter_id] != None:
-                            graph.add((dict_mep[voter_id][0], ABSTAINS, dossier_uri))
-                        else:
-                            print voter_id, 'not found!'
-            if 'For' in votes:
-                for group in votes['For']['groups']:
-                    #group_name = group['group']
-                    for vote in group['votes']:
-                        #user_id = vote['userid']
-                        voter_id = vote['ep_id']
-                        if dict_mep[voter_id] != None:
-                            graph.add((dict_mep[voter_id][0], VOTES_FOR, dossier_uri))
-                        else:
-                            print voter_id, 'not found!'
+                if 'Abstain' in votes:
+                    for group in votes['Abstain']['groups']:
+                        #group_name = group['group']
+                        for vote in group['votes']:
+                            #user_id = vote['userid']
+                            voter_id = vote['ep_id']
+                            if voter_id in dict_mep:
+                                graph.add((dict_mep[voter_id][0], ABSTAINS, dossier_uri))
+                                print 'Abstains dossier:', dossier_uri
 
-            if 'Against' in votes:
-                for group in votes['Against']['groups']:
-                    #group_name = group['group']
-                    for vote in group['votes']:
-                        #user_id = vote['userid']
-                        voter_id = vote['ep_id']
-                        if dict_mep[voter_id] != None:
-                            graph.add((dict_mep[voter_id][0], VOTES_AGAINST, dossier_uri))
-                        else:
-                            print voter_id, 'not found!'
+                if 'For' in votes:
+                    for group in votes['For']['groups']:
+                        #group_name = group['group']
+                        for vote in group['votes']:
+                            #user_id = vote['userid']
+                            voter_id = vote['ep_id']
+                            if voter_id in dict_mep:
+                                graph.add((dict_mep[voter_id][0], VOTES_FOR, dossier_uri))
+                                print 'Vote for dossier:', dossier_uri
 
-            print 'Votes on dossier:', dossier_uri
-
+                if 'Against' in votes:
+                    for group in votes['Against']['groups']:
+                        #group_name = group['group']
+                        for vote in group['votes']:
+                            #user_id = vote['userid']
+                            voter_id = vote['ep_id']
+                            if voter_id in dict_mep:
+                                graph.add((dict_mep[voter_id][0], VOTES_AGAINST, dossier_uri))
+                                print 'Vote against dossier:', dossier_uri
     return dataset, graph
 
 
@@ -242,7 +238,7 @@ def convert_mep(path, dataset, graph_uri):
 
 def save_dataset(filename, dataset):
     with open(filename, 'w') as f:
-        print 'Saving:', filename, '...'
+        print 'Saving:', filename
         dataset.serialize(f, format='trig')
     print 'Saved.'
 
