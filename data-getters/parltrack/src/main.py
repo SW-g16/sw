@@ -52,14 +52,19 @@ VOTES_AGAINST = ONT['votesNay']
 VOTES_IN = ONT['votesIn']
 
 MEMBER_OF = ONT['memberOf']
+#dul:isMemberOf
+#CURRENT_MEMBER_OF
+#PAST_MEMBER_OF
 
 GENDER = DBO['gender']
-MALE = DBP['Male']
-FEMALE = DBP['Female']
+MALE = DBR['Male']
+FEMALE = DBR['Female']
 EUROPEAN_PARLIAMENT = DBR['European_Parliament']
+#http://dbpedia.org/ontology/europeanParliamentGroup
 
 FULL_NAME = FOAF['name']
 BIRTH_DATE = DBO['birthDate']
+DEATH_DATE = DBO['deathDate']
 BIRTH_PLACE = DBO['birthPlace']
 
 URI = XSD['anyURI']
@@ -187,10 +192,10 @@ def convert_mep(path, dataset, graph_uri):
         # Get raw values
         user_id = mep['UserID']
 
-        full_name = Literal(mep['Name']['full'], datatype=STRING)
+        full_name = Literal(mep['Name']['full'].lower().title().encode('utf-8').strip()
+, datatype=STRING)
 
         mep_uri = name_to_dbr(full_name)
-
 
         # append to global dictionary
         dict_mep[user_id].append(mep_uri)
@@ -212,13 +217,30 @@ def convert_mep(path, dataset, graph_uri):
                 birth_place = mep['Birth']['place'].strip()
                 dataset.add((mep_uri, BIRTH_PLACE, name_to_dbr(birth_place)))
 
+        if 'Death' in mep:
+            death_date = mep['Death']
+            death_date = Literal(datetime.strptime(death_date.split('T')[0], '%Y-%m-%d').date(), datatype=DATE)
+            dataset.add((mep_uri, DEATH_DATE, death_date))
+
         if 'active' in mep:
             active = mep['active']
 
-        # Can be in more than one?
-        #organisation = mep['Groups'][0]['Organisation']
-        #organisationId = mep['Groups'][0]['groupid']
-        #organisationRole = mep['Groups'][0]['role']
+        # twitter = mep['Twitter']
+
+        # Can be expanded to process all groups. For now takes the latest known
+        if 'Groups' in mep:
+            # For different memberships
+            #if organisationRole = mep['Groups'][0]['role'] == 'member':
+                # memberOf
+            #if organisationRole = mep['Groups'][0]['role'] == 'xxx':
+                # xxx
+            #elif organisationRole = mep['Groups'][0]['role'] == 'xxx':
+                # xxx
+
+            organisation_title = name_to_dbr(['Groups'][0]['Organisation'])
+            graph.add((mep_uri, MEMBER_OF, organisation_title))
+
+            #organisationId = mep['Groups'][0]['groupid']
 
         if 'Gender' in mep:
             gender = mep['Gender']
