@@ -79,6 +79,13 @@ else
     ./stardog-admin server start --disable-security
 fi
 
+# Create table
+if ask 'Reset votes table?'; then
+  ./stardog-admin db drop votes
+  ./stardog-admin db create -n votes $ABS_DIR/../ontology.ttl
+fi
+echo
+
 cd $ABS_DIR
 
 # Old framework
@@ -107,9 +114,6 @@ fi
 echo 'Please stop any data downloads before proceeding'
 
 if ask 'Import new Govtrack vote data? (default: y)' Y; then
-  if ask 'Reset importer state first? (default: y)' Y; then
-    guake -n guake -e 'python '$ABS_DIR'/../data-getters/govtrack/clean.py'
-  fi
   if ask 'Reset database first? (default: y)' Y; then
     guake -n guake -e 'python '$ABS_DIR'/../scripts/reset-db.sh'
   fi
