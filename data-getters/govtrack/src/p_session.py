@@ -1,8 +1,8 @@
 import time
 
-import bill_processor
-import fsinterface
 import constants as c
+import helpers
+import p_bill
 import send_to_db
 
 
@@ -14,17 +14,17 @@ def process_session(session_id):
     start = time.time()
 
     def depth_1_folders():
-        return fsinterface.get_dirnames('%s%d/votes' % (c.CONGRESS_PATH, session_id))
+        return helpers.get_dirnames('%s%d/votes' % (c.CONGRESS_PATH, session_id))
 
     def depth_2_folders(k):
-        return fsinterface.get_dirnames('%s%d/votes/%s' % (c.CONGRESS_PATH, session_id, str(k)))
+        return helpers.get_dirnames('%s%d/votes/%s' % (c.CONGRESS_PATH, session_id, str(k)))
 
     triples = [('@prefix', ':', '<http://www.votes.example.com/ontology/>'),
                ('@prefix', 'dbr:', '<http://dbpedia.org/resource/>')]
 
     for g in depth_1_folders():
         for b in depth_2_folders(g):
-            triples += bill_processor.process_bill(session_id, g, b)
+            triples += p_bill.process_bill(session_id, g, b)
 
     processing_time = time.time() - start
 

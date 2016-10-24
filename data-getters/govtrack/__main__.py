@@ -1,9 +1,16 @@
-import time
 import sys
-from src import get_session_ids
-from src import govtrack_processor
+import time
 
-print 'Govtrack Data Importer'
+from src import get_session_ids
+from src import p_congress
+
+print 'Govtrack Data Miner'
+
+print 'Mining Voters...'
+
+from src import p_voters
+
+p_voters.process_voters()
 
 start = time.time()
 
@@ -13,10 +20,8 @@ session_ids = get_session_ids.get_session_ids()
 if len(sys.argv) > 1:
     # num_session/5 threads (== 114/5 == 23 threads)
     start_index = int(sys.argv[1])
-    govtrack_processor.init(session_ids[start_index * 5:start_index * 5 + 5])
+    p_congress.process_congress(session_ids[start_index * 5:start_index * 5 + 5])
 
 else:
     # single thread
-    govtrack_processor.init(session_ids)
-
-print 'Done after', time.time() - start, 'seconds'
+    p_congress.process_congress(session_ids)

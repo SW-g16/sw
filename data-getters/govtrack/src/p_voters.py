@@ -36,12 +36,11 @@
 28  :wikipedia <http://www.wikipedia.org/wiki/wikipedia_id>
 
 """
+import csv
+import os
 import time
 
 import send_to_db
-import os
-
-import csv
 
 states = {'AK': 'Alaska', 'AL': 'Alabama', 'AR': 'Arkansas', 'AS': 'American Samoa', 'AZ': 'Arizona',
           'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DC': 'District of Columbia', 'DE': 'Delaware',
@@ -199,7 +198,7 @@ def get_paths():
     return [root + s for s in file_suffixes]
 
 
-def process():
+def process_voters():
     start = time.time()
     paths = get_paths()
 
@@ -214,7 +213,6 @@ def process():
             next(reader)  # ignore headers
             for i, row in enumerate(reader): triples += parse_row(row, i, path)
 
-    print 'Got these bad state acronyms: (acronym, row number, file):', fail_states
-    print 'db response:', send_to_db.send_to_db(triples)
-    print 'total number of triples:', len(triples)
-    print 'time per triple:', len(triples) / (time.time() - start)
+    # print 'Got these bad state acronyms: (acronym, row number, file):', fail_states
+    duration = time.time()-start
+    print 'Processed voters. Stardog response: %s. %d triples stored in %0.2f seconds. %0.2f triples per seconds.' % ( send_to_db.send_to_db(triples), len(triples), duration, len(triples) / duration)

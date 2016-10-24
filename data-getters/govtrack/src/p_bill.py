@@ -1,8 +1,8 @@
 import os.path
 
 import constants as c
-import fsinterface
-import votes_processor
+import helpers
+import p_votes
 
 
 def parse_bill_text(q):
@@ -36,7 +36,7 @@ def process_bill(session_id, g, b):
     if not os.path.isfile(bill_path): return []
 
     # get the bill's data from a json file
-    bill_data = fsinterface.load_json_file(bill_path)
+    bill_data = helpers.load_json_file(bill_path)
 
     # if the bill data is no good, ignore it
     if bill_data is None or 'votes' not in bill_data: return []
@@ -51,5 +51,5 @@ def process_bill(session_id, g, b):
     voting_assembly = parse_voting_assembly(b)
 
     # return the processed votes (and abstinations) on the bill
-    voting_data = votes_processor.process_votes(bill_data['votes'], bill_uri)
+    voting_data = p_votes.process_votes(bill_data['votes'], bill_uri)
     return voting_data + [(bill_uri, ':hasText', bill_text), (bill_uri, ':processedBy', voting_assembly)]

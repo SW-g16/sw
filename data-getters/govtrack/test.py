@@ -1,6 +1,6 @@
 import time
 
-from src import session_processor, bill_processor, votes_processor
+from src import p_session, p_bill, p_votes
 
 
 def reset_db():
@@ -10,19 +10,19 @@ def reset_db():
 
 def test_votes_processor(votes, bill_uri):
     start = time.time()
-    print votes_processor.process_votes(votes, bill_uri)
+    print p_votes.process_votes(votes, bill_uri)
     return time.time() - start
 
 
 def test_bill_processor(s_id, g, b_id):
     start = time.time()
-    print bill_processor.process_bill(s_id, g, b_id)
+    print p_bill.process_bill(s_id, g, b_id)
     return time.time() - start
 
 
 def test_session_processor(s_id):
     start = time.time()
-    session_processor.process_session(s_id)
+    p_session.process_session(s_id)
     return time.time() - start
 
 
