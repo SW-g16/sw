@@ -10,4 +10,5 @@ mkdir -p $1
 cd $1
 echo "Download path: "$1
 
+rsync -avz govtrack.us::govtrackdata/congress-legislators .
 rsync -avz --delete-excluded --exclude='**amendments**' --exclude='**hjres**' --exclude='**sconres**' --exclude='**sjres**' --exclude='**.xml' --exclude='**hconres**' --exclude='**samdt**' --exclude='**hres**' --exclude='**sres**' --exclude='**/text-versions/' --exclude="**committee**" govtrack.us::govtrackdata/congress .

@@ -114,10 +114,10 @@ fi
 echo 'Please stop any data downloads before proceeding'
 
 if ask 'Import new Govtrack vote data? (default: y)' Y; then
-  if ask 'Reset database first? (default: y)' Y; then
-    guake -n guake -e 'python '$ABS_DIR'/../scripts/reset-db.sh'
-  fi
-  guake -n guake -e 'sh '$ABS_DIR'/../data-getters/govtrack/imp.sh' guake -r "Govtrack Semantifier"
+  #if ask 'Reset database first? (default: y)' Y; then
+    #guake -n guake -e 'python '$ABS_DIR'/../scripts/reset-db.sh'
+  #fi
+  guake -n guake -e 'python '$ABS_DIR'/../data-getters/govtrack/' guake -r "Govtrack Semantifier"
 fi
 
 echo
