@@ -479,6 +479,7 @@ We have not yet enabled these inferences, but we intend to.
 
 We're interested in 
 
+
  - any data about individual voters 
  - text, date, and votes on a bill
  - which voting assembly has which voters and bills
