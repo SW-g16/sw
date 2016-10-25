@@ -40,3 +40,6 @@ Potentially useful DBPedia Types
 * http://dbpedia.org/ontology/university
 * http://dbpedia.org/ontology/personFunction
 * http://dbpedia.org/ontology/idNumber
+
+## Other
+* http://dbpedia.org/ontology/party
