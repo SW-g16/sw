@@ -82,7 +82,7 @@ fi
 # Create table
 if ask 'Reset votes table?'; then
   ./stardog-admin db drop votes
-  ./stardog-admin db create -n votes $ABS_DIR/../ontology.ttl
+  ./stardog-admin db create -o reasoning.sameas=FULL search.enabled=TRUE -n votes $ABS_DIR/../ontology.ttl
 fi
 echo
 
