@@ -106,7 +106,6 @@ def convert_votes(path, dataset, graph):
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
                                 graph.add((URIRef(dict_mep[voter_id][0]), c.ABSTAINS, dossier_uri))
-                                print 'Abstains dossier:', dossier_uri
 
                 if 'For' in votes:
                     for group in votes['For']['groups']:
@@ -116,7 +115,6 @@ def convert_votes(path, dataset, graph):
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
                                 graph.add((URIRef(dict_mep[voter_id][0]), c.VOTES_FOR, dossier_uri))
-                                print 'Vote for dossier:', dossier_uri
 
                 if 'Against' in votes:
                     for group in votes['Against']['groups']:
@@ -126,7 +124,8 @@ def convert_votes(path, dataset, graph):
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
                                 graph.add((URIRef(dict_mep[voter_id][0]), c.VOTES_AGAINST, dossier_uri))
-                                print 'Vote against dossier:', dossier_uri
+
+                print 'Votes on dossier:', dossier_uri
     print
     return dataset, graph
 
