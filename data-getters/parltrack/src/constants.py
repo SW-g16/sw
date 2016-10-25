@@ -4,9 +4,13 @@ import os
 DATA_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))) + '/data/parltrack/'
 
+DATA_OUTPUT = DATA_DIR + 'parltrack.trig'
 DATA_MEP = DATA_DIR + 'meps.json'
 DATA_VOTES = DATA_DIR + 'votes.json'
 DATA_DOSSIER = DATA_DIR + 'dossiers.json'
+
+DICT_MEPS = DATA_DIR + 'dict_meps.json'
+DICT_PARTIES = DATA_DIR + 'dict_parties.json'
 
 # Number of elements to mine
 MEP_LIMIT = None
@@ -47,13 +51,16 @@ VOTES_IN = ONT['votesIn']
 MEMBER_OF = ONT['memberOf']
 
 GENDER = DBO['gender']
-MALE = DBP['Male']
-FEMALE = DBP['Female']
+MALE = DBR['Male']
+FEMALE = DBR['Female']
 EUROPEAN_PARLIAMENT = DBR['European_Parliament']
+POLITICAL_PARTY = DBO['PoliticalParty']
+POLITICAL_PARTY_IN_LEGISLATURE = DBO['politicalPartyInLegislature']
 
 FULL_NAME = FOAF['name']
 BIRTH_DATE = DBO['birthDate']
 BIRTH_PLACE = DBO['birthPlace']
+DEATH_DATE = DBO['deathDate']
 
 URI = XSD['anyURI']
 STRING = XSD['string']

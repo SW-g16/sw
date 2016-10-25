@@ -11,9 +11,20 @@ from rdflib import URIRef, Literal
 import constants as c
 import load_json as h
 
-# maps mep id to dbr iri
-dict_mep = defaultdict(list)
+# These are currently dict(lists), because there is a possibility of multiple iris per key in the future
+dict_mep = h.load_json(c.DICT_MEPS)
+if dict_mep is None:
+    dict_mep = defaultdict(list)
+    print 'Created empty dict instead'
+    print
+
 dict_dossier = defaultdict(list)
+
+dict_party = h.load_json(c.DICT_PARTIES)
+if dict_party is None:
+    dict_party = defaultdict(list)
+    print 'Created empty dict instead'
+    print
 
 
 # def mepid_to_profile_iri(id):
@@ -40,11 +51,7 @@ def name_to_dbr(name):
 
 # TODO: See if there is a better dossier url to use instead of dossier['meta']['source']
 # TODO: See if there is a better dossier text to use instead of dossier['procedure']['title']
-def convert_dossier(path, dataset, graph_uri):
-    json_data = h.load_json(path)
-
-    graph = dataset.graph(graph_uri)
-
+def convert_dossier(json_data, dataset, graph):
     for dossier in islice(json_data, 0, c.DOSSIER_LIMIT):
         for activity in dossier['activities']:
             if 'type' in activity:
@@ -71,15 +78,11 @@ def convert_dossier(path, dataset, graph_uri):
                     print 'Dossier:', dossier_uri
                     break  # dossier matches DOSSIER_TYPE, no need to search more activities
 
+    print
     return dataset, graph
 
 
-def convert_votes(path, dataset, graph_uri):
-
-    json_data = h.load_json(path)
-
-    graph = dataset.graph(graph_uri)
-
+def convert_votes(json_data, dataset, graph):
     for votes in islice(json_data, 0, c.VOTES_LIMIT):
         if 'dossierid' in votes:
             dossier_id = votes['dossierid']
@@ -96,7 +99,7 @@ def convert_votes(path, dataset, graph_uri):
                         # group_name = group['group']
                         for vote in group['votes']:
                             # user_id = vote['userid']
-                            voter_id = vote['ep_id']
+                            voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
                                 graph.add((dict_mep[voter_id][0], c.ABSTAINS, dossier_uri))
                                 print 'Abstains dossier:', dossier_uri
@@ -106,7 +109,7 @@ def convert_votes(path, dataset, graph_uri):
                         # group_name = group['group']
                         for vote in group['votes']:
                             # user_id = vote['userid']
-                            voter_id = vote['ep_id']
+                            voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
                                 graph.add((dict_mep[voter_id][0], c.VOTES_FOR, dossier_uri))
                                 print 'Vote for dossier:', dossier_uri
@@ -116,28 +119,26 @@ def convert_votes(path, dataset, graph_uri):
                         # group_name = group['group']
                         for vote in group['votes']:
                             # user_id = vote['userid']
-                            voter_id = vote['ep_id']
+                            voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
                                 graph.add((dict_mep[voter_id][0], c.VOTES_AGAINST, dossier_uri))
                                 print 'Vote against dossier:', dossier_uri
+    print
     return dataset, graph
 
 
-def convert_mep(path, dataset, graph_uri):
-    json_data = h.load_json(path)
-
-    graph = dataset.graph(graph_uri)
-
+def convert_mep(json_data, dataset, graph):
     for mep in islice(json_data, 0, c.MEP_LIMIT):
         # Get raw values
-        user_id = mep['UserID']
+        user_id = str(mep['UserID'])
 
-        full_name = Literal(mep['Name']['full'], datatype=c.STRING)
+        full_name = Literal(mep['Name']['full'].lower().title().encode('utf-8').strip(), datatype=c.STRING)
 
         mep_uri = name_to_dbr(full_name)
 
         # append to global dictionary
-        dict_mep[user_id].append(mep_uri)
+        if not dict_mep[user_id]:
+            dict_mep[user_id].append(mep_uri)
 
         profile_url = Literal(mep['meta']['url'], datatype=c.URI)
 
@@ -157,12 +158,39 @@ def convert_mep(path, dataset, graph_uri):
                 birth_place = mep['Birth']['place'].strip()
                 dataset.add((mep_uri, c.BIRTH_PLACE, name_to_dbr(birth_place)))
 
+        if 'Death' in mep:
+            death_date = mep['Death']
+            death_date = Literal(datetime.strptime(death_date.split('T')[0], '%Y-%m-%d').date(), datatype=c.DATE)
+            dataset.add((mep_uri, c.DEATH_DATE, death_date))
+
         # if 'active' in mep: active = mep['active'] # interesting but unused atm
 
-        # Can be in more than one?
-        # organisation = mep['Groups'][0]['Organisation']
-        # organisationId = mep['Groups'][0]['groupid']
-        # organisationRole = mep['Groups'][0]['role']
+        # twitter = mep['Twitter']
+
+        # Can be expanded to process all groups. For now takes the latest known
+        if 'Groups' in mep:
+            # For different memberships
+            # if organisationRole = mep['Groups'][0]['role'] == 'member':
+            # memberOf
+            # if organisationRole = mep['Groups'][0]['role'] == 'xxx':
+            # xxx
+            # elif organisationRole = mep['Groups'][0]['role'] == 'xxx':
+            # xxx
+
+            party_title = mep['Groups'][0]['Organization']
+            party_dbr = name_to_dbr(party_title)
+
+            party_id = mep['Groups'][0]['groupid']
+            if type(party_id) is list:
+                for pid in party_id:
+                    if party_dbr not in dict_party[pid]:
+                        dict_party[pid].append(party_dbr)
+            elif party_dbr not in dict_party[party_id]:
+                dict_party[party_id].append(party_dbr)
+
+            # If a valid iri was added manually, it's always first, so just take the first
+            graph.add((mep_uri, c.MEMBER_OF, dict_party[party_id][0]))
+
 
         if 'Gender' in mep:
             gender = mep['Gender']
@@ -174,8 +202,7 @@ def convert_mep(path, dataset, graph_uri):
         dataset.add((mep_uri, c.FULL_NAME, full_name))
         dataset.add((mep_uri, c.URI, profile_url))
 
-        # graph.add((mep_uri, MEMBER_OF, URIRef(to_iri(dbr + 'European_Parliament'))))
-
         print 'MEP:', mep_uri
 
+    print
     return dataset, graph

@@ -3,3 +3,5 @@
 catalog-v001.xml
 data/*
 !data/README.md
+!data/parltrack/dict_meps.json
+!data/parltrack/dict_parties.json
