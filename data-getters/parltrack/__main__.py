@@ -10,16 +10,13 @@ ds.bind('foaf', c.FOAF)
 
 graph = ds.graph(c.ONT)
 
-mep_data = h.load_json(c.DATA_MEP)
-ds, graph = m.convert_mep(mep_data, ds, graph)
+ds, graph = m.convert_mep(c.DATA_MEP, ds, graph)
 
 s.save_json(c.DICT_MEPS, m.dict_mep)
 s.save_json(c.DICT_PARTIES, m.dict_party)
 
-dossier_data = h.load_json(c.DATA_DOSSIER)
-ds, graph = m.convert_dossier(dossier_data, ds, graph)
+ds, graph = m.convert_dossier(c.DATA_DOSSIER, ds, graph)
 
-votes_data = h.load_json(c.DATA_VOTES)
-ds, graph = m.convert_votes(votes_data, ds, graph)
+ds, graph = m.convert_votes(c.DATA_VOTES, ds, graph)
 
 s.save_dataset(c.DATA_OUTPUT, ds)

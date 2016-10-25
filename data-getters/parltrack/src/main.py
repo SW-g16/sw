@@ -51,7 +51,9 @@ def name_to_dbr(name):
 
 # TODO: See if there is a better dossier url to use instead of dossier['meta']['source']
 # TODO: See if there is a better dossier text to use instead of dossier['procedure']['title']
-def convert_dossier(json_data, dataset, graph):
+def convert_dossier(path, dataset, graph):
+    json_data = h.load_json(path)
+
     for dossier in islice(json_data, 0, c.DOSSIER_LIMIT):
         for activity in dossier['activities']:
             if 'type' in activity:
@@ -82,7 +84,9 @@ def convert_dossier(json_data, dataset, graph):
     return dataset, graph
 
 
-def convert_votes(json_data, dataset, graph):
+def convert_votes(path, dataset, graph):
+    json_data = h.load_json(path)
+
     for votes in islice(json_data, 0, c.VOTES_LIMIT):
         if 'dossierid' in votes:
             dossier_id = votes['dossierid']
@@ -101,7 +105,7 @@ def convert_votes(json_data, dataset, graph):
                             # user_id = vote['userid']
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
-                                graph.add((dict_mep[voter_id][0], c.ABSTAINS, dossier_uri))
+                                graph.add((URIRef(dict_mep[voter_id][0]), c.ABSTAINS, dossier_uri))
                                 print 'Abstains dossier:', dossier_uri
 
                 if 'For' in votes:
@@ -111,7 +115,7 @@ def convert_votes(json_data, dataset, graph):
                             # user_id = vote['userid']
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
-                                graph.add((dict_mep[voter_id][0], c.VOTES_FOR, dossier_uri))
+                                graph.add((URIRef(dict_mep[voter_id][0]), c.VOTES_FOR, dossier_uri))
                                 print 'Vote for dossier:', dossier_uri
 
                 if 'Against' in votes:
@@ -121,13 +125,15 @@ def convert_votes(json_data, dataset, graph):
                             # user_id = vote['userid']
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
-                                graph.add((dict_mep[voter_id][0], c.VOTES_AGAINST, dossier_uri))
+                                graph.add((URIRef(dict_mep[voter_id][0]), c.VOTES_AGAINST, dossier_uri))
                                 print 'Vote against dossier:', dossier_uri
     print
     return dataset, graph
 
 
-def convert_mep(json_data, dataset, graph):
+def convert_mep(path, dataset, graph):
+    json_data = h.load_json(path)
+
     for mep in islice(json_data, 0, c.MEP_LIMIT):
         # Get raw values
         user_id = str(mep['UserID'])
@@ -185,11 +191,12 @@ def convert_mep(json_data, dataset, graph):
                 for pid in party_id:
                     if party_dbr not in dict_party[pid]:
                         dict_party[pid].append(party_dbr)
+                party_id = party_id[0]
             elif party_dbr not in dict_party[party_id]:
                 dict_party[party_id].append(party_dbr)
 
             # If a valid iri was added manually, it's always first, so just take the first
-            graph.add((mep_uri, c.MEMBER_OF, dict_party[party_id][0]))
+            graph.add((mep_uri, c.MEMBER_OF, URIRef(dict_party[party_id][0])))
 
 
         if 'Gender' in mep:
