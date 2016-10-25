@@ -465,63 +465,53 @@ We have not yet enabled these inferences, but we intend to.
     ( bill has yayproporion >=0.5 ) -> b passed
     ( bill has yayproporion <0.5 ) -> b failed
 
+
 ## Data Reuse and Querying (Milestone 3)
 
-### Data Sources
 
-// describe 2 used data sources. One must be a SPARQL endpoint. The other can be any format. 100-200 words
+    /*
+        1. (100-200 words) a description of at least 2 external sources of data that will be used by your application. At least one of these must be an external SPARQL endpoint. The other dataset need not be in RDF. 
+        2. (100-200 words) a motivation for choosing these data sources: why does the application need these sources specifically. 
+        3. (200-300 words) a description of how you produce integrated the data with your ontology, did you use inferencing? 
+        4. (100-200 words) a description of multiple complex SPARQL queries, relevant for the application, that produce results over the integrated data and ontology 
+        5. (200-300 words) a description and evidence that running the SPARQL queries against the ontology and data produces inferences (screenshot reasoning on/off). Discuss the inferences. 
+    */
 
-#### Primary data sources
+We're interested in 
 
-We mine these sources and construct semantic data. 
+ - any data about individual voters 
+ - text, date, and votes on a bill
+ - which voting assembly has which voters and bills
 
-##### Parltrack
+> In a September 2011 joint report from the National Democratic Institute and World Bank Institute, a survey of parliamentary monitoring organisations (PMOs) found that parliamentary informatics are used by approximately 40 percent of PMOs worldwide. " - wikipedia.org/wiki/Parliamentary_informatics) 
 
-##### Govtrack
+So there's lots of data available. If we were to continue this project beyond the scope of this course, we'd want to mine every available source. For now we retrieve data from govtrack, parltrack and dbpedia. 
 
-#### Namespaces
+#### GovTrack
 
-We reference resources from these external vocabularies
+From govtrack's data, we mine voter ids, some voter info, bills, and votes. 
+See the govtrack data getter code for comments on it's structure. 
 
-##### FOAF
+#### ParlTrack
 
-##### DBPedia
+### Querying and Data Analysis 
 
-#### Motivation for choice of adta sources
+We now have lots of data which we can analyze by sending complex sparql queries to our database. 
+There's no limit to the number of different analyses we can do / queries we can write. 
+Below we give some low-hanging ones. 
 
-// give motivation for choices. Why does the application need these sources specifically? 100-200 words
-
-#### Data Integration
-
-// describe how you integrated the data with your ontology, did you use inferencing? 200-300 words
-
-We mined triples fitting our ontology from some data sources. 
-
-### Multiple complex SPARQL queries
-
-// describe multiple complex SPARQL queries, relevant for the application, that produce results over the integrated data and ontology. 200-300 words
-
-#### Queries
-
-##### Voting Assembly Party Compositions
+#### Voting Assembly Party Compositions
 
 The following query returns the proportion of parties' representation in a voting assembly at the time of a certain bill. Since we have a unified ontology, this will of course work for any of our 2 data sources. Inference is involved: we never explictly store that a resource is a Voter, it is inferred from the fact that they vote, because `:votesOn rdfs:Domain :Voter`. 
-	
-	select ?voting_assembly ?date ?party where {complex condition}
+  
+  select ?voting_assembly ?date ?party where {complex condition}
 
 ##### Another complex query relying on inferencing
 
 This is a description of the query. 
 
-	select ?stuff where {complex condition}
-	
-#### Description and evidence of query results involving inferencing
-
-// describe and give evidence that 
-//   - running the SPARQL queries against the ontology 
-//   - data produces inferences (screenshot reasoning on/off). 
-// Discuss the inferences. 200-300 words
-
+  select ?stuff where {complex condition}
+  
 # Appendix
 
 ## Ontology
