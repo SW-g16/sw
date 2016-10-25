@@ -488,12 +488,36 @@ We're interested in
 
 So there's lots of data available. If we were to continue this project beyond the scope of this course, we'd want to mine every available source. For now we retrieve data from govtrack, parltrack and dbpedia. 
 
+### Data Sources
+
 #### GovTrack
 
 From govtrack's data, we mine voter ids, some voter info, bills, and votes. 
 See the govtrack data getter code for comments on it's structure. 
 
 #### ParlTrack
+
+
+### Motivation for using these sources 
+We considered a great many parliamentary databases during the course of our 
+product. Our first intention was of course to integrate the Netherlands, but 
+that turned out to not be very feasible due to not having an endpoint or 
+organized data source for parliamentary votes available. We next investigated 
+the US data at govtrack.us, which turned out to be a perfect data source for 
+this project due being expansive, consistent and easily accessible. It thus 
+formed the basis of much of our early ontology. Finding another source took us a
+long time, and we went through several other endpoints, including an attempt to 
+integrate the data of the UK house of commons. We eventually settled on using 
+the respective data sets of the EU council and parliament. The council dataset 
+was somewhat limited in its scope compared to the more exhaustive govtrack and 
+eu parliament sets, but was still suitable for our purpose.
+
+### Description how you integrated the data (200-300 words)
+In our ontology, we speak of four classes as being central: Voters, Bills, 
+Assembly and Polity. Voter and Bills are found in the contents of the datasets
+we mined. Assembly and Polity are determined by which dataset the data comes
+from. 
+
 
 ### Querying and Data Analysis 
 
