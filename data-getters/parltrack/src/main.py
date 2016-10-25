@@ -45,8 +45,8 @@ def format_name_string(input_string):
 def name_to_dbr(name):
     formatted = format_name_string(name)
     iri = to_iri(c.dbr + formatted)
-    uriref = URIRef(iri)
-    return uriref
+    #uriref = URIRef(iri)
+    return iri
 
 
 # TODO: See if there is a better dossier url to use instead of dossier['meta']['source']
@@ -146,6 +146,8 @@ def convert_mep(path, dataset, graph):
         if not dict_mep[user_id]:
             dict_mep[user_id].append(mep_uri)
 
+        mep_uri = URIRef(mep_uri)
+
         profile_url = Literal(mep['meta']['url'], datatype=c.URI)
 
         if 'Photo' in mep:
@@ -162,7 +164,7 @@ def convert_mep(path, dataset, graph):
 
             if 'place' in mep['Birth']:
                 birth_place = mep['Birth']['place'].strip()
-                dataset.add((mep_uri, c.BIRTH_PLACE, name_to_dbr(birth_place)))
+                dataset.add((mep_uri, c.BIRTH_PLACE, URIRef(name_to_dbr(birth_place))))
 
         if 'Death' in mep:
             death_date = mep['Death']
