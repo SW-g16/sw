@@ -465,6 +465,62 @@ We have not yet enabled these inferences, but we intend to.
     ( bill has yayproporion >=0.5 ) -> b passed
     ( bill has yayproporion <0.5 ) -> b failed
 
+## Data Reuse and Querying (Milestone 3)
+
+### Data Sources
+
+// describe 2 used data sources. One must be a SPARQL endpoint. The other can be any format. 100-200 words
+
+#### Primary data sources
+
+We mine these sources and construct semantic data. 
+
+##### Parltrack
+
+##### Govtrack
+
+#### Namespaces
+
+We reference resources from these external vocabularies
+
+##### FOAF
+
+##### DBPedia
+
+#### Motivation for choice of adta sources
+
+// give motivation for choices. Why does the application need these sources specifically? 100-200 words
+
+#### Data Integration
+
+// describe how you integrated the data with your ontology, did you use inferencing? 200-300 words
+
+We mined triples fitting our ontology from some data sources. 
+
+### Multiple complex SPARQL queries
+
+// describe multiple complex SPARQL queries, relevant for the application, that produce results over the integrated data and ontology. 200-300 words
+
+#### Queries
+
+##### Voting Assembly Party Compositions
+
+The following query returns the proportion of parties' representation in a voting assembly at the time of a certain bill. Since we have a unified ontology, this will of course work for any of our 2 data sources. Inference is involved: we never explictly store that a resource is a Voter, it is inferred from the fact that they vote, because `:votesOn rdfs:Domain :Voter`. 
+	
+	select ?voting_assembly ?date ?party where {complex condition}
+
+##### Another complex query relying on inferencing
+
+This is a description of the query. 
+
+	select ?stuff where {complex condition}
+	
+#### Description and evidence of query results involving inferencing
+
+// describe and give evidence that 
+//   - running the SPARQL queries against the ontology 
+//   - data produces inferences (screenshot reasoning on/off). 
+// Discuss the inferences. 200-300 words
 
 # Appendix
 
