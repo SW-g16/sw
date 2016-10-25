@@ -104,11 +104,11 @@ echo 'LD-R started in new terminal window'
 echo
 
 if ask 'Download/Sync new govtrack data? (default: n)' N; then
-  guake -n guake -e 'echo && echo Hit ctrl-c at any point to stop the downloading! && sleep 2 && sh '$ABS_DIR'/../data-getters/govtrack/import-bulk-govtrack.sh '$ABS_DIR'/../data/govtrack/' guake -r "GovTrack synch"
+  guake -n guake -e 'echo && echo Hit ctrl-c at any point to stop the downloading! && sleep 2 && sh '$ABS_DIR'/../data-getters/govtrack/download.sh '$ABS_DIR'/../data/govtrack/' guake -r "GovTrack synch"
 fi
 
 if ask 'Download new parltrack data? (default: n)' N; then
-  guake -n guake -e 'echo && echo This retrieves parltrack archives, please let it finish, otherwise the data will be corrupt. && sleep 2 && sh '$ABS_DIR'/../data-getters/parltrack/import-parltrack.sh '$ABS_DIR'/../data/parltrack/' guake -r "Parltrack Download"
+  guake -n guake -e 'echo && echo This retrieves parltrack archives, please let it finish, otherwise the data will be corrupt. && sleep 2 && sh '$ABS_DIR'/../data-getters/parltrack/download.sh '$ABS_DIR'/../data/parltrack/' guake -r "Parltrack Download"
 fi
 
 echo 'Please stop any data downloads before proceeding'
@@ -123,7 +123,7 @@ fi
 echo
 echo 'Parltrack scripts do not currently handle importing, it will save a .trig file in the data dir.'
 if ask 'Create new Parltrack vote data? (default: y)' Y; then
-  guake -n guake -e 'python '$ABS_DIR'/../data-getters/parltrack/src/main.py' guake -r "Parltrack Semantifier"
+  guake -n guake -e 'python '$ABS_DIR'/../data-getters/parltrack/' guake -r "Parltrack Semantifier"
 fi
 
 echo

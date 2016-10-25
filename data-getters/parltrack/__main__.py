@@ -1,6 +1,5 @@
-
 from rdflib import Dataset
-from src import constants as c, main as m, save as s
+from src import constants as c, main as m, save as s, load_json as h
 
 ds = Dataset()
 ds.bind(c.PREFIX, c.ONT)
@@ -9,10 +8,15 @@ ds.bind('dbr', c.DBR)
 ds.bind('dbp', c.DBP)
 ds.bind('foaf', c.FOAF)
 
-ds, mep_graph = m.convert_mep(c.DATA_MEP, ds, c.ONT)
+graph = ds.graph(c.ONT)
 
-ds, dossier_graph = m.convert_dossier(c.DATA_DOSSIER, ds, c.ONT)
+ds, graph = m.convert_mep(c.DATA_MEP, ds, graph)
 
-ds, votes_graph = m.convert_votes(c.DATA_VOTES, ds, c.ONT)
+s.save_json(c.DICT_MEPS, m.dict_mep)
+s.save_json(c.DICT_PARTIES, m.dict_party)
 
-s.save_dataset(c.DATA_DIR + 'parltrack.trig', ds)
+ds, graph = m.convert_dossier(c.DATA_DOSSIER, ds, graph)
+
+ds, graph = m.convert_votes(c.DATA_VOTES, ds, graph)
+
+s.save_dataset(c.DATA_OUTPUT, ds)
