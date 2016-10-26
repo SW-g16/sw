@@ -42,6 +42,8 @@ import time
 
 import send_to_db
 
+import constants as c
+
 states = {'AK': 'Alaska', 'AL': 'Alabama', 'AR': 'Arkansas', 'AS': 'American Samoa', 'AZ': 'Arizona',
           'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DC': 'District of Columbia', 'DE': 'Delaware',
           'FL': 'Florida', 'GA': 'Georgia', 'GU': 'Guam', 'HI': 'Hawaii', 'IA': 'Iowa', 'ID': 'Idaho', 'IL': 'Illinois',
@@ -161,14 +163,10 @@ def gender_triple(voter_uri, gender_key):
 
 
 def votes_in_triple(voter_uri, voting_assembly_key):
-    if voting_assembly_key == 'rep':
-        va_uri = 'dbr:United_States_House_of_Representatives'
-    elif voting_assembly_key == 'sen':
-        va_uri = 'dbr:United_States_Senate'
-    else:
-        return None
+    if   voting_assembly_key == 'rep': va_uri = c.URI_USA_HOUSE
+    elif voting_assembly_key == 'sen': va_uri = c.URI_USA_SENATE
+    else: return None
     return voter_uri, ':votesIn', va_uri
-
 
 def parse_row(row, i, path):
     # voter uri, using govtrack id.
@@ -184,11 +182,11 @@ def parse_row(row, i, path):
     ]
 
     return [
-               (voter_uri, 'foaf:lastName', '"%s"' % make_safe(row[0])),
-               (voter_uri, 'foaf:firstName', '"%s"' % make_safe(row[1])),
-               (voter_uri, ':memberOf', "%s" % get_party(row[7])),
-               (voter_uri, 'owl:sameAs', '<http://api.stardog.com/gt_v/%s>' % row[18]),
-               (voter_uri, ':wikipedia', '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
+               (voter_uri, c.PROP_LAST_NAME, '"%s"' % make_safe(row[0])),
+               (voter_uri, c.PROP_LAST_NAME, '"%s"' % make_safe(row[1])),
+               (voter_uri, c.PROP_MEMBEROF, "%s" % get_party(row[7])),
+               (voter_uri, c.PROP_SAMEAS, '<http://api.stardog.com/gt_v/%s>' % row[18]),
+               (voter_uri, c.PROP_WIKIPAGE, '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
            ] + [p for p in possibles if p is not None]
 
 
@@ -202,10 +200,10 @@ def process_voters():
     start = time.time()
     paths = get_paths()
 
-    triples = [('@prefix', ':', '<http://votes.example.com/ontology/>'),
-               ('@prefix', 'dbr:', '<http://dbpedia.org/resource/>'),
-               ('@prefix', 'owl:', '<http://www.w3.org/2002/07/owl#>'),
-               ('@prefix', 'foaf:', '<http://xmlns.com/foaf/0.1/>')]
+    triples = [('@prefix', ':', c.NS_OURS),
+               ('@prefix', 'dbr:', c.NS_DBR),
+               ('@prefix', 'owl:', c.NS_OWL),
+               ('@prefix', 'foaf:', c.NS_FOAF)]
 
     for path in paths:
         with open(path, 'rb') as csvfile:

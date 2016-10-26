@@ -19,8 +19,8 @@ def process_session(session_id):
     def depth_2_folders(k):
         return helpers.get_dirnames('%s%d/votes/%s' % (c.CONGRESS_PATH, session_id, str(k)))
 
-    triples = [('@prefix', ':', '<http://votes.example.com/ontology/>'),
-               ('@prefix', 'dbr:', '<http://dbpedia.org/resource/>')]
+    triples = [('@prefix', ':', c.NS_OURS),
+               ('@prefix', 'dbr:', c.NS_DBR)]
 
     for g in depth_1_folders():
         for b in depth_2_folders(g):

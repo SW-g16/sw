@@ -18,9 +18,9 @@ def parse_bill_text(q):
 
 def parse_voting_assembly(b):
     if b[0] == 's':
-        return 'dbr:United_States_Senate'
+        return c.URI_USA_SENATE
     elif b[0] == 'h':
-        return 'dbr:United_States_House_of_Representatives'
+        return c.URI_USA_HOUSE
     else:
         raise Exception
 
@@ -52,4 +52,4 @@ def process_bill(session_id, g, b):
 
     # return the processed votes (and abstinations) on the bill
     voting_data = p_votes.process_votes(bill_data['votes'], bill_uri)
-    return voting_data + [(bill_uri, ':hasText', bill_text), (bill_uri, ':processedBy', voting_assembly)]
+    return voting_data + [(bill_uri, c.PROP_BILL_TEXT, bill_text), (bill_uri, c.PROP_PROCESSED_BY, voting_assembly)]
