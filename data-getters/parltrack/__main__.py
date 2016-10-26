@@ -1,8 +1,6 @@
 from rdflib import Dataset
 from src import constants as c, main as m, save as s, load_json as h
 
-
-
 ds = Dataset()
 ds.bind(c.PREFIX, c.ONT)
 ds.bind('dbo', c.DBO)
@@ -14,8 +12,8 @@ graph = ds.graph(c.ONT)
 
 ds, graph = m.convert_mep(c.DATA_MEP, ds, graph)
 
-s.save_json(c.DICT_MEPS, m.meps)
-s.save_json(c.DICT_PARTIES, m.parties)
+s.save_json(c.DICT_MEPS, m.dict_mep)
+s.save_json(c.DICT_PARTIES, m.dict_party)
 
 ds, graph = m.convert_dossier(c.DATA_DOSSIER, ds, graph)
 
