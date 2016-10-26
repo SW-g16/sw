@@ -124,7 +124,14 @@ echo
 echo 'Parltrack scripts do not currently handle importing, it will save a .trig file in the data dir.'
 if ask 'Create new Parltrack vote data? (default: y)' Y; then
   guake -n guake -e 'python '$ABS_DIR'/../data-getters/parltrack/' guake -r "Parltrack Semantifier"
+
 fi
+
+#if ask 'Import Parltrack vote data? (default: y)' Y; then
+  #$STARDOG'/bin/stardog data add -g votes '$ABS_DIR'/../data/parltrack/parltrack.trig'
+#fi
 
 echo
 echo 'Done!'
+
+tail -f $STARDOG/stardog.log
