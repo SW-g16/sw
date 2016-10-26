@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import os
 import re
 from collections import defaultdict
 from datetime import datetime
@@ -11,24 +11,31 @@ from rdflib import URIRef, Literal
 import constants as c
 import load_json as h
 
-# These are currently dict(lists), because there is a possibility of multiple iris per key in the future
-dict_mep = h.load_json(c.DICT_MEPS)
-if dict_mep is None:
-    dict_mep = defaultdict(list)
-    print 'Created empty dict instead'
-    print
 
-dict_dossier = defaultdict(list)
+global meps
+global dossiers
+global parties
 
-dict_party = h.load_json(c.DICT_PARTIES)
-if dict_party is None:
-    dict_party = defaultdict(list)
-    print 'Created empty dict instead'
-    print
+def init_globals():
 
+    def init_meps():
+        global meps
+        if os.path.isfile(c.DICT_MEPS): meps = h.load_json(c.DICT_MEPS)
+        else: raise Exception('MEPs data file not found.')
 
-# def mepid_to_profile_iri(id):
-#   return URIRef(to_iri('http://www.europarl.europa.eu/meps/en/' + str(id) + '/_history.html'))
+    def init_parties():
+        global parties
+        if os.path.isfile(c.DICT_PARTIES): parties = h.load_json(c.DICT_PARTIES)
+        else: raise Exception('Parties data file not found')
+
+    def init_dossiers():
+        global dossiers
+        dossiers = defaultdict(list)
+
+    init_meps()
+    init_parties()
+    init_dossiers()
+
 
 # Needs changing?
 def id_to_iri(id_):
@@ -48,54 +55,55 @@ def name_to_dbr(name):
     #uriref = URIRef(iri)
     return iri
 
-
 # TODO: See if there is a better dossier url to use instead of dossier['meta']['source']
 # TODO: See if there is a better dossier text to use instead of dossier['procedure']['title']
 def convert_dossier(path, dataset, graph):
-    json_data = h.load_json(path)
 
-    for dossier in islice(json_data, 0, c.DOSSIER_LIMIT):
+    dossier_data = h.load_json(path)
+
+    for dossier in islice(dossier_data, 0, c.DOSSIER_LIMIT):
         for activity in dossier['activities']:
-            if 'type' in activity:
-                if activity['type'] == c.DOSSIER_TYPE:
-                    dossier_id = dossier['_id']
-                    dossier_url = Literal(dossier['meta']['source'], datatype=c.URI)
-                    dossier_date = Literal(
-                        datetime.strptime(dossier['activities'][0]['date'].split('T')[0], '%Y-%m-%d').date(),
-                        datatype=c.DATE)
-                    dossier_title = Literal(dossier['procedure']['title'].strip(), datatype=c.STRING)
+            if 'type' in activity and activity['type'] == c.DOSSIER_TYPE:
 
-                    # User the meta url as the iri
-                    dossier_uri = URIRef(to_iri(dossier_url))
+                dossier_id = dossier['_id']
+                dossier_url = Literal(dossier['meta']['source'], datatype=c.URI)
+                dossier_date = Literal(datetime.strptime(dossier['activities'][0]['date'].split('T')[0], '%Y-%m-%d').date(),datatype=c.DATE)
+                dossier_title = Literal(dossier['procedure']['title'].strip(), datatype=c.STRING)
 
-                    graph.add((dossier_uri, c.PROCESSED_BY, c.EUROPEAN_PARLIAMENT))
-                    # graph.add((dossier_uri, RDF.type, DOSSIER))
-                    dataset.add((dossier_uri, c.DOSSIER_TITLE, dossier_title))
-                    dataset.add((dossier_uri, c.URI, dossier_url))
-                    dataset.add((dossier_uri, c.DATE, dossier_date))
+                # Use the meta url as the iri
+                dossier_uri = URIRef(to_iri(dossier_url))
 
-                    # Store the id and uri in the dictionary for use later
-                    dict_dossier[dossier_id].append(dossier_uri)
+                graph.add((dossier_uri, c.PROCESSED_BY, c.EUROPEAN_PARLIAMENT))
+                # graph.add((dossier_uri, RDF.type, DOSSIER))
+                dataset.add((dossier_uri, c.DOSSIER_TITLE, dossier_title))
+                dataset.add((dossier_uri, c.URI, dossier_url))
+                dataset.add((dossier_uri, c.DATE, dossier_date))
 
-                    print 'Dossier:', dossier_uri
-                    break  # dossier matches DOSSIER_TYPE, no need to search more activities
+                # Store the id and uri in the dictionary for use later
+                dossiers[dossier_id].append(dossier_uri)
+
+                # dossier matches DOSSIER_TYPE, no need to search more activities
+                break
 
     print
     return dataset, graph
 
 
 def convert_votes(path, dataset, graph):
+
     json_data = h.load_json(path)
 
     m = {'Abstain':c.ABSTAINS,'For':c.VOTES_FOR,'Against':c.VOTES_AGAINST}
 
     for votes in islice(json_data, 0, c.VOTES_LIMIT):
+
         if 'dossierid' in votes:
+
             dossier_id = votes['dossierid']
 
             # If this dossier is in our dictionary of useful dossiers, continue
-            if dossier_id in dict_dossier:
-                dossier_uri = dict_dossier[dossier_id][0]
+            if dossier_id in dossiers:
+                dossier_uri = dossiers[dossier_id][0]
                 # title = votes['title']
                 # url = dossier['url']
                 # ep_title = dossier['eptitle']
@@ -106,11 +114,11 @@ def convert_votes(path, dataset, graph):
                             for vote in group['votes']:
                                 # user_id = vote['userid']
                                 voter_id = str(vote['ep_id'])
-                                if voter_id in dict_mep:
-                                    graph.add((URIRef(dict_mep[voter_id][0]), m[vote_direction], dossier_uri))
+                                if voter_id in meps:
+                                    graph.add((URIRef(meps[voter_id][0]), m[vote_direction], dossier_uri))
 
                 print 'Votes on dossier:', dossier_uri
-                
+    print
     return dataset, graph
 
 
@@ -125,8 +133,8 @@ def convert_mep(path, dataset, graph):
         mep_uri = name_to_dbr(full_name)
 
         # append to global dictionary
-        if not dict_mep[user_id]:
-            dict_mep[user_id].append(mep_uri)
+        if not meps[user_id]:
+            meps[user_id].append(mep_uri)
         mep_uri = URIRef(mep_uri)
 
         if 'Photo' in mep:
@@ -170,14 +178,14 @@ def convert_mep(path, dataset, graph):
             party_id = mep['Groups'][0]['groupid']
             if type(party_id) is list:
                 for pid in party_id:
-                    if party_dbr not in dict_party[pid]:
-                        dict_party[pid].append(party_dbr)
+                    if party_dbr not in parties[pid]:
+                        parties[pid].append(party_dbr)
                 party_id = party_id[0]
-            elif party_dbr not in dict_party[party_id]:
-                dict_party[party_id].append(party_dbr)
+            elif party_dbr not in parties[party_id]:
+                parties[party_id].append(party_dbr)
 
 
-            party_uri = URIRef(dict_party[party_id][0])
+            party_uri = URIRef(parties[party_id][0])
             # If a valid iri was added manually, it's always first, so just take the first
             #graph.add((mep_uri, c.MEMBER_OF, URIRef(dict_party[party_id][0])))
             dataset.add((mep_uri, c.PARTY, party_uri))
