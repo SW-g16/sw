@@ -197,7 +197,7 @@ def convert_mep(path, dataset, graph):
             # If a valid iri was added manually, it's always first, so just take the first
             #graph.add((mep_uri, c.MEMBER_OF, URIRef(dict_party[party_id][0])))
             dataset.add((mep_uri, c.PARTY, party_uri))
-            graph.add((party_uri, c.POLITICAL_PARTY_IN_LEGISLATURE, c.EUROPEAN_PARLIAMENT))
+            graph.add((party_uri, c.IN_LEGISLATURE, c.EUROPEAN_PARLIAMENT))
 
         if 'Gender' in mep:
             gender = mep['Gender']
