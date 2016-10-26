@@ -24,7 +24,7 @@ def process_congress(session_ids):
 
     print_result_table_headers()
 
-    for s_id in [3]:
+    for s_id in session_ids:
         report['session_reports'][s_id] = p_session.process_session(s_id)
         print_result_row(s_id, report['session_reports'][s_id])
 
