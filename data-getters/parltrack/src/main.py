@@ -146,7 +146,7 @@ def convert_mep(path, dataset, graph):
         mep_uri = URIRef(mep_uri)
 
         if 'Photo' in mep:
-            photo_url = Literal(mep['Photo'], datatype=c.URI)
+            photo_url = Literal(mep['Photo'], datatype=c.THUMBNAIL)
             dataset.add((mep_uri, c.URI, photo_url))
 
         if 'Birth' in mep:
@@ -192,9 +192,12 @@ def convert_mep(path, dataset, graph):
             elif party_dbr not in dict_party[party_id]:
                 dict_party[party_id].append(party_dbr)
 
+
+            party_uri = URIRef(dict_party[party_id][0])
             # If a valid iri was added manually, it's always first, so just take the first
             #graph.add((mep_uri, c.MEMBER_OF, URIRef(dict_party[party_id][0])))
-            dataset.add((mep_uri, c.PARTY, URIRef(dict_party[party_id][0])))
+            dataset.add((mep_uri, c.PARTY, party_uri))
+            graph.add((party_uri, c.POLITICAL_PARTY_IN_LEGISLATURE, c.EUROPEAN_PARLIAMENT))
 
         if 'Gender' in mep:
             gender = mep['Gender']
