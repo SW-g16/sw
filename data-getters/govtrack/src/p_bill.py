@@ -10,7 +10,7 @@ def parse_bill_text(q):
         return '"%s"' % q.replace('"', '').replace('\'', '')
     elif q is None:
         # this does sometimes occur, such as for session 2 group 2 bill s52
-        return "???"
+        return '"Missing"'
     else:
         print q
         raise Exception
