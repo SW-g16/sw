@@ -20,9 +20,9 @@ VOTES_LIMIT = None
 DATABASE = 'http://localhost:5820/#/databases/votes/'
 NAMESPACE = DATABASE
 
-ont = 'http://votes.examples.com/ontology/'
+ont = NAMESPACE
 ONT = Namespace(ont)
-PREFIX = ''
+PREFIX = 'votes'
 
 DOSSIER_TYPE = 'Legislative proposal published'
 
@@ -49,6 +49,7 @@ VOTES_AGAINST = ONT['votesNay']
 VOTES_IN = ONT['votesIn']
 
 MEMBER_OF = ONT['memberOf']
+PARTY = DBO['party']
 
 GENDER = DBO['gender']
 MALE = DBR['Male']
@@ -56,6 +57,8 @@ FEMALE = DBR['Female']
 EUROPEAN_PARLIAMENT = DBR['European_Parliament']
 POLITICAL_PARTY = DBO['PoliticalParty']
 POLITICAL_PARTY_IN_LEGISLATURE = DBO['politicalPartyInLegislature']
+OFFICE = DBP['office']
+MEMBER_OF_EU = DBR['Member_of_the_European_Parliament']
 
 FULL_NAME = FOAF['name']
 BIRTH_DATE = DBO['birthDate']

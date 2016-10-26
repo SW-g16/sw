@@ -136,18 +136,14 @@ def convert_mep(path, dataset, graph):
     for mep in islice(json_data, 0, c.MEP_LIMIT):
         # Get raw values
         user_id = str(mep['UserID'])
-
         full_name = Literal(mep['Name']['full'].lower().title().encode('utf-8').strip(), datatype=c.STRING)
-
+        profile_url = Literal(mep['meta']['url'], datatype=c.URI)
         mep_uri = name_to_dbr(full_name)
 
         # append to global dictionary
         if not dict_mep[user_id]:
             dict_mep[user_id].append(mep_uri)
-
         mep_uri = URIRef(mep_uri)
-
-        profile_url = Literal(mep['meta']['url'], datatype=c.URI)
 
         if 'Photo' in mep:
             photo_url = Literal(mep['Photo'], datatype=c.URI)
@@ -197,8 +193,8 @@ def convert_mep(path, dataset, graph):
                 dict_party[party_id].append(party_dbr)
 
             # If a valid iri was added manually, it's always first, so just take the first
-            graph.add((mep_uri, c.MEMBER_OF, URIRef(dict_party[party_id][0])))
-
+            #graph.add((mep_uri, c.MEMBER_OF, URIRef(dict_party[party_id][0])))
+            dataset.add((mep_uri, c.PARTY, URIRef(dict_party[party_id][0])))
 
         if 'Gender' in mep:
             gender = mep['Gender']
@@ -209,6 +205,7 @@ def convert_mep(path, dataset, graph):
 
         dataset.add((mep_uri, c.FULL_NAME, full_name))
         dataset.add((mep_uri, c.URI, profile_url))
+        dataset.add((mep_uri, c.OFFICE, c.MEMBER_OF_EU))
 
         print 'MEP:', mep_uri
 
