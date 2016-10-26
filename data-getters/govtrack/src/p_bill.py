@@ -42,7 +42,7 @@ def process_bill(session_id, g, b):
     if bill_data is None or 'votes' not in bill_data: return []
 
     # construct bill uri from retrieved bill id
-    bill_uri = '<gt_b/%s_%d_%d>' % (b[0],session_id, bill_data['number'])
+    bill_uri = c.PREFIX+':%s_%d_%d' % (b[0],session_id, bill_data['number'])
 
     # the text of the bill
     bill_text = parse_bill_text(bill_data['question'])

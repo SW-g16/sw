@@ -185,7 +185,7 @@ def parse_row(row, i, path):
                (voter_uri, c.PROP_LAST_NAME, '"%s"' % make_safe(row[0])),
                (voter_uri, c.PROP_LAST_NAME, '"%s"' % make_safe(row[1])),
                (voter_uri, c.PROP_PARTY, "%s" % get_party(row[7])),
-               (voter_uri, c.PROP_SAMEAS, '<http://api.stardog.com/gt_v/%s>' % row[18]),
+               (voter_uri, c.PROP_SAMEAS, c.PREFIX+':gt_v_%s' % row[18]),
                (voter_uri, c.PROP_WIKIPAGE, '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
            ] + [p for p in possibles if p is not None]
 

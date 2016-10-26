@@ -5,7 +5,7 @@ def process_votes(votes, bill_uri):
     # return an array of (Voter reactsTo Bill) triples, generated from the given bill uri and vote data
 
     def vote_triple(voter_id, l):
-        return '<gt_v/%s>' % voter_id, c.VOTE_VOC[l], bill_uri
+        return c.PREFIX+':gt_v_%s' % voter_id, c.VOTE_VOC[l], bill_uri
 
     def is_dict(thing):
         return isinstance(thing, dict)
