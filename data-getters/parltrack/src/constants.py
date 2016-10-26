@@ -17,7 +17,7 @@ MEP_LIMIT = None
 DOSSIER_LIMIT = None
 VOTES_LIMIT = None
 
-DATABASE = 'http://localhost:5820/#/databases/votes/'
+DATABASE = 'http://localhost:5820/databases/votes/'
 NAMESPACE = DATABASE
 
 ont = NAMESPACE
@@ -44,11 +44,11 @@ DOSSIER_TITLE = ONT['bill_text']
 PROCESSED_BY = ONT['processedBy']
 
 ABSTAINS = ONT['abstains']
-VOTES_FOR = ONT['votesYay']
-VOTES_AGAINST = ONT['votesNay']
+VOTES_FOR = ONT['upvotes']
+VOTES_AGAINST = ONT['downvotes']
 VOTES_IN = ONT['votesIn']
 
-MEMBER_OF = ONT['memberOf']
+MEMBER_OF = DBR['party']
 PARTY = DBO['party']
 
 GENDER = DBO['gender']

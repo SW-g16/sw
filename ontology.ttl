@@ -1,4 +1,3 @@
-@prefix : <http://localhost:5820/#/databases/votes/> .
 @prefix dbo: <http://dbpedia.org/ontology/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -6,11 +5,9 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix votes: <http://localhost:5820/#/databases/votes/> .
-@prefix stardog: <tag:stardog:api:> .
-@base <http://localhost:5820/#/databases/votes/> .
+@prefix votes: <http://localhost:5820/databases/votes/> .
 
-<http://localhost:5820/#/databases/votes/> rdf:type owl:Ontology .
+<http://localhost:5820/databases/votes/> rdf:type owl:Ontology .
 
 #################################################################
 #    Datatypes
@@ -24,29 +21,29 @@ xsd:date rdf:type rdfs:Datatype .
 #    Object Properties
 #################################################################
 
-###  http://localhost:5820/#/databases/votes/abstains
+###  http://localhost:5820/databases/votes/abstains
 votes:abstains rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf votes:reactsToVote ;
-               owl:propertyDisjointWith votes:votesNay ,
-                                        votes:votesYay .
+               owl:propertyDisjointWith votes:downvotes ,
+                                        votes:upvotes .
 
 
-###  http://localhost:5820/#/databases/votes/appliesTo
+###  http://localhost:5820/databases/votes/appliesTo
 votes:appliesTo rdf:type owl:ObjectProperty ;
                 rdfs:domain votes:Bill ;
                 rdfs:range votes:Polity ;
                 rdfs:label "appliesTo"@en .
 
 
-###  http://localhost:5820/#/databases/votes/hasMember
+###  http://localhost:5820/databases/votes/hasMember
 votes:hasMember rdf:type owl:ObjectProperty ;
-                owl:equivalentProperty [ owl:inverseOf votes:memberOf
+                owl:equivalentProperty [ owl:inverseOf dbo:party
                                        ] ;
                 rdfs:domain votes:Party ;
                 rdfs:range votes:Voter .
 
 
-###  http://localhost:5820/#/databases/votes/hasText
+###  http://localhost:5820/databases/votes/hasText
 votes:hasText rdf:type owl:ObjectProperty ;
               rdfs:domain votes:Bill ;
               rdfs:range [ rdf:type owl:Restriction ;
@@ -56,7 +53,7 @@ votes:hasText rdf:type owl:ObjectProperty ;
                          ] .
 
 
-###  http://localhost:5820/#/databases/votes/legalizesFor
+###  http://localhost:5820/databases/votes/legalizesFor
 votes:legalizesFor rdf:type owl:ObjectProperty ;
                    rdfs:domain votes:VotingAssembly ;
                    rdfs:range votes:Polity ;
@@ -64,13 +61,7 @@ votes:legalizesFor rdf:type owl:ObjectProperty ;
                    rdfs:label "legalizesFor"@en .
 
 
-###  http://localhost:5820/#/databases/votes/memberOf
-votes:memberOf rdf:type owl:ObjectProperty ;
-               rdfs:domain votes:Voter ;
-               rdfs:range votes:Party .
-
-
-###  http://localhost:5820/#/databases/votes/processed
+###  http://localhost:5820/databases/votes/processed
 votes:processed rdf:type owl:ObjectProperty ;
                 owl:inverseOf votes:processedBy ;
                 rdfs:domain votes:VotingAssembly ;
@@ -78,20 +69,20 @@ votes:processed rdf:type owl:ObjectProperty ;
                 rdfs:label "processed"@en .
 
 
-###  http://localhost:5820/#/databases/votes/processedBy
+###  http://localhost:5820/databases/votes/processedBy
 votes:processedBy rdf:type owl:ObjectProperty ;
                   rdfs:domain votes:Bill ;
                   rdfs:range votes:VotingAssembly ;
                   rdfs:label "processedBy"@en .
 
 
-###  http://localhost:5820/#/databases/votes/reactsToVote
+###  http://localhost:5820/databases/votes/reactsToVote
 votes:reactsToVote rdf:type owl:ObjectProperty ;
                    rdfs:domain votes:Voter ;
                    rdfs:range votes:Bill .
 
 
-###  http://localhost:5820/#/databases/votes/representedBy
+###  http://localhost:5820/databases/votes/representedBy
 votes:representedBy rdf:type owl:ObjectProperty ;
                     owl:inverseOf votes:represents ;
                     rdfs:domain votes:Polity ;
@@ -99,37 +90,37 @@ votes:representedBy rdf:type owl:ObjectProperty ;
                     rdfs:label "representedBy"@en .
 
 
-###  http://localhost:5820/#/databases/votes/represents
+###  http://localhost:5820/databases/votes/represents
 votes:represents rdf:type owl:ObjectProperty ;
                  rdfs:domain votes:Voter ;
                  rdfs:range votes:Polity ;
                  rdfs:label "represents"@en .
 
 
-###  http://localhost:5820/#/databases/votes/votesIn
+###  http://localhost:5820/databases/votes/votesIn
 votes:votesIn rdf:type owl:ObjectProperty ;
               rdfs:domain votes:Voter ;
               rdfs:range votes:VotingAssembly ;
               rdfs:label "votesIn"@en .
 
 
-###  http://localhost:5820/#/databases/votes/votesNay
-votes:votesNay rdf:type owl:ObjectProperty ;
+###  http://localhost:5820/databases/votes/downvotes
+votes:downvotes rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf votes:votesOn ;
-               owl:propertyDisjointWith votes:votesYay .
+               owl:propertyDisjointWith votes:upvotes .
 
 
-###  http://localhost:5820/#/databases/votes/votesOn
+###  http://localhost:5820/databases/votes/votesOn
 votes:votesOn rdf:type owl:ObjectProperty ;
               rdfs:subPropertyOf votes:reactsToVote .
 
 
-###  http://localhost:5820/#/databases/votes/votesYay
-votes:votesYay rdf:type owl:ObjectProperty ;
+###  http://localhost:5820/databases/votes/upvotes
+votes:upvotes rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf votes:votesOn .
 
 
-###  http://localhost:5820/#/databases/votes/wikipedia
+###  http://localhost:5820/databases/votes/wikipedia
 votes:wikipedia rdf:type owl:ObjectProperty .
 
 
@@ -142,7 +133,7 @@ dbo:birthDate rdf:type owl:DatatypeProperty ;
               rdfs:domain dbo:Person .
 
 
-###  http://localhost:5820/#/databases/votes/bill_text
+###  http://localhost:5820/databases/votes/bill_text
 votes:bill_text rdf:type owl:DatatypeProperty ;
                 rdfs:domain votes:Bill ;
                 rdfs:range xsd:string ;
@@ -170,13 +161,13 @@ dbo:Person rdf:type owl:Class ;
            rdfs:subClassOf votes:Agent .
 
 
-###  http://localhost:5820/#/databases/votes/Agent
+###  http://localhost:5820/databases/votes/Agent
 votes:Agent rdf:type owl:Class ;
             owl:equivalentClass foaf:Agent ;
             rdfs:label "Agent"@en .
 
 
-###  http://localhost:5820/#/databases/votes/Bill
+###  http://localhost:5820/databases/votes/Bill
 votes:Bill rdf:type owl:Class ;
            owl:equivalentClass [ rdf:type owl:Restriction ;
                                  owl:onProperty votes:processedBy ;
@@ -185,31 +176,31 @@ votes:Bill rdf:type owl:Class ;
                                ] .
 
 
-###  http://localhost:5820/#/databases/votes/Commune
+###  http://localhost:5820/databases/votes/Commune
 votes:Commune rdf:type owl:Class ;
               rdfs:subClassOf votes:Polity ;
               rdfs:label "Commune"@en .
 
 
-###  http://localhost:5820/#/databases/votes/County
+###  http://localhost:5820/databases/votes/County
 votes:County rdf:type owl:Class ;
              rdfs:subClassOf votes:Polity ;
              rdfs:label "County"@en .
 
 
-###  http://localhost:5820/#/databases/votes/Federation
+###  http://localhost:5820/databases/votes/Federation
 votes:Federation rdf:type owl:Class ;
                  rdfs:subClassOf votes:Polity ;
                  rdfs:label "Federation"@en .
 
 
-###  http://localhost:5820/#/databases/votes/FemaleVoter
+###  http://localhost:5820/databases/votes/FemaleVoter
 votes:FemaleVoter rdf:type owl:Class ;
                   rdfs:subClassOf votes:HumanVoter ;
                   rdfs:label "FemaleVoter"@en .
 
 
-###  http://localhost:5820/#/databases/votes/HumanVoter
+###  http://localhost:5820/databases/votes/HumanVoter
 votes:HumanVoter rdf:type owl:Class ;
                  owl:equivalentClass [ owl:intersectionOf ( dbo:Person
                                                             [ rdf:type owl:Restriction ;
@@ -229,13 +220,13 @@ votes:HumanVoter rdf:type owl:Class ;
                                  votes:Voter .
 
 
-###  http://localhost:5820/#/databases/votes/MaleVoter
+###  http://localhost:5820/databases/votes/MaleVoter
 votes:MaleVoter rdf:type owl:Class ;
                 rdfs:subClassOf votes:HumanVoter ;
                 rdfs:label "MaleVoter"@en .
 
 
-###  http://localhost:5820/#/databases/votes/MiddleAgedVoter
+###  http://localhost:5820/databases/votes/MiddleAgedVoter
 votes:MiddleAgedVoter rdf:type owl:Class ;
                       owl:equivalentClass [ owl:intersectionOf ( votes:HumanVoter
                                                                  [ rdf:type owl:Restriction ;
@@ -256,7 +247,7 @@ votes:MiddleAgedVoter rdf:type owl:Class ;
                       rdfs:label "MiddleAgedVoter"@en .
 
 
-###  http://localhost:5820/#/databases/votes/OldVoter
+###  http://localhost:5820/databases/votes/OldVoter
 votes:OldVoter rdf:type owl:Class ;
                owl:equivalentClass [ rdf:type owl:Restriction ;
                                      owl:onProperty foaf:age ;
@@ -271,27 +262,27 @@ votes:OldVoter rdf:type owl:Class ;
                rdfs:label "OldVoter"@en .
 
 
-###  http://localhost:5820/#/databases/votes/Party
+###  http://localhost:5820/databases/votes/Party
 votes:Party rdf:type owl:Class ;
             rdfs:subClassOf votes:Agent ;
             rdfs:comment "A collection of relatively likeminded Voters" ;
             rdfs:label "Party"@en .
 
 
-###  http://localhost:5820/#/databases/votes/Polity
+###  http://localhost:5820/databases/votes/Polity
 votes:Polity rdf:type owl:Class ;
              rdfs:subClassOf votes:Agent ;
              rdfs:comment "Something onto which laws are applied" ;
              rdfs:label "Polity"@en .
 
 
-###  http://localhost:5820/#/databases/votes/State
+###  http://localhost:5820/databases/votes/State
 votes:State rdf:type owl:Class ;
             rdfs:subClassOf votes:Polity ;
             rdfs:label "State"@en .
 
 
-###  http://localhost:5820/#/databases/votes/Voter
+###  http://localhost:5820/databases/votes/Voter
 votes:Voter rdf:type owl:Class ;
             owl:equivalentClass [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
                                                          owl:onProperty votes:reactsToVote ;
@@ -314,13 +305,13 @@ votes:Voter rdf:type owl:Class ;
             rdfs:subClassOf votes:Agent .
 
 
-###  http://localhost:5820/#/databases/votes/VotingAssembly
+###  http://localhost:5820/databases/votes/VotingAssembly
 votes:VotingAssembly rdf:type owl:Class ;
                      rdfs:subClassOf votes:Agent ;
                      rdfs:label "VotingAssembly"@en .
 
 
-###  http://localhost:5820/#/databases/votes/YoungVoter
+###  http://localhost:5820/databases/votes/YoungVoter
 votes:YoungVoter rdf:type owl:Class ;
                  owl:equivalentClass [ rdf:type owl:Restriction ;
                                        owl:onProperty foaf:age ;

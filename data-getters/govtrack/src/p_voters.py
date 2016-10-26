@@ -159,14 +159,14 @@ def gender_triple(voter_uri, gender_key):
         k = '"female"'
     else:
         return None
-    return voter_uri, 'foaf:gender', k
+    return (voter_uri, 'foaf:gender', k)
 
 
 def votes_in_triple(voter_uri, voting_assembly_key):
     if   voting_assembly_key == 'rep': va_uri = c.URI_USA_HOUSE
     elif voting_assembly_key == 'sen': va_uri = c.URI_USA_SENATE
     else: return None
-    return voter_uri, ':votesIn', va_uri
+    return (voter_uri, ':votesIn', va_uri)
 
 def parse_row(row, i, path):
     # voter uri, using govtrack id.
@@ -184,7 +184,7 @@ def parse_row(row, i, path):
     return [
                (voter_uri, c.PROP_LAST_NAME, '"%s"' % make_safe(row[0])),
                (voter_uri, c.PROP_LAST_NAME, '"%s"' % make_safe(row[1])),
-               (voter_uri, c.PROP_MEMBEROF, "%s" % get_party(row[7])),
+               (voter_uri, c.PROP_PARTY, "%s" % get_party(row[7])),
                (voter_uri, c.PROP_SAMEAS, '<http://api.stardog.com/gt_v/%s>' % row[18]),
                (voter_uri, c.PROP_WIKIPAGE, '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
            ] + [p for p in possibles if p is not None]
