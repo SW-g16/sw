@@ -87,6 +87,8 @@ def convert_dossier(path, dataset, graph):
 def convert_votes(path, dataset, graph):
     json_data = h.load_json(path)
 
+    m = {'Abstain':c.ABSTAINS,'For':c.VOTES_FOR,'Against':c.VOTES_AGAINST}
+
     for votes in islice(json_data, 0, c.VOTES_LIMIT):
         if 'dossierid' in votes:
             dossier_id = votes['dossierid']
@@ -97,36 +99,18 @@ def convert_votes(path, dataset, graph):
                 # title = votes['title']
                 # url = dossier['url']
                 # ep_title = dossier['eptitle']
-
-                if 'Abstain' in votes:
-                    for group in votes['Abstain']['groups']:
-                        # group_name = group['group']
-                        for vote in group['votes']:
-                            # user_id = vote['userid']
-                            voter_id = str(vote['ep_id'])
-                            if voter_id in dict_mep:
-                                graph.add((URIRef(dict_mep[voter_id][0]), c.ABSTAINS, dossier_uri))
-
-                if 'For' in votes:
-                    for group in votes['For']['groups']:
-                        # group_name = group['group']
-                        for vote in group['votes']:
-                            # user_id = vote['userid']
-                            voter_id = str(vote['ep_id'])
-                            if voter_id in dict_mep:
-                                graph.add((URIRef(dict_mep[voter_id][0]), c.VOTES_FOR, dossier_uri))
-
-                if 'Against' in votes:
-                    for group in votes['Against']['groups']:
-                        # group_name = group['group']
-                        for vote in group['votes']:
-                            # user_id = vote['userid']
-                            voter_id = str(vote['ep_id'])
-                            if voter_id in dict_mep:
-                                graph.add((URIRef(dict_mep[voter_id][0]), c.VOTES_AGAINST, dossier_uri))
+                for vote_direction in m:
+                    if vote_direction in votes:
+                        for group in votes[vote_direction]['groups']:
+                            # group_name = group['group']
+                            for vote in group['votes']:
+                                # user_id = vote['userid']
+                                voter_id = str(vote['ep_id'])
+                                if voter_id in dict_mep:
+                                    graph.add((URIRef(dict_mep[voter_id][0]), m[vote_direction], dossier_uri))
 
                 print 'Votes on dossier:', dossier_uri
-    print
+                
     return dataset, graph
 
 

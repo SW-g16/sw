@@ -202,7 +202,7 @@ def process_voters():
     start = time.time()
     paths = get_paths()
 
-    triples = [('@prefix', ':', '<http://www.votes.example.com/ontology/>'),
+    triples = [('@prefix', ':', '<http://votes.example.com/ontology/>'),
                ('@prefix', 'dbr:', '<http://dbpedia.org/resource/>'),
                ('@prefix', 'owl:', '<http://www.w3.org/2002/07/owl#>'),
                ('@prefix', 'foaf:', '<http://xmlns.com/foaf/0.1/>')]
