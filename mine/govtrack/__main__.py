@@ -15,7 +15,7 @@ p_voters.process_voters()
 start = time.time()
 
 # get the list of session ids
-session_ids = get_session_ids.get_session_ids()[:3] # mine only 5 congress sessions to save resources while developing
+session_ids = get_session_ids.get_session_ids()[:1] # mine only 5 congress sessions to save resources while developing
 print session_ids
 
 if False: # true for multithread

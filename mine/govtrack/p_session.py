@@ -17,7 +17,7 @@ def process_session(session_id):
         return helpers.get_dirnames('%s%d/votes' % (c.CONGRESS_PATH, session_id))
 
     def depth_2_folders(k):
-        return helpers.get_dirnames('%s%d/votes/%s' % (c.CONGRESS_PATH, session_id, str(k)))
+        return helpers.get_dirnames('%s%d/votes/%s' % (c.CONGRESS_PATH, session_id, str(k)))[:10]
 
     triples = []
 
