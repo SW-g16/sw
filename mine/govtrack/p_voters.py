@@ -40,8 +40,7 @@ import csv
 import os
 import time
 
-import send_to_db
-
+import save
 import constants as c
 
 states = {'AK': 'Alaska', 'AL': 'Alabama', 'AR': 'Arkansas', 'AS': 'American Samoa', 'AZ': 'Arizona',
@@ -60,13 +59,14 @@ fail_states = []
 
 
 def make_safe(string):
-    return ''.join(e for e in string if e.isalnum() or e == ' ')
+
+    return ''.join(e for e in string if ord(e)<127)
 
 
 def represents_triple(voter_uri, state_acronym, i, path):
     # some state acronyms be bad
     try:
-        return voter_uri, ':represents', 'dbr:' + states[state_acronym].replace(' ', '_')
+        return voter_uri, 'votes:represents', 'dbr:' + states[state_acronym].replace(' ', '_')
     except:
         fail_states.append((state_acronym, i, path[len(path) - 12:]))
         return None
@@ -166,7 +166,7 @@ def votes_in_triple(voter_uri, voting_assembly_key):
     if   voting_assembly_key == 'rep': va_uri = c.URI_USA_HOUSE
     elif voting_assembly_key == 'sen': va_uri = c.URI_USA_SENATE
     else: return None
-    return (voter_uri, ':votesIn', va_uri)
+    return (voter_uri, 'votes:votesIn', va_uri)
 
 def parse_row(row, i, path):
     # voter uri, using govtrack id.
@@ -182,8 +182,7 @@ def parse_row(row, i, path):
     ]
 
     return [
-               (voter_uri, c.PROP_LAST_NAME, '"%s"' % make_safe(row[0])),
-               (voter_uri, c.PROP_LAST_NAME, '"%s"' % make_safe(row[1])),
+               (voter_uri, c.PROP_NAME, '"%s"' % make_safe(row[0]+' '+row[1])),
                (voter_uri, c.PROP_PARTY, "%s" % get_party(row[7])),
                (voter_uri, c.PROP_SAMEAS, c.PREFIX+':gt_v_%s' % row[18]),
                (voter_uri, c.PROP_WIKIPAGE, '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
@@ -192,7 +191,7 @@ def parse_row(row, i, path):
 
 def get_paths():
     file_suffixes = ['current.csv', 'historic.csv']
-    root = os.path.dirname(os.path.realpath(__file__)) + '/../../../data/govtrack/congress-legislators/legislators-'
+    root = os.path.dirname(os.path.realpath(__file__)) + '/../../data/govtrack/congress-legislators/legislators-'
     return [root + s for s in file_suffixes]
 
 
@@ -200,17 +199,20 @@ def process_voters():
     start = time.time()
     paths = get_paths()
 
-    triples = [('@prefix', ':', c.NS_OURS),
+    triples = [('@prefix', 'votes:', c.NS_OURS),
                ('@prefix', 'dbr:', c.NS_DBR),
                ('@prefix', 'owl:', c.NS_OWL),
                ('@prefix', 'foaf:', c.NS_FOAF)]
 
+    counter = 0
     for path in paths:
         with open(path, 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             next(reader)  # ignore headers
-            for i, row in enumerate(reader): triples += parse_row(row, i, path)
+            for i, row in enumerate(reader):
+                triples += parse_row(row, i, path)
+
 
     # print 'Got these bad state acronyms: (acronym, row number, file):', fail_states
     duration = time.time()-start
-    print 'Processed voters. Stardog response: %s. %d triples stored in %0.2f seconds. %0.2f triples per seconds.' % ( send_to_db.send_to_db(triples), len(triples), duration, len(triples) / duration)
+    print 'Processed voters. Stardog response: %s. %d triples stored in %0.2f seconds. %0.2f triples per seconds.' % (save.save(triples), len(triples), duration, len(triples) / duration)

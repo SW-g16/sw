@@ -1,9 +1,9 @@
 import time
 
-import constants as c
 import helpers
 import p_bill
-import send_to_db
+import save
+import constants as c
 
 
 # this function processes a 'session' - a piece of the totality of congress' bills and laws, delimited by time.
@@ -19,8 +19,7 @@ def process_session(session_id):
     def depth_2_folders(k):
         return helpers.get_dirnames('%s%d/votes/%s' % (c.CONGRESS_PATH, session_id, str(k)))
 
-    triples = [('@prefix', ':', c.NS_OURS),
-               ('@prefix', 'dbr:', c.NS_DBR)]
+    triples = []
 
     for g in depth_1_folders():
         for b in depth_2_folders(g):
@@ -30,7 +29,7 @@ def process_session(session_id):
 
     start = time.time()
 
-    send_to_db.send_to_db(triples)
+    save.save(triples)
 
     stardog_time = time.time() - start
 

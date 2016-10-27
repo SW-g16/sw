@@ -2,9 +2,10 @@ from rdflib import Namespace, XSD
 import os
 
 DATA_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))) + '/data/parltrack/'
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))) + '/sw/data/parltrack/'
+print DATA_DIR
 
-DATA_OUTPUT = DATA_DIR + 'parltrack.trig'
+DATA_OUTPUT = DATA_DIR + 'parltrack.ttl'
 DATA_MEP = DATA_DIR + 'meps.json'
 DATA_VOTES = DATA_DIR + 'votes.json'
 DATA_DOSSIER = DATA_DIR + 'dossiers.json'

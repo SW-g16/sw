@@ -1,8 +1,8 @@
 import os.path
 
-import constants as c
 import helpers
 import p_votes
+import constants as c
 
 
 def parse_bill_text(q):

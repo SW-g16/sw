@@ -8,8 +8,8 @@ from itertools import islice
 from iribaker import to_iri
 from rdflib import URIRef, Literal
 
-import constants as c
 import load_json as h
+import constants as c
 
 # These are currently dict(lists), because there is a possibility of multiple iris per key in the future
 dict_mep = h.load_json(c.DICT_MEPS)
@@ -39,7 +39,7 @@ def format_name_string(input_string):
     input_string = re.sub('\(.+?\)', '', input_string)
     input_string = input_string.lower().title().encode('utf-8').strip()
     input_string = re.sub('\s+', '_', input_string)
-    return input_string
+    return input_string.replace('.','_')
 
 
 def name_to_dbr(name):

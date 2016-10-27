@@ -1,0 +1,9 @@
+select ?bill ?party (COUNT(distinct ?voter_1) as ?num_party_members) (COUNT(distinct ?voter_2) as ?num_voters)
+where {
+
+	?voter_1 :reactsToVote ?bill.
+	?voter_1 :memberOf ?party.
+	?voter_2 :reactsToVote ?bill.
+}
+group by ?bill ?party
+order by desc(?num_party_members)

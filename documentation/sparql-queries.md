@@ -2,6 +2,7 @@
 
 ## Endpoints:
 ### 1. http://localhost:5820/votes/query
+
 ```
 select ?bill (COUNT(distinct ?voter_1) as ?nay_votes) (COUNT(distinct ?voter_2) as ?yay_votes) (COUNT(distinct ?voter_3) as ?abstains)
 where {

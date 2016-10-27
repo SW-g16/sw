@@ -1,29 +1,24 @@
+
 import os
 
-PATH = os.path.dirname(os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))  # the location of the downloaded bulk data
-DATA_PATH = PATH + '/data'
-CONGRESS_PATH = DATA_PATH + '/govtrack/congress/'
+PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))) + '/sw'
 
-EMPTY_THRESHOLD = 1500
+DATA_PATH = PATH + '/data/govtrack/'
+CONGRESS_PATH = DATA_PATH + 'congress/'
+print CONGRESS_PATH
 
 BASE_URI = 'http://localhost:5820/databases/votes/'
 
-print PATH
-print DATA_PATH
-
 PREFIX = 'votes'
 
-VOTE_VOC = {'Yea': ':upvotes', 'Nay': ':downvotes', 'Not Voting': ':abstains'}
+VOTE_VOC = {'Yea': PREFIX+':upvotes', 'Nay': PREFIX+':downvotes', 'Not Voting': PREFIX+':abstains'}
 
 PROP_BILL_TEXT = PREFIX+':hasText'
 PROP_PROCESSED_BY = PREFIX+':processedBy'
 PROP_WIKIPAGE = PREFIX+':wikipedia'
 PROP_PARTY = 'dbr:party'
 PROP_SAMEAS = 'owl:sameAs'
-PROP_LAST_NAME = 'foaf:lastName'
-PROP_FIRST_NAME = 'foaf:firstName'
-
+PROP_NAME = 'foaf:name'
 URI_USA_SENATE = 'dbr:United_States_Senate'
 URI_USA_HOUSE = 'dbr:United_States_House_of_Representatives'
 

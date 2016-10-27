@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd ~/sw/
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 git submodule init
 git submodule update

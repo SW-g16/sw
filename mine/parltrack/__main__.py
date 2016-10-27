@@ -1,5 +1,6 @@
 from rdflib import Dataset
-from src import constants as c, main as m, save as s, load_json as h
+
+import constants as c, main as m, save as s
 
 ds = Dataset()
 ds.bind(c.PREFIX, c.ONT)

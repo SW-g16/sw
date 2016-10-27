@@ -1,0 +1,3 @@
+# number of distinct classes
+
+SELECT (COUNT(distinct ?o) as ?count)WHERE{?s a ?o.}
