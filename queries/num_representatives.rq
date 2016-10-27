@@ -1,10 +1,13 @@
 # this returns the number of representatives per party, and the total number of voters(and abstainers) at the time of a given bill.
 
-select distinct ?bill ?party (COUNT(distinct ?voter_1) as ?num_party_members) (COUNT(distinct ?voter_2) as ?num_voters)
+select ?bill ?party ?party_members ?voters
 where {
-	?voter_1 votes:votesOn ?bill.
-    ?voter_1 dbo:party ?party.
-	?voter_2 votes:votesOn ?bill.
+    select distinct ?bill ?party (count(distinct ?voter_1) as ?party_members) (count(distinct ?voter_2) as ?voters)
+    where {
+        ?voter_1 votes:votesOn ?bill.
+        ?voter_1 dbo:party ?party.
+        ?voter_2 votes:votesOn ?bill.
+    }
+    group by ?bill ?party ?party_members ?voters
 }
-group by ?bill ?party
-order by desc(?num_party_members)
+order by desc (?party_members/?voters)

@@ -1,14 +1,20 @@
+# adds proportion to num_representatives.rq
+
 # this is supposed to return the proportion of a voting assembly held by a party per party
 # however it returns nothing - not even column headers in stardog
 # why?
 # syntax is correct
 
-select ?bill ?party (COUNT(distinct ?voter_1)/COUNT(distinct ?voter_2) as ?proportion)
+# try replacing (?party_members/?voters as ?proportion) with (2/5 as ?proportion), and observe weird results
 
+select ?bill ?party ?party_members ?voters (?party_members/?voters as ?proportion)
 where {
-	?voter_1 votes:votesOn ?bill.
-    ?voter_1 dbo:party ?party.
-	?voter_2 votes:votesOn ?bill.
+    select distinct ?bill ?party (count(distinct ?voter_1) as ?party_members) (count(distinct ?voter_2) as ?voters)
+    where {
+        ?voter_1 votes:votesOn ?bill.
+        ?voter_1 dbo:party ?party.
+        ?voter_2 votes:votesOn ?bill.
+    }
+    group by ?bill ?party ?party_members ?voters
 }
-group by ?bill ?party
-order by desc(?proportion)
+order by desc (?party_members/?voters)
