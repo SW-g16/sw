@@ -19,6 +19,6 @@ cd $SCRIPTS_DIR
 bash mine.sh
 
 echo
-echo 'Done!'
+echo 'All programs/scrics/modules inited. Tailing stardog log. ' # best term?
 
 tail -f $STARDOG/stardog.log

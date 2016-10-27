@@ -38,12 +38,32 @@ fi
 echo 'Stardog directory: '$STARDOG
 cd $STARDOG/bin
 
-sudo ./stardog-admin server stop
-sudo ./stardog-admin server start --disable-security
 
-# Create table
-if ask 'Reset votes table?'; then
-  sudo ./stardog-admin db drop votes
-  sudo ./stardog-admin db create -o reasoning.sameas=FULL search.enabled=TRUE -n votes $ABS_DIR/../ontology.ttl
+
+# rm system.lock is the quickest way to restart stardog, and appears not to do any harm.
+# an alternative to deleting this file is to send a shutdown signal to stardog,
+# but this takes TIMEOUT seconds if stardog isn't already running
+
+if ask 'Use sudo for stardog?'; then
+
+  sudo rm -f ../system.lock
+  sudo ./stardog-admin server start --disable-security
+
+  # Create table
+  if ask 'Reset votes table?'; then
+    ABS_DIR=~/sw/scripts
+    sudo ./stardog-admin db drop votes
+    sudo ./stardog-admin db create -o reasoning.sameas=FULL search.enabled=TRUE -n votes $ABS_DIR/../ontology.ttl
+  fi
+else
+  rm -f ../system.lock
+  ./stardog-admin server start --disable-security
+
+  # Create table
+  if ask 'Reset votes table?'; then
+    ABS_DIR=~/sw/scripts
+    ./stardog-admin db drop votes
+    ./stardog-admin db create -o reasoning.sameas=FULL search.enabled=TRUE -n votes $ABS_DIR/../ontology.ttl
+  fi
 fi
 echo
