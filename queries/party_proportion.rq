@@ -1,0 +1,14 @@
+# this is supposed to return the proportion of a voting assembly held by a party per party
+# however it returns nothing - not even column headers in stardog
+# why?
+# syntax is correct
+
+select ?bill ?party (COUNT(distinct ?voter_1)/COUNT(distinct ?voter_2) as ?proportion)
+
+where {
+	?voter_1 votes:votesOn ?bill.
+    ?voter_1 dbo:party ?party.
+	?voter_2 votes:votesOn ?bill.
+}
+group by ?bill ?party
+order by desc(?proportion)
