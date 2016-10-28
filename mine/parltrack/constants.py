@@ -13,7 +13,7 @@ DATA_DOSSIER = DATA_DIR + 'dossiers.json'
 DICT_MEPS = DATA_DIR + 'dict_meps.json'
 DICT_PARTIES = DATA_DIR + 'dict_parties.json'
 
-# Number of elements to mine
+# Number of elements to iterate over (None for all, all for None)
 MEP_LIMIT = None
 DOSSIER_LIMIT = None
 VOTES_LIMIT = None

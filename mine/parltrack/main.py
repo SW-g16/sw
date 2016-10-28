@@ -4,6 +4,8 @@ import re
 from collections import defaultdict
 from datetime import datetime
 from itertools import islice
+import json
+from urllib import quote
 
 from iribaker import to_iri
 from rdflib import URIRef, Literal
@@ -11,21 +13,19 @@ from rdflib import URIRef, Literal
 import load_json as h
 import constants as c
 
-# These are currently dict(lists), because there is a possibility of multiple iris per key in the future
-dict_mep = h.load_json(c.DICT_MEPS)
-if dict_mep is None:
-    dict_mep = defaultdict(list)
-    print 'Created empty dict instead'
-    print
 
+# These are currently dict(lists), because there is a possibility of multiple iris per key in the future
+dict_mep = defaultdict(list)
+dict_party = defaultdict(list)
 dict_dossier = defaultdict(list)
 
-dict_party = h.load_json(c.DICT_PARTIES)
-if dict_party is None:
-    dict_party = defaultdict(list)
-    print 'Created empty dict instead'
-    print
+json_str = h.load_json(c.DICT_MEPS)
+if json_str is not None:
+    dict_mep = h.json_to_defaultdict(json_str)
 
+json_str = h.load_json(c.DICT_PARTIES)
+if json_str is not None:
+    dict_party = h.json_to_defaultdict(json_str)
 
 # def mepid_to_profile_iri(id):
 #   return URIRef(to_iri('http://www.europarl.europa.eu/meps/en/' + str(id) + '/_history.html'))
@@ -39,7 +39,7 @@ def format_name_string(input_string):
     input_string = re.sub('\(.+?\)', '', input_string)
     input_string = input_string.lower().title().encode('utf-8').strip()
     input_string = re.sub('\s+', '_', input_string)
-    return input_string.replace('.','_')
+    return quote(input_string.replace('.','_'))
 
 
 def name_to_dbr(name):
@@ -68,8 +68,8 @@ def convert_dossier(path, dataset, graph):
                     # User the meta url as the iri
                     dossier_uri = URIRef(to_iri(dossier_url))
 
-                    graph.add((dossier_uri, c.PROCESSED_BY, c.EUROPEAN_PARLIAMENT))
-                    # graph.add((dossier_uri, RDF.type, DOSSIER))
+                    dataset.add((dossier_uri, c.PROCESSED_BY, c.EUROPEAN_PARLIAMENT))
+                    # dataset.add((dossier_uri, RDF.type, DOSSIER))
                     dataset.add((dossier_uri, c.DOSSIER_TITLE, dossier_title))
                     dataset.add((dossier_uri, c.URI, dossier_url))
                     dataset.add((dossier_uri, c.DATE, dossier_date))
@@ -105,7 +105,7 @@ def convert_votes(path, dataset, graph):
                             # user_id = vote['userid']
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
-                                graph.add((URIRef(dict_mep[voter_id][0]), c.ABSTAINS, dossier_uri))
+                                dataset.add((URIRef(dict_mep[voter_id][0]), c.ABSTAINS, dossier_uri))
 
                 if 'For' in votes:
                     for group in votes['For']['groups']:
@@ -114,7 +114,7 @@ def convert_votes(path, dataset, graph):
                             # user_id = vote['userid']
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
-                                graph.add((URIRef(dict_mep[voter_id][0]), c.VOTES_FOR, dossier_uri))
+                                dataset.add((URIRef(dict_mep[voter_id][0]), c.VOTES_FOR, dossier_uri))
 
                 if 'Against' in votes:
                     for group in votes['Against']['groups']:
@@ -123,7 +123,7 @@ def convert_votes(path, dataset, graph):
                             # user_id = vote['userid']
                             voter_id = str(vote['ep_id'])
                             if voter_id in dict_mep:
-                                graph.add((URIRef(dict_mep[voter_id][0]), c.VOTES_AGAINST, dossier_uri))
+                                dataset.add((URIRef(dict_mep[voter_id][0]), c.VOTES_AGAINST, dossier_uri))
 
                 print 'Votes on dossier:', dossier_uri
     print
@@ -195,9 +195,9 @@ def convert_mep(path, dataset, graph):
 
             party_uri = URIRef(dict_party[party_id][0])
             # If a valid iri was added manually, it's always first, so just take the first
-            #graph.add((mep_uri, c.MEMBER_OF, URIRef(dict_party[party_id][0])))
+            #dataset.add((mep_uri, c.MEMBER_OF, URIRef(dict_party[party_id][0])))
             dataset.add((mep_uri, c.PARTY, party_uri))
-            graph.add((party_uri, c.IN_LEGISLATURE, c.EUROPEAN_PARLIAMENT))
+            dataset.add((party_uri, c.IN_LEGISLATURE, c.EUROPEAN_PARLIAMENT))
 
         if 'Gender' in mep:
             gender = mep['Gender']
