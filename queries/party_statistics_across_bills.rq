@@ -1,0 +1,35 @@
+select distinct
+    # target
+    ?voting_assembly
+    ?party
+
+    (count(?abstain_proportion) as ?num_bills_voted_on_by_party)
+    (avg(?coherence) as ?average_coherence)
+    (avg(?abstain_proportion) as ?avg_abstain)
+
+
+ where {
+
+
+  select distinct ?voting_assembly ?bill ?party ?yes_members ?no_members ?abstain_members
+                                   ((abs(?yes_members-?no_members)/(?yes_members+?no_members)) as ?coherence)
+                                   (?abstain_members/(?yes_members + ?no_members + ?abstain_members) as ?abstain_proportion)
+  where {
+      select distinct ?voting_assembly ?bill ?party (count(distinct ?voter_1) as ?yes_members) (count(distinct ?voter_2) as ?no_members) (count(distinct ?voter_3) as ?abstain_members)
+      where {
+          ?voter_1 dbo:party ?party.
+          ?voter_2 dbo:party ?party.
+          ?voter_3 dbo:party ?party.
+          ?voter_1 votes:upvotes ?bill.
+          ?voter_2 votes:downvotes ?bill.
+          ?voter_3 votes:abstains ?bill.
+          ?bill votes:processedBy ?voting_assembly.
+      }
+      group by ?bill ?party ?party_members ?voting_assembly
+  }
+  group by ?voting_assembly ?party ?bill ?yes_members ?no_members ?abstain_members
+
+
+}
+group by ?voting_assembly ?party
+order by desc (?average_coherence)
