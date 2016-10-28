@@ -146,8 +146,8 @@ def convert_mep(path, dataset, graph):
         mep_uri = URIRef(mep_uri)
 
         if 'Photo' in mep:
-            photo_url = Literal(mep['Photo'], datatype=c.THUMBNAIL)
-            dataset.add((mep_uri, c.URI, photo_url))
+            photo_url = Literal(mep['Photo'], datatype=c.IMAGE)
+            dataset.add((mep_uri, c.THUMBNAIL, photo_url))
 
         if 'Birth' in mep:
             if 'date' in mep['Birth']:
