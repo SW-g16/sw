@@ -1,0 +1,12 @@
+voting_assembly,party,num_bills_voted_on_by_party,average_coherence,avg_abstain
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/European_Conservatives_and_Reformists,8,0.549480696335606660471794625,0.17141317572887133222542
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/European_United_Left%E2%80%93Nordic_Green_Left,11,0.44991096091574560474082,0.358292442589653255956195
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/Europe_of_Nations_and_Freedom,7,0.385323207263328407141619,0.246992241712738607148545
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/Non-Inscrits,12,0.374028941737275070608404,0.154546945329688632959598
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/Europe_of_Freedom_and_Democracy,3,0.350877192982456140350877,0.118714618714618714618715
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/Alliance_of_Liberals_and_Democrats_for_Europe_Party,4,0.236844458135481156458496,0.05022851377018043684710375
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/Europe_of_Freedom_and_Direct_Democracy,5,0.2270782580034966037086928,0.106785641291969336086051
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/The_Greens%E2%80%93European_Free_Alliance,1,0.06976744186046511627907,0.011494252873563218390805
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/European_People%27s_Party,3,0.047197985138053911592474,0.112432950191570881226054
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/Progressive_Alliance_of_Socialists_&_Democrats,2,0.001408450704225352112676,0.194592198581560283687943
+http://dbpedia.org/resource/European_Parliament,http://dbpedia.org/resource/Group_Of_The_European_People%27s_Party_And_European_Democrats,1,0.0,0.333333333333333333333333
