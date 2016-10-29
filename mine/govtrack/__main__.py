@@ -9,6 +9,20 @@ print 'Govtrack Data Miner'
 print 'Mining Voters...'
 
 import p_voters
+import os
+
+if raw_input('will (over)write to data/govtrack/govtrack.ttl. Proceed? (y/n)\n') is 'y':
+
+    output_path = os.path.dirname(os.path.abspath(__file__))+'/../../data/govtrack/govtrack.ttl'
+    print output_path
+    with open(output_path, 'w') as f:
+        # Note that f has now been truncated to 0 bytes, so you'll only
+        # be able to read data that you wrote earlier...
+        f.write('')
+        f.close()
+else:
+    print 'Aborting. '
+    exit(0)
 
 p_voters.process_voters()
 

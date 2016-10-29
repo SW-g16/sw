@@ -1,0 +1,140 @@
+
+<html>
+
+<head>
+    {% include 'shared_head.html' %}
+
+    <style>
+
+        .axis {
+            font: 10px sans-serif;
+        }
+
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+    </style>
+</head>
+<body>
+{% include 'header.html' %}
+<h1><a href="{{party_uri}}">{{party_uri}}</a></h1>
+
+<h3>Party through time</h3>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+<canvas id="canvas"></canvas>
+
+<script>
+    var data = {{data|safe}}
+
+    var uniformity = [], abstination = [], dates = []
+    for (var i in data){
+
+        dates.push(data[i]['bill_date'])
+        uniformity.push({x:parseInt(i),y:data[i]['uniformity'],label:dates[i]})
+        abstination.push({x:parseInt(i),y:data[i]['abstain_proportion'],label:dates[i]})
+    }
+
+</script>
+
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var chart = new CanvasJS.Chart("chartContainer",{
+            title:{
+                text: "Abstination proportion and uniformity in votes of non-abstaining voters across bills",
+                fontSize: 30
+            },
+            animationEnabled: true,
+            axisX:{
+                gridColor: "Silver",
+                tickColor: "silver",
+                labels:dates
+
+            },
+            toolTip:{
+                shared:true
+            },
+            theme: "theme2",
+            axisY: {
+                gridColor: "Silver",
+                tickColor: "silver"
+            },
+            legend:{
+                verticalAlign: "center",
+                horizontalAlign: "right"
+            },
+            data: [
+                {
+                    type: "line",
+                    showInLegend: true,
+                    lineThickness: 2,
+                    name: "Uniformity of non-abstaining party members' votes",
+                    markerType: "square",
+                    color: "#F08080",
+                    dataPoints: uniformity
+                },
+                {
+                    type: "line",
+                    showInLegend: true,
+                    name: "The proportion of abstaining party members",
+                    color: "#20B2AA",
+                    lineThickness: 2,
+
+                    dataPoints: abstination
+                }
+
+
+            ],
+            legend:{
+                cursor:"pointer",
+                itemclick:function(e){
+                    if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                        e.dataSeries.visible = false;
+                    }
+                    else{
+                        e.dataSeries.visible = true;
+                    }
+                    chart.render();
+                }
+            }
+        });
+
+        chart.render();
+    }
+</script>
+
+
+<h3>Bill History</h3>
+<table class="table">
+    <thead>
+        {% for i in data[0] %}
+            <th>{{i}}</th>
+        {% endfor %}
+    </thead>
+    <tbody>
+{% for i in data %}
+<tr>
+    {% for j in i %}
+        <td>
+            {{ i[j] }}
+        </td>
+    {% endfor %}
+</tr>
+    </tbody>
+{% endfor %}
+</table>
+
+
+</body></html>

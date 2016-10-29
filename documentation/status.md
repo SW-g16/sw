@@ -25,7 +25,7 @@ The grade estimate is brutal for our own good.
 |Linked Data Star							|		   |x	      |	 		     |				  |
 |Linked Data Producer						|		   |	      |x		     |				  |
 |Owl Wizard									|		   |x	      | 		     |				  |
-|Interaction Guru  							|		   |x	      |	 		     |				  |
+|Interaction Guru  							|		   |	      |x	 		     |				  |
 
 ca 60/90 , grade 6.5
 
@@ -210,9 +210,7 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|Interface|10|enable users to browse data|through ld-r|
-|Interface|0|configure data views||
+|Interface|6|enable users to browse data|through ld-r. needs more custom views and searching for efficient user navigation|
+|Interface|6|configure data views|by outputing custom tables, we're effectively defining views|
 |Design|6|have neat design|we inherit the neat desidn of ld-r|
-|visualization|0|visualize some data in some way|0|
-
-
+|visualization|6|visualize some data as excellently as possible|we give some line plots of some statistics through time|

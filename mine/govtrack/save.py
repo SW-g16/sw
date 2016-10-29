@@ -5,7 +5,7 @@ import constants as c
 
 def save(triples):
     start = time.time()
-    rdf = '.\n'.join(["%s %s %s" % (t[0], t[1], t[2]) for t in triples if len(t) == 3]) + '.\n'
+    rdf = ''.join(["%s %s %s.\n" % (t[0], t[1], t[2]) for t in triples if len(t) == 3])
 
     duration = time.time()-start
     print 'constructing rdf took %f sec' % duration
