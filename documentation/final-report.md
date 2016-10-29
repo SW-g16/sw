@@ -1,3 +1,79 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents** 
+
+- [Final Report](#final-report)
+  - [Abstract](#abstract)
+  - [Introduction](#introduction)
+    - [Goals](#goals)
+      - [Primary Goals](#primary-goals)
+      - [Secondary Goals](#secondary-goals)
+    - [Application](#application)
+        - [Description](#description)
+        - [Technical Requirements](#technical-requirements)
+    - [Users](#users)
+      - [Satistfaction Requirements](#satistfaction-requirements)
+      - [Target groups by Satistfaction Requirements](#target-groups-by-satistfaction-requirements)
+        - [Target group 1: People with domain interest](#target-group-1-people-with-domain-interest)
+        - [Target group 2: Developers](#target-group-2-developers)
+        - [Target group 3: People who are attracted to data visualizations](#target-group-3-people-who-are-attracted-to-data-visualizations)
+      - [Satisfaction Requirements per Target Group](#satisfaction-requirements-per-target-group)
+    - [Interface Design](#interface-design)
+      - [Data Views](#data-views)
+        - [Party View](#party-view)
+        - [Parties View](#parties-view)
+        - [Statistical profiles of entites](#statistical-profiles-of-entites)
+          - [Data retrieval](#data-retrieval)
+          - [View filling](#view-filling)
+        - [Visualization construction](#visualization-construction)
+      - [Software used during ontology construction](#software-used-during-ontology-construction)
+      - [The LD-R Framework](#the-ld-r-framework)
+        - [Code Location / Method](#code-location--method)
+        - [Network Graph Browser](#network-graph-browser)
+        - [Text-based Browser](#text-based-browser)
+      - [Devices](#devices)
+      - [Possible Extensions](#possible-extensions)
+    - [Walkthrough](#walkthrough)
+  - [Domain Modeling (Milestone 2)](#domain-modeling-milestone-2)
+    - [Domain and Scope](#domain-and-scope)
+      - [Domain](#domain)
+        - [Required Domain Knowledge](#required-domain-knowledge)
+      - [Scope](#scope)
+      - [Mapping and Inferencing Between Political entities](#mapping-and-inferencing-between-political-entities)
+        - [Election and Polling Data](#election-and-polling-data)
+    - [Ontology Construction Methodology](#ontology-construction-methodology)
+      - [Vocabulary Definition Process](#vocabulary-definition-process)
+      - [Automatic Data Querying and Construction](#automatic-data-querying-and-construction)
+        - [Identifying Candidate Sources](#identifying-candidate-sources)
+        - [Evaluating and Accessing Candidate Sources](#evaluating-and-accessing-candidate-sources)
+        - [Coding Custom Querier and Data Constructor](#coding-custom-querier-and-data-constructor)
+          - [Issues with Current Implementation](#issues-with-current-implementation)
+    - [Conceptualization](#conceptualization)
+      - [External Vocabularies and Ontologies](#external-vocabularies-and-ontologies)
+        - [Reused Semantic Data](#reused-semantic-data)
+        - [Constructed Semantic Data](#constructed-semantic-data)
+    - [Ontology](#ontology)
+    - [Inferencing](#inferencing)
+      - [Initial Trivial Inferences](#initial-trivial-inferences)
+      - [Less Trivial Inferences](#less-trivial-inferences)
+  - [Data Reuse and Querying (Milestone 3)](#data-reuse-and-querying-milestone-3)
+    - [Data Sources](#data-sources)
+      - [GovTrack](#govtrack)
+      - [ParlTrack](#parltrack)
+    - [Motivation for using these sources](#motivation-for-using-these-sources)
+    - [Description how you integrated the data (200-300 words)](#description-how-you-integrated-the-data-200-300-words)
+    - [Querying and Data Analysis](#querying-and-data-analysis)
+      - [Voting Assembly Party Compositions](#voting-assembly-party-compositions)
+        - [Another complex query relying on inferencing](#another-complex-query-relying-on-inferencing)
+  - [Conclusion](#conclusion)
+    - [Goals met](#goals-met)
+- [Appendix](#appendix)
+  - [Ontology](#ontology-1)
+  - [Evidence of Inference](#evidence-of-inference)
+  - [Code Base](#code-base)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Final Report
 
 *Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
@@ -21,12 +97,14 @@ and more intuition-friendly ways of visualizing the data and analysis results.
 
 ## Introduction
 //TODO IMPROVE 
-This report's structure is aligned with the grading rubrics. 
+This report's structure is aligned with the grading rubrics: design
 In the first milestone, we wil talk about planning the application design, establishing the goals, 
 identifying the potential users, determine how we are going to design it, and giving a short walkthrough of how it will work. In the second milestone, we will talk about the ontology for our application, explaining the planned domain and scope, how the ontology was conceptualuzed and constructed, provide a short description, and describe how the ontology will inference new information. Finally, in the third part, we will describe the more practical parts of our application, where it gets the data from, how it integrates that data, and how it queries that data.
 
-## Application Design (Milestone 1)
 ### Goals
+
+// |write|6:8|define goals of application|goals were written weeks ago. needs update.|
+
 #### Primary Goals
 Our goal for the project was to provide an application capable of vizualizing the internal votes of legislative assemblies, providing users with oversight and the tools with which to analyze this data through filters. For this to work, we need to achieve the following sub-goals:
  - We need to provide an endpoint that combines the open voting data from several sources.
@@ -41,9 +119,30 @@ As additional goals, we also considered trying to achieve the following:
  - Defining Data Views for viewing statistics and interesting output of analyzing machiness.
  - Adding LD-R UI functionality so standard plots and charts could be used to vizualize statistics and the output of the analyzer.
 
+### Application 
+
+##### Description
+
+##### Technical Requirements
+//TODO label tabel
+The Satisfaction requirements imply the following Technical Requirements
+
+|TR_id|is essential|description|
+|---|---|---|
+|TR_0|yes|Combine a set of data sources into a single ontology|
+|TR_1|yes|Present semantic data to users through custom Data Views|
+|TR_2|yes|Perform some inference|
+|TR_4|no|Compute and present trivial statistics to users through custom Data Views|
+|TR_5|no|Visualize trivial statistics|
+|TR_6|no|Perform non-trivial analysis on voting data to |
+|TR_7|no|Visualize results of non-trivial analysis|
+
 ### Users
+
 #### Satistfaction Requirements
+
 To design this program, we needed to know who we were desigining this for, and what these people would want out of the program. As such, we defined the following satisfaction requirements: 
+
  - **Facts**: The ability of the program to provide the users with certain facts. Who voted for what? What passed and what failed, and with what margin?
  - **Analysis**: The ability of the program to allow the user to analyze the data. What patterns exist in the behavior of voters, parties and voting assembles? How do entities cluster and how do values correlate?
  - **Shareability**: The ability of the program to allow one user to share his current view of the data with other users.
@@ -52,6 +151,17 @@ To design this program, we needed to know who we were desigining this for, and w
  - **Code accessibility**: The degree to which our code is open and accessible. 
 
 We have also defined several target groups.
+
+
+#### Target groups by Satistfaction Requirements
+
+|write|6:8|define target groups|is elaborate but needs updating|
+
+|Target Group|Fact|Analysis|Sharability|Visualization|Documentation|Code Accessibility|
+|---|---|---|---|---|---|---|
+|TG_1|1|1|1|1|0|0|
+|TG_2|1|1|1|1|1|1|
+|TG_3|0|1|1|1|0|0|
 
 ##### Target group 1: People with domain interest
 These users are interested in the data itself, and in any patterns that can be found in said data.
@@ -69,29 +179,67 @@ They want to understand as much information as efficiently as possible from data
 //TODO label tabel
 The Target Groups have these Satisfaction Requirements, presented in no particular order.
 
-|Target Group|Fact|Analysis|Sharability|Visualization|Documentation|Code Accessibility|
-|---|---|---|---|---|---|---|
-|TG_1|1|1|1|1|0|0|
-|TG_2|1|1|1|1|1|1|
-|TG_3|0|1|1|1|0|0|
+### Interface Design
 
-##### Implied Technical Requirements
-//TODO label tabel
-The Satisfaction requirements imply the following Technical Requirements
+|Category|Grade estimate|Description|Comment|
+|--------|--------------|-----------|------|
+|code |6|encode and use views|can be done in a hurry in a fiddle, independent of LD-R|
+|write|4|describe LD-R|see the docs|
+|write|0|give abstract definitions of views||
+|write|4|give walkthrough|needs screenshots and fulfillment of fiddle req above|
+|write|0|justify design and views|explain that fiddle was last minute patch, that better solution is use ld-r bcs code reuse|
 
-|TR_id|is essential|description|
-|---|---|---|
-|TR_0|yes|Combine a set of data sources into a single ontology|
-|TR_1|yes|Present semantic data to users through custom Data Views|
-|TR_2|yes|Perform some inference|
-|TR_4|no|Compute and present trivial statistics to users through custom Data Views|
-|TR_5|no|Visualize trivial statistics|
-|TR_6|no|Perform non-trivial analysis on voting data to |
-|TR_7|no|Visualize results of non-trivial analysis|
-
-### Design
 //TODO HEADER CULLING. The amount of sub-headers in this section is excessive and does not make for a good report when there is a new header every other sentence.
-Our ontology was created through the free, open-source ontology editor protégé, with which we built familiarity during the course. The interface was designed by using the Linked-Data-Reactor, hereinafter referred to as 'LD-R', allowing for use of its wide variety of already available UI elements.
+
+In this section we describe our interface in terms of what components it consists of, 
+what tasks it performs, and how it interacts with other components.
+
+The interface includes the LD-R browser, a highly configureable semantic web browser. 
+LD-R is suitable for our application, but unfortunately we did not succeed in configuring it in time for the deadline of this project. 
+Instead we are including a fiddle which performs some of the tasks we intended for LD-R (and our intended extentions to it) to do. 
+
+#### Data Views
+
+Data views are implictly defined by queries generated from user's uri lookups, implemented through GET requests. 
+The data views are different, and may or may not include statistics on the requested data. 
+We've only implemented two views, but have the framework to increase this number indefinitely. 
+
+##### Party View
+
+This view gives a summary of a specific party. Note the uri as value of `bill` in the url bar, 
+which is dereference by the interface. 
+
+![](images/party.png)
+
+##### Parties View
+
+This view gives a summary of a set of parties. See the screenshot. 
+
+![](images/parties.png)
+
+##### Statistics in Data Views
+
+As evidenced in the above screenshots, our data views include statistics. 
+These are currently computed on-the-fly, which is unecessary since it will return the same result until the database is updated. 
+This would have to change before a potential employment. 
+The statistics computed are `proportion of abstaining party members`
+and ´unity = (number of upvoters - number of downvoters) / (number of upvoters + number of downvoters)´. 
+
+##### Visualization 
+
+As evidenced in the screenshot at [Party View](#Party-View), 
+we perform some basic visualization of the some data. 
+Here, we plot the uni
+
+The interface performs the tasks of channeling information from the combined database to the user, filtered through certain views. 
+
+The interface was designed by using the Linked-Data-Reactor, hereinafter referred to as 'LD-R', 
+allowing for use of its wide variety of already available UI elements.
+
+#### Software used during ontology construction
+
+Our ontology was created through the free, open-source ontology editor protégé,
+
 
 #### The LD-R Framework
 We use the LD-R framework to avoid reinventing wheels.
