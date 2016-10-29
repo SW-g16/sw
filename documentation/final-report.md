@@ -123,6 +123,10 @@ As additional goals, we also considered trying to achieve the following:
 
 ##### Description
 
+###### Open Endpoint
+
+Upon employment, we'd make openly available a read-only SPARQL endpoint, releasing our produced data to the semantic web.
+
 ##### Technical Requirements
 //TODO label tabel
 The Satisfaction requirements imply the following Technical Requirements
@@ -183,11 +187,20 @@ The Target Groups have these Satisfaction Requirements, presented in no particul
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|code |6|encode and use views|can be done in a hurry in a fiddle, independent of LD-R|
-|write|4|describe LD-R|see the docs|
-|write|0|give abstract definitions of views||
+|code |6|encode and use views|done in a hurry in a fiddle, independent of (but linking to) LD-R|
+|write|4|describe and justify decision of using LD-R|see the docs|
+|write|6|give abstract definitions of views||
 |write|4|give walkthrough|needs screenshots and fulfillment of fiddle req above|
 |write|0|justify design and views|explain that fiddle was last minute patch, that better solution is use ld-r bcs code reuse|
+
+
+// walkthrough is merged with the description of the interface already. does it need a separate section? it would be bound to be repetitive
+
+// this is outdated, but does include suggested future work. todo extract future work bits
+// ### Walkthrough
+// Upon initialization, the user is presented with the default page, providing him with an overview of the data, as well as links to acess to acess the data of the various political entities. Clicking one of these will bring up all the relevant data (as defined by a Data View) taken from that source, associated with that source through interlinking of endpoints, or inferred about that source. The user may also click additional buttons for the generation of graphs and statistics. If a user finds this data interesting enough to share, he can do so by copying the URL currently in the address bar, and sharing that URL. Any other user who opens that link will see the same data in the same way as the first use.
+// Users can also generate a graph of the data defined by applying their own user-defined filters on the dataset. A user may select filters such as only showing bills from a specific period, only showing people that voted a specific way on a specific bill or only showing politicians that fit a particular profile (such as wealth, level of education, nation of birth or gender). Upon selecting these filters, the user presses 'submit'. If the amount of data that is called is sufficiently large, the user is provided with a warning prompt, giving him a chance to cancel, upon which the user can modify their filter and retry. Upon submission, a semantic graph is returned, sent to the application's WebVowl component for visualization.
+
 
 //TODO HEADER CULLING. The amount of sub-headers in this section is excessive and does not make for a good report when there is a new header every other sentence.
 
@@ -203,6 +216,7 @@ Instead we are including a fiddle which performs some of the tasks we intended f
 Data views are implictly defined by queries generated from user's uri lookups, implemented through GET requests. 
 The data views are different, and may or may not include statistics on the requested data. 
 We've only implemented two views, but have the framework to increase this number indefinitely. 
+In both views, the column headers of the screenshot together explicitly define the data view. 
 
 ##### Party View
 
@@ -213,7 +227,7 @@ which is dereference by the interface.
 
 ##### Parties View
 
-This view gives a summary of a set of parties. See the screenshot. 
+This view gives a summary of a set of parties. It takes no input. 
 
 ![](images/parties.png)
 
@@ -221,60 +235,42 @@ This view gives a summary of a set of parties. See the screenshot.
 
 As evidenced in the above screenshots, our data views include statistics. 
 These are currently computed on-the-fly, which is unecessary since it will return the same result until the database is updated. 
-This would have to change before a potential employment. 
+This would have to change before a potential employment - the current solution is not scalable. 
+The results of statistics should be stored, and analysis should be rerun only when new data becomes available. 
 The statistics computed are `proportion of abstaining party members`
 and ´unity = (number of upvoters - number of downvoters) / (number of upvoters + number of downvoters)´. 
 
 ##### Visualization 
 
-As evidenced in the screenshot at [Party View](#Party-View), 
-we perform some basic visualization of the some data. 
-Here, we plot the uni
 
-The interface performs the tasks of channeling information from the combined database to the user, filtered through certain views. 
+As evidenced in the screenshot at [Party View](#Party-View), we perform some basic visualization of the some data. 
+Here, we plot the values of the statistics defined above across time. 
 
-The interface was designed by using the Linked-Data-Reactor, hereinafter referred to as 'LD-R', 
-allowing for use of its wide variety of already available UI elements.
+#### LD-R 
 
-#### Software used during ontology construction
+We intended to do everything we're currently doing in the fiddle within LD-R. 
+We were bottlenecked by inability to configure data views with it. 
+Until we succeed in this, we only use the default configurations of LD-R. 
+LD-R is still a useful interface, even without customization,
+as it allows us to semantically browse our data and inferences made from it. 
 
-Our ontology was created through the free, open-source ontology editor protégé,
+#### Network Graph Browser
 
+We considered integrating some semantic network graph browser as an LD-R component, 
+    such as [WebVOWL](http://vowl.visualdataweb.org/webvowl/index.html).
 
-#### The LD-R Framework
-We use the LD-R framework to avoid reinventing wheels.
-Web pages are generated for us, after we apply our custom configurations.
+#### Platform
 
-##### Code Location / Method
-We design our interface by modifying config files of LD-R.
-
-##### Network Graph Browser
-We may integrate some semantic network graph browser as an LD-R component.
-[WebVOWL](http://vowl.visualdataweb.org/webvowl/index.html) seems relevant.
-
-##### Text-based Browser
-We create Data Views that generate tabular and object 'profile pages'.
-
-#### Devices
+##### Devices
 Our application inherits the mobile-first layout of LD-R.
 However for some visualizations it is sometimes desirable to have a larger screen,
 as it allows for communicating more information at once.
 
-#### Possible Extensions
-We may consider adding our own API functionality through a SPARQL endpoint,
-allowing technical users to work with our data in their own applications.
-Finally, the project will all be open source,
-allowing anyone to understand and expand on our code-base.
-
-### Walkthrough
-Upon initialization, the user is presented with the default page, providing him with an overview of the data, as well as links to acess to acess the data of the various political entities. Clicking one of these will bring up all the relevant data (as defined by a Data View) taken from that source, associated with that source through interlinking of endpoints, or inferred about that source. The user may also click additional buttons for the generation of graphs and statistics. If a user finds this data interesting enough to share, he can do so by copying the URL currently in the address bar, and sharing that URL. Any other user who opens that link will see the same data in the same way as the first use.
-
-Users can also generate a graph of the data defined by applying their own user-defined filters on the dataset. A user may select filters such as only showing bills from a specific period, only showing people that voted a specific way on a specific bill or only showing politicians that fit a particular profile (such as wealth, level of education, nation of birth or gender). Upon selecting these filters, the user presses 'submit'. If the amount of data that is called is sufficiently large, the user is provided with a warning prompt, giving him a chance to cancel, upon which the user can modify their filter and retry. Upon submission, a semantic graph is returned, sent to the application's WebVowl component for visualization.
-
-## Domain Modeling (Milestone 2)
 ### Domain and Scope
+
 #### Domain
-The domain of our ontology is the set of Voting Assemblies' Voters votes on Bills around the world, and other immediately relevant and interesting data related to this. Our data is imported from the political entities in question, and is then fused into a single, combined ontology. Without inferring, this allows the program to see who voted for what, and 
+
+he domain of our ontology is the set of Voting Assemblies' Voters votes on Bills around the world, and other immediately relevant and interesting data related to this. Our data is imported from the political entities in question, and is then fused into a single, combined ontology. Without inferring, this allows the program to see who voted for what, and 
 
 Assertions we are interested include
  - Who votes for what?
