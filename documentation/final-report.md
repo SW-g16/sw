@@ -508,6 +508,26 @@ This is a description of the query.
 
   select ?stuff where {complex condition}
   
+## Conclusion
+
+### Goals met
+
+|goal is met|goal|
+|-----------|----|
+|+|provide an endpoint that combines voting data from several sources|
+|+|achieve 5 TimBL-stars|
+|+|semantify non-semantic data|
+|~|The data in the endpoint needs to have several meaningful Data Views for humans defined|
+|~|Output to LD-R UI components|
+|~|Analyzing the data |
+|+|Present analysis results in a clear and meaningful way|
+|-|Integrate a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists.|
+
+We achieved most of our goals with partial success. 
+For all goals there is room for practically indefinate refinement - 
+ we can combine more sources, we can enrich our data further, we can do more analysis, and we can improve our interface. 
+We have successfully established the necessary framework to enable these further refinements. 
+ 
 # Appendix
 
 ## Ontology
