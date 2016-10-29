@@ -24,6 +24,9 @@ def parse_voting_assembly(b):
     else:
         raise Exception
 
+def parse_bill_date(date):
+
+    return '"%s"^^xsd:date' % date[:10]
 
 def process_bill(session_id, g, b):
     # if bill reference looks weird, ignore it
@@ -47,9 +50,16 @@ def process_bill(session_id, g, b):
     # the text of the bill
     bill_text = parse_bill_text(bill_data['question'])
 
+    # the voting date
+    bill_date = parse_bill_date(bill_data['date'])
+
     # the voting assembly that processed the bill (House or Senate)
     voting_assembly = parse_voting_assembly(b)
 
     # return the processed votes (and abstinations) on the bill
     voting_data = p_votes.process_votes(bill_data['votes'], bill_uri)
-    return voting_data + [(bill_uri, c.PROP_BILL_TEXT, bill_text), (bill_uri, c.PROP_PROCESSED_BY, voting_assembly)]
+    return voting_data + [
+        (bill_uri, c.PROP_BILL_TEXT, bill_text),
+        (bill_uri, c.PROP_PROCESSED_BY, voting_assembly),
+        (bill_uri, c.PROP_BILL_DATE, bill_date)
+    ]

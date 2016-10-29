@@ -185,12 +185,13 @@ def parse_row(row, i, path):
                (voter_uri, c.PROP_NAME, '"%s"' % make_safe(row[0]+' '+row[1])),
                (voter_uri, c.PROP_PARTY, "%s" % get_party(row[7])),
                (voter_uri, c.PROP_SAMEAS, c.PREFIX+':gt_v_%s' % row[18]),
-               (voter_uri, c.PROP_WIKIPAGE, '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
+               #(voter_uri, c.PROP_WIKIPAGE, '<http://www.wikipedia.org/wiki/%s>' % row[28].replace(' ', '_'))
            ] + [p for p in possibles if p is not None]
 
 
 def get_paths():
-    file_suffixes = ['current.csv', 'historic.csv']
+    file_suffixes = ['current.csv']#, 'historic.csv' ]
+
     root = os.path.dirname(os.path.realpath(__file__)) + '/../../data/govtrack/congress-legislators/legislators-'
     return [root + s for s in file_suffixes]
 
@@ -200,9 +201,12 @@ def process_voters():
     paths = get_paths()
 
     triples = [('@prefix', 'votes:', c.NS_OURS),
-               ('@prefix', 'dbr:', c.NS_DBR),
                ('@prefix', 'owl:', c.NS_OWL),
-               ('@prefix', 'foaf:', c.NS_FOAF)]
+               ('@prefix', 'foaf:', c.NS_FOAF),
+               ('@prefix', 'dbo:', c.NS_DBO),
+               ('@prefix', 'dbr:', c.NS_DBR)
+
+               ]
 
     counter = 0
     for path in paths:
