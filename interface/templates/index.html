@@ -1,0 +1,23 @@
+<html>
+
+{% include 'shared_head.html' %}
+<body>
+{% include "header.html" %}
+<div class="container">
+
+    <h1>Temporary Application Interface</h1>
+
+    <p>
+        until we integrate LD-R, we use this fiddle to bring data views to the user.
+        this allows us to visualize stuff.
+        use LD-R to browse entities. Some entities have links to localhost:5000/entity?uri=x,
+        where x is the uri of the bill.
+        click this to trigger a query that gives a summary on the instance.
+        currently only bills are supported (ie written a custom view for).
+
+        example: <a href="bill?uri=">bill</a>
+    </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+
+<html>
+
+<head>
+    {% include 'shared_head.html' %}
+
+    <style>
+
+        .axis {
+            font: 10px sans-serif;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+    </style>
+</head>
+<body>
+{% include 'header.html' %}
+
+
+
+<table class="table">
+    <thead><tr>
+        <th>party</th>
+    {% for col_index in data[data.keys()[0]] %}
+        <th>{{col_index}}</th>
+    {% endfor %}
+    </tr></thead><tbody>
+    {% for row_index in data %}
+        <tr>
+            <td><a href="bill?bill={{row_index}}">{{row_index}}</a></td>
+            {% for col_index in data[row_index] %}
+                <td>{{ data[row_index][col_index] }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</tbody></table>
+
+<script>
+    var buckets = {{buckets|safe}}
+    console.log(buckets);
+</script>
+
+</body></html>

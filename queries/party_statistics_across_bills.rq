@@ -1,10 +1,17 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX votes: <http://localhost:5820/databases/votes/>
+
 select distinct
     # target
     ?voting_assembly
     ?party
 
     (count(?abstain_proportion) as ?num_bills_voted_on_by_party)
-    (avg(?coherence) as ?average_coherence)
+    (avg(?unity) as ?average_unity)
     (avg(?abstain_proportion) as ?avg_abstain)
 
 
@@ -12,7 +19,7 @@ select distinct
 
 
   select distinct ?voting_assembly ?bill ?party ?yes_members ?no_members ?abstain_members
-                                   ((abs(?yes_members-?no_members)/(?yes_members+?no_members)) as ?coherence)
+                                   ((abs(?yes_members-?no_members)/(?yes_members+?no_members)) as ?unity)
                                    (?abstain_members/(?yes_members + ?no_members + ?abstain_members) as ?abstain_proportion)
   where {
       select distinct ?voting_assembly ?bill ?party (count(distinct ?voter_1) as ?yes_members) (count(distinct ?voter_2) as ?no_members) (count(distinct ?voter_3) as ?abstain_members)
@@ -32,4 +39,4 @@ select distinct
 
 }
 group by ?voting_assembly ?party
-order by desc (?average_coherence)
+order by desc (?average_unity)
