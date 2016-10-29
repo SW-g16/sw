@@ -27,18 +27,18 @@
 <table class="table">
     <thead><tr>
         <th>party</th>
-    {% for col_index in data[data.keys()[0]] %}
+        {% for col_index in data[data.keys()[0]] %}
         <th>{{col_index}}</th>
-    {% endfor %}
+        {% endfor %}
     </tr></thead><tbody>
-    {% for row_index in data %}
-        <tr>
-            <td><a href="bill?bill={{row_index}}">{{row_index}}</a></td>
-            {% for col_index in data[row_index] %}
-                <td>{{ data[row_index][col_index] }}</td>
-            {% endfor %}
-        </tr>
+{% for row_index in data %}
+<tr>
+    <td><a href="party?party={{row_index}}">{{row_index}}</a></td>
+    {% for col_index in data[row_index] %}
+    <td>{{ data[row_index][col_index] }}</td>
     {% endfor %}
+</tr>
+{% endfor %}
 </tbody></table>
 
 <script>
