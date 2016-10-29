@@ -1,129 +1,29 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Final Report](#final-report)
-  - [Table of Contents](#table-of-contents)
-  - [Abstract](#abstract)
-  - [Introduction](#introduction)
-  - [Application Design (Milestone 1)](#application-design-milestone-1)
-    - [Goals](#goals)
-      - [Primary Goals](#primary-goals)
-      - [Secondary Goals](#secondary-goals)
-    - [Users](#users)
-      - [Satistfaction Requirements](#satistfaction-requirements)
-        - [TG_1: People with domain interest](#tg_1-people-with-domain-interest)
-        - [TG_2: Developers](#tg_2-developers)
-        - [TG_3: People who are attracted to data visualizations](#tg_3-people-who-are-attracted-to-data-visualizations)
-      - [Satisfaction Requirements per Target Group](#satisfaction-requirements-per-target-group)
-        - [Implied Technical Requirements (TRs)](#implied-technical-requirements-trs)
-    - [Design](#design)
-      - [The LD-R Framework](#the-ld-r-framework)
-        - [Code Location / Method](#code-location--method)
-        - [Network Graph Browser](#network-graph-browser)
-        - [Text-based Browser](#text-based-browser)
-      - [Devices](#devices)
-      - [Possible Extensions](#possible-extensions)
-    - [Walkthrough](#walkthrough)
-  - [Domain Modeling (Milestone 2)](#domain-modeling-milestone-2)
-    - [Domain and Scope](#domain-and-scope)
-      - [Domain](#domain)
-        - [Required Domain Knowledge](#required-domain-knowledge)
-      - [Scope](#scope)
-      - [Mapping and Inferencing Between Political entities](#mapping-and-inferencing-between-political-entities)
-        - [Election and Polling Data](#election-and-polling-data)
-    - [Ontology Construction Methodology](#ontology-construction-methodology)
-      - [Vocabulary Definition Process](#vocabulary-definition-process)
-      - [Automatic Data Querying and Construction](#automatic-data-querying-and-construction)
-        - [Identifying Candidate Sources](#identifying-candidate-sources)
-        - [Evaluating and Accessing Candidate Sources](#evaluating-and-accessing-candidate-sources)
-        - [Coding Custom Querier and Data Constructor](#coding-custom-querier-and-data-constructor)
-          - [Issues with Current Implementation](#issues-with-current-implementation)
-    - [Conceptualization](#conceptualization)
-      - [External Vocabularies and Ontologies](#external-vocabularies-and-ontologies)
-        - [Reused Semantic Data](#reused-semantic-data)
-        - [Constructed Semantic Data](#constructed-semantic-data)
-    - [Ontology](#ontology)
-    - [Inferencing](#inferencing)
-      - [Initial Trivial Inferences](#initial-trivial-inferences)
-      - [Less Trivial Inferences](#less-trivial-inferences)
-- [Appendix](#appendix)
-  - [Ontology](#ontology-1)
-  - [Evidence of Inference](#evidence-of-inference)
-  - [Code Base](#code-base)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-
 # Final Report
-
-*Semantic Web Course 2016*
 
 *Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
 
+*For the Semantic Web Course at VU Amsterdam, 2016*
+
+*Keywords: semantic web, data mining, sparql querying, inferencing parliamentary informatics, government data, open data* 
+
 *[latest version of this document on GitHub](https://github.com/SW-g16/sw/blob/master/documentation/final-report.md).*
-
-## Table of Contents
-
-- [Final Report](#final-report)
-  - [Table of Contents](#table-of-contents)
-  - [Abstract](#abstract)
-  - [Introduction](#introduction)
-  - [Application Design (Milestone 1)](#application-design-milestone-1)
-    - [Goals](#goals)
-      - [Primary Goals](#primary-goals)
-      - [Secondary Goals](#secondary-goals)
-    - [Users](#users)
-      - [Satistfaction Requirements](#satistfaction-requirements)
-        - [TG_1: People with domain interest](#tg_1-people-with-domain-interest)
-        - [TG_2: Developers](#tg_2-developers)
-        - [TG_3: People who are attracted to data visualizations](#tg_3-people-who-are-attracted-to-data-visualizations)
-      - [Satisfaction Requirements per Target Group](#satisfaction-requirements-per-target-group)
-        - [Implied Technical Requirements (TRs)](#implied-technical-requirements-trs)
-    - [Design](#design)
-      - [The LD-R Framework](#the-ld-r-framework)
-        - [Code Location / Method](#code-location--method)
-        - [Network Graph Browser](#network-graph-browser)
-        - [Text-based Browser](#text-based-browser)
-      - [Devices](#devices)
-      - [Possible Extensions](#possible-extensions)
-    - [Walkthrough](#walkthrough)
-  - [Domain Modeling (Milestone 2)](#domain-modeling-milestone-2)
-    - [Domain and Scope](#domain-and-scope)
-      - [Domain](#domain)
-        - [Required Domain Knowledge](#required-domain-knowledge)
-      - [Scope](#scope)
-      - [Mapping and Inferencing Between Political entities](#mapping-and-inferencing-between-political-entities)
-        - [Election and Polling Data](#election-and-polling-data)
-    - [Ontology Construction Methodology](#ontology-construction-methodology)
-      - [Vocabulary Definition Process](#vocabulary-definition-process)
-      - [Automatic Data Querying and Construction](#automatic-data-querying-and-construction)
-        - [Identifying Candidate Sources](#identifying-candidate-sources)
-        - [Evaluating and Accessing Candidate Sources](#evaluating-and-accessing-candidate-sources)
-        - [Coding Custom Querier and Data Constructor](#coding-custom-querier-and-data-constructor)
-          - [Issues with Current Implementation](#issues-with-current-implementation)
-    - [Conceptualization](#conceptualization)
-      - [External Vocabularies and Ontologies](#external-vocabularies-and-ontologies)
-        - [Reused Semantic Data](#reused-semantic-data)
-        - [Constructed Semantic Data](#constructed-semantic-data)
-    - [Ontology](#ontology)
-    - [Inferencing](#inferencing)
-      - [Initial Trivial Inferences](#initial-trivial-inferences)
-      - [Less Trivial Inferences](#less-trivial-inferences)
-- [Appendix](#appendix)
-  - [Ontology](#ontology-1)
-  - [Evidence of Inference](#evidence-of-inference)
-  - [Code Base](#code-base)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Abstract
 //TODO IMPROVE
-More and more political entities provide endpoints on the world wide web, giving the world access to an unprecedented amount of open governmental data. This report describes one attempt to provide an utility to traverse this available data by building a program that can visualize and filter the internal voting processes of a variety of legislative assemblies. 
+
+An increasing amount of data on elected representative's votes on bills are being made freely available online,
+but they are mostly in different formats. 
+This report documents a framework and some instance components for combining these sources into a single ontology, 
+making it easier to perform data analysis across the data of several different voting assemblies. 
+The system integrates data miners, UIs, and a semantic database, 
+forming a functioning system ready to be expanded to include more data sources, more sophisticated data analysis, 
+and more intuition-friendly ways of visualizing the data and analysis results. 
 
 ## Introduction
 //TODO IMPROVE 
-This report is structured along the milestones set by the course. In the first milestone, we wil talk about planning the application design, establishing the goals, identifying the potential users, determine how we are going to design it, and giving a short walkthrough of how it will work. In the second milestone, we will talk about the ontology for our application, explaining the planned domain and scope, how the ontology was conceptualuzed and constructed, provide a short description, and describe how the ontology will inference new information. Finally, in the third part, we will describe the more practical parts of our application, where it gets the data from, how it integrates that data, and how it queries that data.
+This report's structure is aligned with the grading rubrics. 
+In the first milestone, we wil talk about planning the application design, establishing the goals, 
+identifying the potential users, determine how we are going to design it, and giving a short walkthrough of how it will work. In the second milestone, we will talk about the ontology for our application, explaining the planned domain and scope, how the ontology was conceptualuzed and constructed, provide a short description, and describe how the ontology will inference new information. Finally, in the third part, we will describe the more practical parts of our application, where it gets the data from, how it integrates that data, and how it queries that data.
 
 ## Application Design (Milestone 1)
 ### Goals
