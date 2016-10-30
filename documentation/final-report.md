@@ -581,22 +581,7 @@ While the program currently does not function at the Guru-level, the interface n
   
 ## Conclusion
 
-### Goals met
-
-|goal is met|goal|
-|-----------|----|
-|yes|provide an endpoint that combines voting data from several sources|
-|yes|achieve 5 TimBL-stars|
-|yes|semantify non-semantic data|
-|partially|The data in the endpoint needs to have several meaningful Data Views for humans defined|
-|partially|Output to LD-R UI components|
-|yes|Analyzing the data |
-|partially|Present analysis results in a clear and meaningful way|
-|no|Integrate a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists.|
-
-*table 4: project goals and their fulfilment*
-
-We achieved most of our goals with partial success. 
+We achieved most of our goals, and are ready to fulfill the rest.  
 For all goals there is room for practically indefinate refinement - 
  we can combine more sources, we can enrich our data further, we can do more analysis, and we can improve our interface. 
 We have successfully established the necessary framework to enable these further refinements. 
