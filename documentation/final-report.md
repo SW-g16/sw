@@ -82,6 +82,8 @@
 
 *[latest version of this document on GitHub](https://github.com/SW-g16/sw/blob/master/documentation/final-report.md).*
 
+*screenshots are taken on a small test dataset*
+
 ## Abstract
 //TODO IMPROVE
 
@@ -242,6 +244,9 @@ We were bottlenecked by inability to configure data views with it.
 Until we succeed in this, we only use the default configurations of LD-R. 
 LD-R is still a useful interface, even without customization,
 as it allows us to semantically browse our data and inferences made from it. 
+Below is a screenshot of LD-R listing our entities.
+
+![](images/ldr_list.png)
 
 ### Network Graph Browser
 
@@ -545,41 +550,72 @@ This is a description of the query.
 
 ![](images/designdiagram.png)
 
+This diagram illustrates the main structure of our code. 
+
+`__main__.py` is run by a system administrator, who is prompted whether to 
+    - (re)start the stardog dbms
+    - reset the database,
+    - download new data from the data sources, 
+    - mine(produce/construct/convert) new data from the source data
+    - initiate LDR 
+    - initiate the temporary interface
+
+`interface.py` is a python script using flask to manage `interface.html`. 
+`interface.html` is visited by end users, and contains visualizations 
+and some pages for certain dataviews. It also links to `LD-R`, through which users
+can browse all our data through LD-R's generic data view. 
+
+`database.ttl` is queryable from anywhere by sending a get requests to the endpoint managed by stardog. 
+
 ### Data Mining
 
 The process of generating semantic triples from non-semantic sources. 
+Miners retrieve the triples specified in [section](#link). 
+The most crucial triples are `Voter voteDirection Votable` and `Votable processedBy VotingAssembly`. 
+This is sufficient to form the backbone of our graph, to which other data is attached. 
+Other data that is fundamental for the domain (i.e. necessities for making the data meaningful) include dates, party memberships, and voter personalia. 
+We also link the Polity that that a VotingAssembly legislates for. The latter is among the rarest triples, and is done manually. 
+ 
+#### Space Complexity
 
-    // dumps
-    
-    Voter and Bills are found in the contents of the datasets
-    we mined. Assembly and Polity are determined by which dataset the data comes
-    from. 
-    
-    
-    ##### Coding Custom Querier and Data Constructor
-    
-    So far we've programmed one Data Getter.
-    It is written in Python and works by querying govtrack.us,
-        translating JSON data in Govtrack's format to semantic triples
-        before inserting the the triples to our database.
-    
-    ###### Issues with Current Implementation
-    
-    There are some issues with.
-    
-     - We're converting from a custom JSON data to a custom TTL vocabulary in Python,
-        without using helpful libraries where we could.
-     - We're doing many small queries instead of one large bulk download of the source data.
-        This should change out of respect to the data provider and for efficiency of the import task.
+We give an overview of the size of space complexity of our database in terms of number of triples of each form. 
 
-     -todo make all miners share a constants.py file and other files with any shared functions
-     
-     
-#### Govtrack
+The number of triples is of order `O(numDatasets*avg_numVotingAssemblies*avg_numBills*avg_numSimultaneousVoters)`
+
+In the case of govtrack, the constants are
+
+    numVotingAssemblies = 2
+    numBills = 345k # 170k per voting assembly
+    numVotes = 23m #
+    numVoters = 12374
+    numSimultaneousVoters = 68 # 23m/345k
+
+We're also collecting approximately 5 triples per voter
+
+    voterdata = numVoters * 5 ~~100k
     
-    the source data has this structure, represented as a file tree. 
-    all leaves are named data.json. 
+This doesn't affect our scale of data very much, as we're already at ~23 million triples. 
+
+##### Scalability Issues?
+
+Is it feasible to have this many triples? [Yes,](http://highscalability.com/blog/2014/1/20/8-ways-stardog-made-its-database-insanely-scalable.html)
+up to 50 billion triples is feasible for our database software (stardog). 
+     
+#### Miners 
+
+Our target datasets needs custom miners, because they are differently formatted. 
+From the developers' point of view, the process of mining involves getting the data, inspecting the target datastructure, 
+
+For implementation details, see the miner source codes [in our repository](http://github.com/SW-g16/sw/mine). 
+
+##### Govtrack
     
+The Govtrack miner iterates through a very large amount of json files nested in a folder tree. 
+The data is organized in Sections of Congress, and Congress is an entity which consists of the two 
+voting assemblies House and Senate. We manually define that they both legislate for USA. 
+
+The data tree (in which govtrack.us exports their data) has this structure:  
+
     'congress'
         <int> // range: 1:114 . represents sessions of congress
             'votes'
@@ -587,78 +623,73 @@ The process of generating semantic triples from non-semantic sources.
                     ('h'|'s')<int>
                         'data.json'
                         
-    the govtrack getter traverses 'congress' to find all data.json files nested as in the above tree.
-    together, these data.json files contain all votes, all bill texts, and mentions of all voters. 
+Data about voters is available in a separate `.csv` file. 
+Mining this is necessary, as the id used in the voting data (above tree) is only referenced in this file. 
+It is also where to find personalia. So it is a necessity for enriching our dataset with voter data. 
+
+###### Mining Efficiency
+
+The task of mining is desiged to be executed only once for each session of congress. 
+This means some inefficiency is tolerable, but it's still an interesting challenge to write an efficient data miner. 
+We experimented with multithreading and different channels from python to stardog, but in the end found that
+our performance was bottlenecked by our hardware. On one common laptop the miner was tested on, we 
+had initial stable multithreaded mining, as shows in the screenshot. 
+
+![](images/govtrack_multithread.png)
+
+However it would soon slow down significantly, and only one processor core would be active at a time. 
+We're sure stardog is not the bottleck, as it claims 300k triples per second. 
+If stardog was the bottleneck them mining process would take 23m triples / 300k triples per second = 83 seconds, 
+but for our test laptop it took approximately 50 minutes. 
+This leads us to suspect that the bottleneck is our hardware, 
+but until we've tested it on a more powerful system we can't confirm this. 
+  
+###### Implementation issues
+
+// todo write about the strange bug that stardog failed to handle properly
     
-    for more information about the voters, we mine congress-legislators.csv. 
-    this file contains more information, including personalia like gender and age, as well as party membership and wikipedia links
-    
-    
-    
-    
-    # Govtrack data getter
-    
-    ## to use
-    
-     1. make sure db_putter is running
-     2. sh sw/converters/secondary/import-bulk-govtrack.sh
-     3. wait
-     4. python sw/converters/govtrack
-     5. wait
-     
-    ## features
-    
-    ### multithreading
-    
-    the getter dispatches a number of worker threads which navigate through the bulk data structure, 
-    constructing triples as it does so. 
-    once in a while the workers send their triples to stardog, and empty their local array of triples
-    
-    #### number of triples before dumping
-    
-    We set up a unit test for processing a single session, and time it.  
-    We systematically call this function with parameters threshold and session id.
-    We use 5 different sessions and the range [750,3000] with interval 10.
-    We put it in a scatter plot.
-    We should avoid too low values. 1500 seems good. 
-    More data is needed to make confident conclusions though. 
-    However, don't have the resources (time) to focus too much on this. 
-    
-    ![](scatter.png)
-    
-    ## where to code
-    
-    ### to generate more triples 
-    
-    modify process_session.py
-    
-    ### to tinker with multithreading mechanism
-    
-    modify govtrack.py and handle.py. test stuff in test.py. 
-    
+We found that certain queries yielded results when run on the mined parltrack data, 
+but not on the govtrack data, and that this would occur when adding `(2/3 as ?val)` to the outermost select line.
+Further, when this query was called stardog would throw a "Divide by 0" error. 
+We could not make sense of this behavior, but assume it's due to some unintended feature of the govtrack semantic output. 
+
+##### Parltrack
 
 ### User Interface
 
 We partially integrated LD-R and we wrote an interface with python with flask, html and js. 
+See the screenshots of this report, the appended screencast, and the code on github. 
 
 ### Developer environment working scripts
 
 We wrote scripts to automize task sequences that reoccured during development. 
-
-### Developer environment setup
-  
-We wrote scripts to automize setup of our dependencies and source code. 
+See them in action in the screencast, and the code on github. 
   
 ## Bonus Assignments
 
+We evaluate to which extent we fulfilled the bonus requirements. 
+
 ### Linked Data Star
+
+We have an endpoint containing previously non-existent triples running on localhost, 
+    and are able to access them with queries from anywhere on the computer, 
+    and we have an interface that involves dereferencing URIs. 
+Our data is in principle publishable, but work on security and further refinement of the ontology would come first. 
 
 ### Linked Data Producer
 
+We use existing external vocabularies and our own vocabulary to construct new semantic data from non-semantic data. 
 
 ### Owl Wizzard
 
+We have some inference, but we're not wizards. 
+
 ### Interaction Guru
+
+We enable users to browse data, filtered through both our custom data views and LD'Rs default generic views.
+We inherit the neat design of LD-R, and bootstrap our non-ldr component for aestethic appeal. 
+We perform some basic visualization (line plots). 
+While what we currently do is not on the Guru-level, we have opened up the interface needed
   
 ## Conclusion
 
