@@ -53,7 +53,7 @@ if ask 'Use sudo for stardog?'; then
   if ask 'Reset votes table?'; then
     ABS_DIR=~/sw/scripts
     sudo ./stardog-admin db drop votes
-    sudo ./stardog-admin db create -o reasoning.sameas=FULL search.enabled=TRUE -n votes $ABS_DIR/../ontology.ttl
+    sudo ./stardog-admin db create -o reasoning.type=DL reasoning.sameas=FULL -n votes $ABS_DIR/../ontology.ttl
   fi
 else
   rm -f ../system.lock
@@ -63,7 +63,7 @@ else
   if ask 'Reset votes table?'; then
     ABS_DIR=~/sw/scripts
     ./stardog-admin db drop votes
-    ./stardog-admin db create -o reasoning.sameas=FULL search.enabled=TRUE -n votes $ABS_DIR/../ontology.ttl
+    ./stardog-admin db create -o reasoning.type=DL reasoning.sameas=FULL -n votes $ABS_DIR/../ontology.ttl
   fi
 fi
 echo
