@@ -14,20 +14,18 @@ The grade estimate is brutal for our own good.
 
 |Rubric										|0/-10 none|5/2 novice|11/6 competent|10/20 proficient|
 |----|--------------------------------------|----------|----------|--------------|----------------|
-|Report organization, layout and language	|		   |x	      |	 		     |				  |
-|Description of the application and users	|		   |x	      |	 		     |				  |
-|Design and walkthrough					 	|		   |x	      |	 		     |				  |
-|Domain and conceptualization				|		   |x	      |	 		     |				  |
-|Ontology and inferencing					|		   |x	      |	 		     |				  |
-|Data reuse									|		   |x	      |	 		     |				  |
-|Queries 									|		   |x	      | 		     |				  |
-|Application functionality					|		   |	      |x 		     |				  |
-|Linked Data Star							|		   |x	      |	 		     |				  |
-|Linked Data Producer						|		   |	      |x		     |				  |
-|Owl Wizard									|		   |x	      | 		     |				  |
-|Interaction Guru  							|		   |	      |x	 		     |				  |
-
-ca 60/90 , grade 6.5
+|Report organization, layout and language	|		   |	      |	 		     |				  |
+|Description of the application and users	|		   |	      |	 		     |				  |
+|Design and walkthrough					 	|		   |	      |	 		     |				  |
+|Domain and conceptualization				|		   |	      |	 		     |				  |
+|Ontology and inferencing					|		   |	      |	 		     |				  |
+|Data reuse									|		   |	      |	 		     |				  |
+|Queries 									|		   |	      | 		     |				  |
+|Application functionality					|		   |	      | 		     |				  |
+|Linked Data Star							|		   |	      |	 		     |				  |
+|Linked Data Producer						|		   |	      |		         |				  |
+|Owl Wizard									|		   |	      | 		     |				  |
+|Interaction Guru  							|		   |	      |	 		     |				  |
 
 ## Subtasks / tips
 
@@ -48,10 +46,10 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|-----|-----------|------|
-|language|5|academic english|needs less narrative|
-|structure|2|report's header tree corresponds to rubrics and their subrequirements||
-|graphics|0|include relevant plots n charts and other images (but only when it makes sense)||
-|write|0|have conclusion: which goals we met and what further work would be done||
+|language|~|use academic/professional english||
+|structure|+|report's header tree corresponds to rubrics and their subrequirements|todo complete building report skeleton|
+|graphics|+|include relevant plots n charts and other images (but only when it makes sense)|todo make and include all required|
+|write|~|have conclusion: which goals we met and what further work would be done|todo expand|
 
 ### Description of application and users
 
@@ -61,9 +59,9 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|-----|-----------|------|
-|write|6:8|define goals of application|goals were written weeks ago. needs update.|
-|write|0|describe functionality|needs to exist in the right place|
-|write|6:8|define target groups|is elaborate but needs updating|
+|write|~|define goals of application|goals were written weeks ago. needs update.|
+|write|-|describe functionality (high abstraction level)|keep brief, details come in Application Functionality section|
+|write|~|define target groups|is elaborate but needs refinement and maybe expansion|
 
 ### Design and Walkthrough
 
@@ -77,11 +75,12 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|code |0|encode and use views|can be done in a hurry in a fiddle, independent of LD-R|
-|write|4|describe LD-R|see the docs|
-|write|0|give abstract definitions of views||
-|write|4|give walkthrough|needs screenshots and fulfillment of fiddle req above|
-|write|0|justify design and views|explain that fiddle was last minute patch, that better solution is use ld-r bcs code reuse|
+|code |+|encode and use views|is done for a few views in non-ldr fiddle|
+|write|-|describe and justify LD-R|see the docs. there is little description or justification, only endorsement|
+|write|-|give abstract definitions of views|doesn't exist|
+|write|~|give exact defintion of views|is done unelegantly with screenshots. todo give formal definition|
+|write|+|give walkthrough|is integrated with the rest of the section|
+|write|~|justify design and views|explain that fiddle was last minute patch, that better solution is use ld-r bcs code reuse. see 'describe and justfy ldr' req above|
 
 // Our main product is a module, rather than an application for users. 
 
@@ -97,10 +96,10 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|write|6|describe scope||
-|write|6|describe domain||
-|chart|0|put diagram of ontology|use protege|
-|write|6:8|describe ontology|reference diagram. |
+|write|~|describe scope|todo review|
+|write|~|describe domain|todo review|
+|chart|-|put diagram of ontology||
+|write|~|describe ontology|done to some extent. reference diagram when up. |
 
 ### Ontology and inferencing
 
@@ -115,13 +114,13 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|Ontology|0|have 15 classes|we have 9 classes|
-|Ontology|10|have 5 class restrictions|(todo verify this is covered)|
-|Ontology|0|reuse 3 vocabularies or ontologies|we have foaf and dbpedia. need one more.|
-|Ontology|6:8|describe the ontology design and the decisions behind it|is elaborate but needs updating|
-|Inference|6:8||needs distinction between what's inference and deduction, and deduction should go elsewhere. needs distinction between what we have done and what we want to do. (we currently only have trivial uninteresting inferencing (but it is crucial))|
-|Inference|0|Give screenshots evidencing inference||
-|Inference|0|Infer on external data||
+|Ontology|-|have 15 classes|we have 9 classes|
+|Ontology|+|have 5 class restrictions|(todo verify this is covered)|
+|Ontology|2/3|reuse 3 vocabularies or ontologies|we have foaf and dbpedia. need one more.|
+|Ontology|~|describe the ontology design and the decisions behind it|is elaborate but needs updating|
+|Inference|~||needs distinction between what's inference and deduction, and deduction should go elsewhere. needs distinction between what we have done and what we want to do. (we currently only have trivial uninteresting inferencing (but it is crucial))|
+|Inference|+|Give screenshots evidencing inference||
+|Inference|-|Infer on external data||
 
 ### Data Reuse
 
@@ -131,9 +130,9 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|Research|5|describe 2 sources|we describe parltrack, govtrack and dbpedia. needs better structure and a comparison table|
-|write|5|motivation for choosing these source|needs less narrative|
-|write|5|data construction methodology|integrate with code snippets to show how it was done|
+|Research|~|describe 2 sources|we describe parltrack, govtrack and dbpedia. needs better structure and a comparison table|
+|write|~|motivation for choosing these source|needs refinement|
+|write|~|data construction methodology (bried)|keep brief. elaboration in Application Functionality|
 
 ### Queries
 
@@ -143,10 +142,10 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|Query writing|6||Some queries exist, but they need more documentation, and should be more in numbers|
-|Inference|0|Proof that queries depend on inference (screenshot)|queries dont currently need inference|
-|Query writing|0|Make complex query that depends on inference||
-|write|0|discuss inferences made|queries dont depend on inference|
+|Query writing|+||Some queries exist, but they need more documentation, and should be more in numbers|
+|Inference|+|Proof that queries depend on inference (screenshot)|we have this for a trivial query|
+|Query writing|-|Make complex query that depends on inference||
+|write|-|discuss inferences made|needs discussion|
 
 ### Application functionality
 
@@ -157,9 +156,11 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|code|8|have working prototype|fix govtrack|
-|screencast|0|show program functionality|needs making|
-|ontology|6:8|ontology.ttl with and without sample data||
+|code|+|have working prototype|fix govtrack (but this is only a module, not the main program)|
+|code docs|-|describe|put and reference system diagram|
+|screencast|-|show program functionality|needs making|
+|ontology|+|have ontology.ttl with and without sample data||
+|write|~|describe ontology construction methodology|currently spread around. reference system diagram.| // moved here from 'domain and inferencing'
 
 ### Extra points
 
@@ -179,8 +180,8 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|data publishing|0|make endpoint available online|can be done by free serverhosting|
-|data publishing|10|make data dereferencable and enriched with mappings to external sources|done locally|
+|data publishing|-|make endpoint available online|can be done by free serverhosting|
+|data publishing|+|make data dereferencable and enriched with mappings to external sources|done locally|
 
 ##### Linked Data Producer 
 
@@ -189,8 +190,8 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|code|10|semantify non-semantic data|done in govtrack and parltrack|
-|publishing|6|use existing vocabularies in the semantification|we did, but also used some we defined ourselves|
+|code|+|semantify non-semantic data|done in govtrack and parltrack|
+|publishing|~|use existing vocabularies in the semantification|we did, but also used some we defined ourselves|
 
 ##### OWL Wizard
 
@@ -198,8 +199,8 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|Inference|2|do lots of inference|we make only some trivial inference|
-|Data analysis|5|derive non-trivial results|we compute some basic statistics that border on the trivial|
+|Inference|-|do lots of inference|we make only some trivial inference|
+|Data analysis|~|derive non-trivial results|we compute some basic statistics that border on the trivial|
 
 ##### Interaction Guru 
  
@@ -210,7 +211,7 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
-|Interface|6|enable users to browse data|through ld-r. needs more custom views and searching for efficient user navigation|
-|Interface|6|configure data views|by outputing custom tables, we're effectively defining views|
-|Design|6|have neat design|we inherit the neat desidn of ld-r|
-|visualization|6|visualize some data as excellently as possible|we give some line plots of some statistics through time|
+|Interface|+|enable users to browse data|through ld-r. needs more custom views and searching for efficient user navigation|
+|Interface|+|configure data views|by outputing custom tables, we're effectively defining views|
+|Design|+|have neat design|we inherit the neat desidn of ld-r, and bootstrap the non-ldr components|
+|visualization|~|visualize some data as excellently as possible|we give some basic line plots of some statistics through time|
