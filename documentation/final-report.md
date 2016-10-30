@@ -135,7 +135,7 @@ The goals and project requirements imply the following Technical Requirements
 |TR_5|no|Visualize trivial statistics|
 |TR_6|no|Perform non-trivial analysis on voting data to |
 |TR_7|no|Visualize results of non-trivial analysis|
-[Table 1: Technical requirements and their level of essentiality]
+*Table 1: Technical requirements and their level of essentiality*
 
 ## Users
 ### Satisfaction Requirements
@@ -157,7 +157,7 @@ For description of the application's target groups, the following satisfaction r
 |TG_1|1|1|1|1|0|0|
 |TG_2|1|1|1|1|1|1|
 |TG_3|0|1|1|1|0|0|
-[Table 2: Target Groups and projected satisfaction requirements]
+*Table 2: Target Groups and projected satisfaction requirements*
 
 #### Target group 1: People with domain interest
 These users are interested in the data itself, and in any patterns that can be found in said data.
@@ -203,14 +203,14 @@ This view gives a summary of a specific party. Note the uri as value of `bill` i
 which is dereferenced by the interface. 
 
 ![](images/party.png)
-[Image 1: Party View]
+*Image 1: Party View*
 
 #### Parties View
 
 This view gives a summary of a set of parties. It takes no input. 
 
 ![](images/parties.png)
-[Image 2: Parties View]
+*Image 2: Parties View*
 
 #### Statistics in Data Views
 
@@ -236,6 +236,7 @@ as it allows us to semantically browse our data and inferences made from it.
 Below is a screenshot of LD-R listing our entities.
 
 ![](images/ldr_list.png)
+*image 3: LD-R Screenshot
 
 ### Network Graph Browser
 
@@ -419,10 +420,10 @@ These are screenshots of the results of the same query to the same stardog datab
 with (first) and without (second) inferencing. 
 
 ![](images/inference_with.png)
-[image 3: Inference proof with inference enabled]
+*image 4: Inference proof with inference enabled*
 
 ![](images/inference_without.png)
-[image 3: Inference proof with inferenec disabled]
+*image 5: Inference proof with inferenec disabled*
 
 
 
@@ -539,8 +540,8 @@ This is a description of the query.
 
 ### Overview
 
-![](images/designdiagram.png)
-[image 5: Overview of program structure]
+![image 6: Overview of program structure](images/designdiagram.png)
+*image 6: Overview of program structure*
 
 This diagram illustrates the main structure of our code. 
 
