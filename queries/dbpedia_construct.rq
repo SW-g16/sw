@@ -1,0 +1,16 @@
+PREFIX votes: <http://localhost:5820/databases/votes/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+construct {
+    ?authority dbo:houses ?assembly.
+    ?authority votes:legalizesFor ?polity.
+  	?polity a votes:Country.
+    ?assembly votes:hasVoter ?voter.
+}
+where {
+    ?authority dbp:houses ?assembly.
+    ?authority dbp:houseType ?housetype.
+    ?authority dbo:location ?polity.
+	?polity a dbo:Country.
+}
