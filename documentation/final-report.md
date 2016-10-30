@@ -1,78 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents** 
-
-- [Final Report](#final-report)
-  - [Abstract](#abstract)
-  - [Introduction](#introduction)
-  - [Goals](#goals)
-    - [Primary Goals](#primary-goals)
-    - [Secondary Goals](#secondary-goals)
-  - [Application](#application)
-    - [Description](#description)
-      - [Open Endpoint](#open-endpoint)
-      - [Technical Requirements](#technical-requirements)
-  - [Users](#users)
-    - [Satistfaction Requirements](#satistfaction-requirements)
-    - [Target groups by Satistfaction Requirements](#target-groups-by-satistfaction-requirements)
-      - [Target group 1: People with domain interest](#target-group-1-people-with-domain-interest)
-      - [Target group 2: Developers](#target-group-2-developers)
-      - [Target group 3: People who are attracted to data visualizations](#target-group-3-people-who-are-attracted-to-data-visualizations)
-    - [Satisfaction Requirements per Target Group](#satisfaction-requirements-per-target-group)
-  - [Interface Design // corresponds to 'Design and Walkthrough'](#interface-design--corresponds-to-design-and-walkthrough)
-    - [Data Views](#data-views)
-      - [Party View](#party-view)
-      - [Parties View](#parties-view)
-      - [Statistics in Data Views](#statistics-in-data-views)
-      - [Visualization](#visualization)
-    - [LD-R](#ld-r)
-    - [Network Graph Browser](#network-graph-browser)
-    - [Platform](#platform)
-      - [Devices](#devices)
-  - [Domain and Scope](#domain-and-scope)
-    - [Domain](#domain)
-      - [Required Domain Knowledge](#required-domain-knowledge)
-    - [Scope](#scope)
-    - [Mapping and Inferencing Between Political entities](#mapping-and-inferencing-between-political-entities)
-      - [Election and Polling Data](#election-and-polling-data)
-  - [Conceptualization](#conceptualization)
-  - [Ontology](#ontology)
-    - [Vocabulary](#vocabulary)
-    - [Ontology Construction](#ontology-construction)
-  - [Inferencing](#inferencing)
-    - [Initial Trivial Inferences](#initial-trivial-inferences)
-    - [Less Trivial Inferences](#less-trivial-inferences)
-    - [Performing an inference-dependent query](#performing-an-inference-dependent-query)
-  - [Data Reuse](#data-reuse)
-    - [Sources](#sources)
-      - [GovTrack](#govtrack)
-      - [ParlTrack](#parltrack)
-    - [Motivation for using these sources](#motivation-for-using-these-sources)
-    - [Data integration methodology](#data-integration-methodology)
-  - [Querying and Data Analysis](#querying-and-data-analysis)
-    - [Voting Assembly Party Compositions](#voting-assembly-party-compositions)
-      - [Another complex query relying on inferencing](#another-complex-query-relying-on-inferencing)
-  - [Application Functionality](#application-functionality)
-    - [Overview](#overview)
-    - [Data Mining](#data-mining)
-      - [Govtrack](#govtrack)
-    - [User Interface](#user-interface)
-    - [Developer environment working scripts](#developer-environment-working-scripts)
-    - [Developer environment setup](#developer-environment-setup)
-  - [Bonus Assignments](#bonus-assignments)
-    - [Linked Data Star](#linked-data-star)
-    - [Linked Data Producer](#linked-data-producer)
-    - [Owl Wizzard](#owl-wizzard)
-    - [Interaction Guru](#interaction-guru)
-  - [Conclusion](#conclusion)
-    - [Goals met](#goals-met)
-- [Appendix](#appendix)
-  - [Ontology](#ontology-1)
-  - [Code Base](#code-base)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-//TODO MENTION SOMEWHERE THAT WE SWITCHED TO DL TO TAKE ADVANTAGE OF INFERRED CLASSES
 
 # Final Report
 
@@ -87,6 +12,9 @@
 *screenshots are taken on a small test dataset*
 
 ## Abstract
+
+> In a September 2011 joint report from the National Democratic Institute and World Bank Institute, a survey of parliamentary monitoring organisations (PMOs) found that parliamentary informatics are used by approximately 40 percent of PMOs worldwide. " - wikipedia.org/wiki/Parliamentary_informatics) 
+
 An increasing amount of data on elected representative's votes on bills are being made freely available online, but they do not share a common format.
 This report documents a framework and several instance components for combining these sources into a single ontology, 
 making it easier to perform data analysis across the data of several different voting assemblies. 
@@ -95,35 +23,27 @@ forming a functioning system ready to be expanded to include more data sources, 
 and more intuition-friendly ways of visualizing the data and analysis results. 
 
 ## Introduction
-//TODO IMPROVE 
-This report's structure is aligned with the grading rubrics: design
-In the first milestone, we wil talk about planning the application design, establishing the goals, 
-identifying the potential users, determine how we are going to design it, and giving a short walkthrough of how it will work. In the second milestone, we will talk about the ontology for our application, explaining the planned domain and scope, how the ontology was conceptualuzed and constructed, provide a short description, and describe how the ontology will inference new information. Finally, in the third part, we will describe the more practical parts of our application, where it gets the data from, how it integrates that data, and how it queries that data.
+This report was made for the course 'Semanatic Web', at the Vrije Universiteit of Amsterdam, in which students were tasked with creating a semantic web application of their own choice. For this task, our group chose to tackle politics. We had learned that many legislative assemblies have been making parliamentary informatics available, but we could find no tool that allowed for analysis and oversight of such parliamentary informatics. As such, we decided to make one of our own. Specifically, we decided to create a modular tool for visualizing and filtering the voting-related data from a small set of legislative assemblies.
+ctrl+z? 
+This report covers the creation of that tool.
+
+This report is structured according to the milestones set for the course. In the first milestone we will talk about planning the application design, establishing the goals, 
+identifying the potential users, determining how we are going to design it, and giving a short walkthrough of how it will work. In the second milestone, we will talk about the ontology for our application, explaining the planned domain and scope, how the ontology was conceptualized and constructed, provide a short description and describe how the ontology will infer new information. Finally, in the third section, we will describe the more practical parts of our application, such as where it gets the data from, how it integrates said data and how it is queried. In the end, we talk about project conclusions, and the possibilities for future developments.
 
 ## Goals
 
-// |write|6:8|define goals of application|goals were written weeks ago. needs update.|
-// Updated for formal language, very little contents. 
+The goal of this project was to provide an application capable of mining, analyzing, and presenting data on votes, voters and bills of legislative assemblies, providing users with some oversight and tools to consume this data. To achieve this, the following sub-goals have been established:
 
-### Primary Goals
-The goal of this project was to provide an application capable of vizualizing the internal votes of legislative assemblies, providing users with oversight and the tools with which to analyze this data through filters. To achieve this, the following sub-goals needed to be achieved:
- - The creation of an endpoint that combines the open voting data from a number of legislative assemblies.
- - The enhancement of this endpoint until it fits the 5-TimBL star requirements.
- - Definining several meaningful Data Views for this endpoint.
- - Outputting these Data Views to a suitable user interface.
- - Integrating UI elements that allow users to select and apply filters to the data.
-
-### Secondary Goals
-The following goals were also considered part of the project. However, as they did not pertain to core functionality, they were relegated to secondary status.
- - Integrating a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists.
- - Analyzing the data using machine learning techniques for semantic data.
- - Defining Data Views for viewing statistics and other interesting output of analyzing machiness.
- - Adding LD-R UI functionality so standard plots and charts could be used to vizualize statistics and the output of the analyzer.
+ - The provision of an endpoint that combines the open voting data from a number of legislative assemblies.
+ - The enrichment of this endpoint, to reach 5-TimBL stars.
+ - Using the data to infer further triples.
+ - Definition of meaningful Data Views for this endpoint.
+ - The provision of a human-friendly interface that applies these Data Views.
 
 ## Application 
 ### Description
 #### Open Endpoint
-Upon application deployment, a read-only SPARQL endpoint would be made publicly, releasing the project data to the semantic web.
+Upon application deployment, a read-only SPARQL endpoint would be made publicly available, releasing the project data to the semantic web.
 
 #### Technical Requirements
 The goals and project requirements imply the following Technical Requirements
@@ -153,8 +73,6 @@ For description of the application's target groups, the following satisfaction r
 
 ### Target groups by Satistfaction Requirements
 
-//|write|6:8|define target groups|is elaborate but needs updating|
-
 |Target Group|Fact|Analysis|Sharability|Visualization|Documentation|Code Accessibility|
 |---|---|---|---|---|---|---|
 |TG_1|1|1|1|1|0|0|
@@ -175,21 +93,17 @@ They inherit the needs of all other users.
 These users may skip past explanatory text to look at visualizations, regardless of the domain.
 They want to understand as much information as efficiently as possible from data visualizations.
 
-## Interface Design // corresponds to 'Design and Walkthrough'
+## Interface Design
 ### Walkthrough
-//TODO this is outdated, but does include suggested future work.
 
-//old walkthrough
 Upon initialization, the user is presented with the default page, providing him with an overview of the data, as well as links to acess to acess the data of the various political entities. Clicking one of these will bring up all the relevant data (as defined by a Data View) taken from that source, associated with that source through interlinking of endpoints, or inferred about that source. The user may also click additional buttons for the generation of graphs and statistics. If a user finds this data interesting enough to share, he can do so by copying the URL currently in the address bar, and sharing that URL. Any other user who opens that link will see the same data in the same way as the first use.
 
-//old walkthrough
 Users can also generate a graph of the data defined by applying their own user-defined filters on the dataset. A user may select filters such as only showing bills from a specific period, only showing people that voted a specific way on a specific bill or only showing politicians that fit a particular profile (such as wealth, level of education, nation of birth or gender). Upon selecting these filters, the user presses 'submit'. If the amount of data that is called is sufficiently large, the user is provided with a warning prompt, giving him a chance to cancel, upon which the user can modify their filter and retry. Upon submission, a semantic graph is returned, sent to the application's WebVowl component for visualization.
 
-//old interface
+
 In this section we describe our interface in terms of what components it consists of, 
 what tasks it performs, and how it interacts with other components.
 
-//old interface
 The interface includes the LD-R browser, a highly configureable semantic web browser. 
 LD-R is suitable for our application, but unfortunately we did not succeed in configuring it in time for the deadline of this project. 
 Instead we are including a fiddle which performs some of the tasks we intended for LD-R (and our intended extentions to it) to do. 
@@ -206,7 +120,7 @@ In both views, the column headers of the screenshot together explicitly define t
 This view gives a summary of a specific party. Note the uri as value of `bill` in the url bar, 
 which is dereferenced by the interface. 
 
-![](images/party.png)
+![](https://raw.githubusercontent.com/SW-g16/sw/master/documentation/images/party.png)
 
 *Image 1: Party View*
 
@@ -214,7 +128,7 @@ which is dereferenced by the interface.
 
 This view gives a summary of a set of parties. It takes no input. 
 
-![](images/parties.png)
+![](https://raw.githubusercontent.com/SW-g16/sw/master/documentation/images/parties.png)
 
 *Image 2: Parties View*
 
@@ -241,7 +155,7 @@ LD-R is still a useful interface, even without customization,
 as it allows us to semantically browse our data and inferences made from it. 
 Below is a screenshot of LD-R listing our entities.
 
-![](images/ldr_list.png)
+![](https://raw.githubusercontent.com/SW-g16/sw/master/documentation/images/ldr_list.png)
 
 *image 3: LD-R Screenshot*
 
@@ -261,7 +175,7 @@ as it allows for communicating more information at once.
 
 ### Domain
 
-The domain of our ontology is the set of Voting Assemblies' Voters votes on Bills around the world, and other immediately relevant and interesting data related to this. Our data is imported from the political entities in question, and is then fused into a single, combined ontology. 
+The domain of our ontology is the set of Voting Assemblies' Voters' votes on Bills around the world, and other immediately relevant and interesting data related to this. Our data is imported from the political entities in question, and is then fused into a single, combined ontology. 
 
 Assertions we are interested include
  - Who votes for what?
@@ -294,27 +208,8 @@ This would allow for mapping how closely assembly voting matches the desires of 
 
 ## Conceptualization
 
-    
-    // todo figure why humanvoter isnt inferred
-    Voter has a subclass HumanVoter, defined in anticipation of integrating EU votes into our ontology,
-        where the Voters are not HumanVoters but Countries.
-    
-    // todo implement the age classes
-    Human Voters have an age, a birth date and a gender property,
-        each of which has an appropriate data property.
-    Depending on these, they are put in subclasses Young Voter, Old Voter, Middle-Aged Voter, Male Voter and/or Female Voter,
-        inferred from the rules we use assert in our ontology.
-    
-    A voting assembly is that in which Bills are introduced and Voters vote for bills.
-    It legalizes for a specific Polity.
-    
-    A Polity is that to which Bills are applied.
-    It can be put into several subclasses, which fit different scopes, organizational types and legislative statuses.
-    
-    
-
-First, we need the essential components for describing a set of non-anonymous
-votes. For this, we only need two classes and three relations.
+First, the essential components for describing a set of non-anonymous
+votes are needed. For this, only two classes and three relations are needed.
 
     Voter votes yes on Bill
     Voter votes no on Bill
@@ -325,11 +220,11 @@ additional relation is needed to distinguish between them.
 
     Bill is processed by VotingAssembly
 
-The above are the 4 fundamental triples that make up the backbone of our graph. 
+The above are the 4 fundamental triples that make up the backbone of the application's graph. 
 Data collected beyond is only appended to the graph. 
-The appended data serves to *enrich* our ontology, 
+The appended data serves to *enrich* the application's ontology, 
 both in the semantic sense (referencing external resources), 
-and in the sense that it enables us to perform more interesting analyses on the data. 
+and in the sense that it enables more interesting analyses on the data. 
 
 A bill's date is relevant. 
 
@@ -345,43 +240,47 @@ patterns.
 
     Voter has subclasses MiddleAgedVoter, YoungVoter, OldVoter, FemaleVoter, MaleVoter
 
+For each legislative assembly, there is the relevant data of what authority it processes votes for, and to which polity the authority applies the passed votes to. 
 
-For each legislative assembly, there is the relevant data of what polity it
-legislates for.
+    VotingAssembly processes votes for Authority
 
-    VotingAssembly legalizes for Polity
+    Authority legalizes for Polity
+
 
 Polities can be divided into several subcategories, describing different scopes,
 organizational types and legislatives statuses.
 
     Polity has subclasses State, Commune, Federation, County
+
+ There is room for a lot of further refinement in many directions as we move further away from our core structure, 
+ which is the sets of `Voter direction Votable` and `Votable processedBy VotingAssembly` triples 
     
 ## Ontology 
 
 ### Vocabulary 
 
-Our vocabulary is designed to express voting data and some other related data from a number of different sources.
+Our vocabulary is designed to express voting data and other related data from a variety of sources.
 Its construction was enabled by a basic level of domain knowledge and an intermediate understanding of OWL.
-The practical task of ontology construction was performed using the Protégé ontology editor.
+The practical task of ontology construction was performed using the Protege ontology editor.
 
 ### Ontology Construction
 
 A vocabulary becomes an ontology when instance data is added to it. 
-Our combined ontology includes our vocabulary and instance data mined from external sources. 
-In addition to using our vocabulary, the instance data also includes some references to external sources. 
+The combined ontology includes a custom vocabulary and instance data mined from external sources. 
+In addition to using the custom vocabulary, the instance data also includes references to external sources. 
 These resources include both central properties like `dbo:party` to indicate the party a voter belongs to, 
     and real entities like `dbr:United_States_Senate`. 
-See further elaborations on how we use what external data. 
+See 'further elaborations' on how external data is used. 
 
     
 ## Inferencing
 
 ### Initial Trivial Inferences
 
-*In this section, we use a pseudo-formal ad-hoc notation to communicate
+*In this section,  a pseudo-formal ad-hoc notation is used to communicate
     steps we want to either infer or deduce.*
 
-These inferences are trivial but enrich our dataset,
+These inferences are trivial but enrich the dataset,
     helping us construct human-friendly data-views
     as well as providing us useful variables we can reference
     when computing statistics later on.
@@ -398,8 +297,7 @@ While the inference is trivial, we don't currently have access to
 
 ### Less Trivial Inferences
 
-The following Inferences involve arithmetics and gives interesting data which we can compute statistics from.
-We have not yet enabled these inferences, but we intend to.
+The following inferences involve arithmetics and gives interesting data from which statistics can be computed from.
 
     # a voter's age upon a voting event
     ( x votes * on y , y has date date_1, x has birthdate date_2 ) -> Voter had age (date_1-date_2) at time of vote
@@ -426,102 +324,82 @@ We have not yet enabled these inferences, but we intend to.
 These are screenshots of the results of the same query to the same stardog database, 
 with (first) and without (second) inferencing. 
 
-![](images/inference_with.png)
+![](https://raw.githubusercontent.com/SW-g16/sw/master/documentation/images/inference_with.png)
 
 *image 4: Inference proof with inference enabled*
 
-![](images/inference_without.png)
+![](https://raw.githubusercontent.com/SW-g16/sw/master/documentation/images/inference_without.png)
 
 *image 5: Inference proof with inference disabled*
 
 ## Data Reuse
 
-    // bits, were spread around, now dumped here. todo integrate
+## Data Reuse
 
-    We're interested in 
-    
-    
-     - any data about individual voters 
-     - text, date, and votes on a bill
-     - which voting assembly has which voters and bills
-    
-    > In a September 2011 joint report from the National Democratic Institute and World Bank Institute, a survey of parliamentary monitoring organisations (PMOs) found that parliamentary informatics are used by approximately 40 percent of PMOs worldwide. " - wikipedia.org/wiki/Parliamentary_informatics) 
-    
-    So there's lots of data available. If we were to continue this project beyond the scope of this course, we'd want to mine every available source. For now we retrieve data from govtrack, parltrack and dbpedia. 
+To connect our graph to the semantic web, we use existing vocabularies and entity URIs. 
 
-    
+We're interested in 
+ - any data about individual voters 
+ - text, date, and votes on a bill
+ - which voting assembly has which voters and bills
+ - which voting assemblies pass legislation for which bills
+ 
+So there's lots of data available. If we were to continue this project beyond the scope of this course, 
+we'd want to mine every available source. For now we retrieve data from govtrack, parltrack and dbpedia. 
 
-    The process of acquiring this data consists of
-    
-     1. identifying candidate sources
-     2. evaluating and accessing candidate
-     3. coding custom queriers and data constructors for different data sources
-    
-    ##### Identifying Candidate Sources
-    
-    One of the first steps in our Agile development approach, was to do in-depth research into the the open data provided by governments and political bodies. This research helped us with many of our design choices. After identifying many possibilities, we narrowed our choices (based on the quality and depth of data) to the following:
-      - [US Governmental data (GovTrack)](https://www.govtrack.us/)
-      - [UK Parliament bill progress tracking](http://www.data.parliament.uk/dataset/bills)
-      - [European Council votes on legislative acts](http://data.consilium.europa.eu/)
-    
-    ##### Evaluating and Accessing Candidate Sources
-    
-    |Provider name|endpoint|timblr-stars|comment|
-    |---|---|---|---|
-    |GovTrack|http://www.govtrack.us/api/v2/|3|Data encoded in custom JSON format|
-    |UK Parliament|http://lda.data.parliament.uk/bills.json|3|Data encoded in custom JSON/XML/CSV formats|
-    |European Council|http://data.consilium.europa.eu/sparql|4|Data available through SPARQL endpoint, but is not linked to any external data|
-    
-    
-    //////////////////////// 
-    
-    
-    #### External Vocabularies and Ontologies
-    
-    ##### Reused Semantic Data
-    
-    DBpedia is used for the URIs of political parties and state actors, such as
-    `dbr:United_States_Congress` and `dbr:Democratic_Party_(United_States)>`.
-    DBpedia is also used for date of birth (`dbp:birthDate`), as foaf only has age
-    and date of birth, not specifying the year.
-    
-    ##### Constructed Semantic Data
-    
-    Combination of a variety of data sources is essential to our application. Large
-    quantities of data fitting our ontology are constructed by querying the publicly
-    available data of political entities. Currently, data for our ontology is drawn
-    exclusively from GovTrack, but the possibility to combine with more sources remains open.
-    We intend to gather data from at least one additional source within the scope of
-    this coursework as well.
-    
+The process of acquiring this data consists of
 
-### Sources
+ 1. identifying candidate sources
+ 2. evaluating and accessing candidate
+ 3. coding custom queriers and data constructors for different data sources
 
-#### GovTrack
+Large quantities of data are mined from our current sources, 
+and the possibility to combine with more sources remains open.
+The number of sources is subject to practically indefinete expansion - until every voting assembly in existence has been covered. 
 
-From govtrack's data, we mine voter ids, some voter info, bills, and votes. 
-See elaboration in Application Functionality
+### Identifying Candidate Sources
 
-#### ParlTrack
+One of the first steps in our Agile development approach, was to do some research into the 
+the open data provided by governments and political bodies. 
+This research helped us with many of our design choices. 
+After identifying many possibilities, we narrowed our choices (based on the quality and depth of data) to the following:
+
+- [US Governmental data (GovTrack)](https://www.govtrack.us/)
+- [UK Parliament bill progress tracking](http://www.data.parliament.uk/dataset/bills)
+- [European Parliament votes on legislative acts](http://parltrack.euwiki.org/)
+- [European Council votes on legislative acts](http://data.consilium.europa.eu/)
+
+### Evaluating and Accessing Candidate Sources
+
+|Provider name|endpoint|timblr-stars|comment|
+|---|---|---|---|
+|GovTrack|http://www.govtrack.us/api/v2/|3|Data encoded in custom JSON format|
+|UK Parliament|http://lda.data.parliament.uk/bills.json|3|Data encoded in custom JSON/XML/CSV formats|
+|European Parliament|http://parltrack.euwiki.org/dumps/|3|Data encoded in custom JSON/XML/CSV formats|
+|European Council|http://data.consilium.europa.eu/sparql|4|Data available through SPARQL endpoint, but is not linked to any external data|
+*table 3: sources and their accessibility*
 
 ### Motivation for using these sources 
 
-We considered a great many parliamentary databases during the course of our 
-product. Our first intention was of course to integrate the Netherlands, but 
-that turned out to not be very feasible due to not having an endpoint or 
-organized data source for parliamentary votes available. We next investigated 
-the US data at govtrack.us, which turned out to be a perfect data source for 
-this project due being expansive, consistent and easily accessible. It thus 
-formed the basis of much of our early ontology. Finding another source took us a
-long time, and we went through several other endpoints, including an attempt to 
-integrate the data of the UK house of commons. We eventually settled on using 
-the respective data sets of the EU council and parliament. The council dataset 
-was somewhat limited in its scope compared to the more exhaustive govtrack and 
-eu parliament sets, but was still suitable for our purpose.
+We choose Govtrack and Parltrack as subject of data mining, as 
+both contain structued non-semantic voting data relevant to our domain. 
+We also construct some data from dbpedia's data. 
+The choice of these sources was motivated by their variety in format and uniformity in domain,
+and the judgement that we'd be technically able to acquire and mine the data. 
 
 ### Data integration methodology
 
-See Application Functinoality section
+See the Application Functionality section.
+
+#### External Vocabularies and Ontologies
+
+##### Reused Semantic Data
+
+DBpedia is used for the URIs of political parties, state actors and voters, such as
+`dbr:United_States_Congress` and `dbr:Democratic_Party_(United_States)>`.
+DBpedia is also used for date of birth (`dbp:birthDate`) and gender (`dbo:gender`)
+We also use `foaf:gender`.
+ 
 
 ## Querying and Data Analysis 
 
@@ -531,7 +409,7 @@ Below we give some low-hanging ones.
 
 ### Voting Assembly Party Compositions
 
-The following query returns the proportion of parties' representation in a voting assembly at the time of a certain bill. Since we have a unified ontology, this will of course work for any of our 2 data sources. Inference is involved: we never explictly store that a resource is a Voter, it is inferred from the fact that they vote, because `:votesOn rdfs:Domain :Voter`. 
+The following query returns the proportion of parties' representation in a voting assembly at the time of a certain bill. Since the sources are combined into a unified ontology, this will of course work for either of them data sources. Inference is involved: Whether a resource is a voter is never explicitly stored, but is instead inferred from the fact that they vote, because `:votesOn rdfs:Domain :Voter`. 
   
   select ?voting_assembly ?date ?party where {complex condition}
 
@@ -546,7 +424,7 @@ This is a description of the query.
 
 ### Overview
 
-![](images/designdiagram.png)
+![](https://raw.githubusercontent.com/SW-g16/sw/master/documentation/images/designdiagram.png)
 
 *image 6: Overview of program structure*
 
@@ -557,7 +435,7 @@ This diagram illustrates the main structure of our code.
 - reset the database,
 - download new data from the data sources, 
 - mine(produce/construct/convert) new data from the source data
-- initiate LDR 
+- initiate LDR , or
 - initiate the temporary interface
 
 `interface.py` is a python script using flask to manage `interface.html`. 
@@ -569,16 +447,16 @@ can browse all our data through LD-R's generic data view.
 
 ### Data Mining
 
-The process of generating semantic triples from non-semantic sources. 
+Data mining here describes the process of generating semantic triples from non-semantic sources. 
 Miners retrieve the triples specified in [section](#link). 
 The most crucial triples are `Voter voteDirection Votable` and `Votable processedBy VotingAssembly`. 
-This is sufficient to form the backbone of our graph, to which other data is attached. 
+This is sufficient to form the backbone of the application's graph, to which other data is attached. 
 Other data that is fundamental for the domain (i.e. necessities for making the data meaningful) include dates, party memberships, and voter personalia. 
 We also link the Polity that that a VotingAssembly legislates for. The latter is among the rarest triples, and is done manually. 
  
 #### Space Complexity
 
-We give an overview of the size of space complexity of our database in terms of number of triples of each form. 
+This section provides an overview of the size of space complexity of our database in terms of number of triples of each form. 
 
 The number of triples is of order `O(numDatasets*avg_numVotingAssemblies*avg_numBills*avg_numSimultaneousVoters)`
 
@@ -590,11 +468,11 @@ In the case of govtrack, the constants are
     numVoters = 12374
     numSimultaneousVoters = 68 # 23m/345k
 
-We're also collecting approximately 5 triples per voter
+The mining programs also collecting approximately 5 triples per voter
 
     voterdata = numVoters * 5 ~~100k
     
-This doesn't affect our scale of data very much, as we're already at ~23 million triples. 
+This doesn't significantly affect the scale of data, as there are already around 23 million triples. 
 
 ##### Scalability Issues?
 
@@ -628,7 +506,14 @@ Mining this is necessary, as the id used in the voting data (above tree) is only
 It is also where to find personalia. Therefore it is a prerequisite for enriching our dataset with voter data. 
 
 ##### Parltrack
-//TODO PARLTRACK description
+
+Parltrack provides compressed JSON files, which are kept up to date with the latest data. The parltrack data scrapers gather a vast amount of informtation, with schemas showing the structure found [here](http://parltrack.euwiki.org/dumps/schema.html).
+
+Instead of attempting to learn and integrate something within the existing [Parltrack scraper codebase](https://github.com/civicdataeu/parltrack/tree/master/parltrack), we opted to simply use their data dumps and process the specific parts of those that we were interested in, into linked data.
+
+By consulting the schemas provided and working through their (quite inconsistent) JSON files, we were able to map a large amount of what was needed in the scope of our application. The miner itself processes three Parltrack JSON dumps: votes.json, dossiers.json and meps.json. The only information that can link data between the three data dumps is IDs and since internal IDs are not particularly useful to us, we create some dictionaries, mapping for example, MEP ID to generated MEP URIs. Some of the automatically generated DBpedia URIs were not actually resources, unfortunately. We therefore saved these dictionaries to json files, which can be edited manually with correct URIs.
+
+Thanks to RDFLib, the output is a fully consistent turtle file.
 
 ###### Mining Efficiency
 
@@ -637,7 +522,7 @@ This means some inefficiency is tolerable, but it's still an interesting challen
 We experimented with multithreading and different channels from python to stardog, but in the end found that
 performance was bottlenecked by available hardware. On one common laptop the miner was tested on, initial stable multithreaded mining was achieved, as shown in the screenshot. 
 
-![](images/govtrack_multithread.png)
+![](https://raw.githubusercontent.com/SW-g16/sw/master/documentation/images/govtrack_multithread.png)
 
 *image 7: multithreaded mining performance on common laptop*
 
@@ -649,8 +534,6 @@ This leads to the suspicion that the bottleneck is the hardware on which the tes
 but until this is tested it on a more powerful system this cannot be confirmed.
   
 ###### Implementation issues
-
-// todo write about the strange bug that stardog failed to handle properly
     
 We found that certain queries yielded results when run on the mined parltrack data, 
 but not on the govtrack data, and that this would occur when adding `(2/3 as ?val)` to the outermost select line.
@@ -678,16 +561,16 @@ The following section details the degree to which bonus assignments have been fu
 
 ### Linked Data Star
 
-The project produces an endpoint containing previously non-existent triples running on localhost, and is able to access them with queries from anywhere on the computer, as well as providing an interface that involves dereferencing URIs. 
-The data is in principle publishable, but work on security and further refinement of the ontology would come first. 
+The project produces an endpoint containing previously non-existent triples from both Govtrack and Parltrack, which map to DBpedia and complement/complete existing resources. The added information is mostly in the form of Properties of politicians and their parties.
+Overall, the data is in principle publishable, but work on security and further refinement of the ontology would come first. 
 
 ### Linked Data Producer
 
-Existing external vocabularies is used with a custom vocabulary in order to construct new semantic data from non-semantic data. 
+Existing external vocabularies are used with a custom vocabulary in order to construct new semantic data from non-semantic data. 
 
-### Owl Wizzard
+### Owl Wizard
 
-While there is some interference, it does not fit the 'wizard' requirement.
+While there is some inference, it does not fit the 'wizard' requirement.
 
 ### Interaction Guru
 Users have the ability view data filtered through both our custom data views and LD'Rs default generic views.
@@ -710,7 +593,7 @@ While the program currently does not function at the Guru-level, the interface n
 |partially|Present analysis results in a clear and meaningful way|
 |no|Integrate a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists.|
 
-*table 3: project goals and their fulfilment*
+*table 4: project goals and their fulfilment*
 
 We achieved most of our goals with partial success. 
 For all goals there is room for practically indefinate refinement - 
@@ -718,7 +601,48 @@ For all goals there is room for practically indefinate refinement -
 We have successfully established the necessary framework to enable these further refinements. 
  
 ### Future Development
-//TODO Future developments
+
+This project was aborted by a deadline before all goals were met. 
+The application is not yet useful. 
+Below are the next steps of development we'd take, organized in different categories. 
+
+#### Bug fixes
+
+Different components of our system has worked at different points in time. 
+Before expanding functionality, stability and functionality of all components should be verified. 
+
+#### Unit Testing 
+
+Unit tests should be updated and maintained. 
+
+#### Inference
+
+#### Scalability and Hardware
+
+For our final system to run comfortably, it would need more powerful hardware and we'd need change some things. 
+
+#### Interface
+
+##### LD-R
+
+Understand how to configure, and configure. 
+This would give developers easier access to data view configurations, 
+and would give users a more uniform interface.
+
+
+##### Integrate WebVowl
+
+Integrating WebVowl to LD-R would give users easier navigation. Tabular and node view could be exchanged interchangably. 
+
+##### Further Analysis
+
+We've opened access to lots of data, and we've only just started to analyze it. 
+How do voters and party cluster?
+
+###### Natural Language Processing
+
+Bill texts contain desirable but non-semantic information. 
+Tools exist for constructing IRIs to popular graphs like dbpedia from natural lang sentences.  
 
 # Appendix
 
