@@ -1,4 +1,7 @@
+@prefix : <http://localhost:5820/databases/votes/> .
 @prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbp: <http://dbpedia.org/property/> .
+@prefix dbr: <http://dbpedia.org/resource/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
@@ -6,6 +9,7 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix votes: <http://localhost:5820/databases/votes/> .
+@base <http://localhost:5820/databases/votes/> .
 
 <http://localhost:5820/databases/votes/> rdf:type owl:Ontology .
 
@@ -21,11 +25,40 @@ xsd:date rdf:type rdfs:Datatype .
 #    Object Properties
 #################################################################
 
+###  http://dbpedia.org/ontology/PoliticalParty
+dbo:PoliticalParty rdf:type owl:ObjectProperty .
+
+
+###  http://dbpedia.org/ontology/birthPlace
+dbo:birthPlace rdf:type owl:ObjectProperty ;
+               rdfs:domain dbo:Person ;
+               rdfs:range dbo:Place .
+
+
+###  http://dbpedia.org/ontology/gender
+dbo:gender rdf:type owl:ObjectProperty .
+
+
+###  http://dbpedia.org/ontology/party
+dbo:party rdf:type owl:ObjectProperty ;
+          rdfs:range dbo:PoliticalParty .
+
+
+###  http://dbpedia.org/ontology/politicalPartyInLegislature
+dbo:politicalPartyInLegislature rdf:type owl:ObjectProperty ;
+                                rdfs:domain dbo:Legislature ;
+                                rdfs:range dbo:PoliticalParty .
+
+
+###  http://dbpedia.org/property/office
+dbp:office rdf:type owl:ObjectProperty .
+
+
 ###  http://localhost:5820/databases/votes/abstains
 votes:abstains rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf votes:reactsToVote ;
-               owl:propertyDisjointWith votes:downvotes ,
-                                        votes:upvotes .
+               rdfs:domain votes:Voter ;
+               rdfs:range votes:Bill .
 
 
 ###  http://localhost:5820/databases/votes/appliesTo
@@ -33,6 +66,13 @@ votes:appliesTo rdf:type owl:ObjectProperty ;
                 rdfs:domain votes:Bill ;
                 rdfs:range votes:Polity ;
                 rdfs:label "appliesTo"@en .
+
+
+###  http://localhost:5820/databases/votes/downvotes
+votes:downvotes rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf votes:votesOn ;
+                rdfs:domain votes:Voter ;
+                rdfs:range votes:Bill .
 
 
 ###  http://localhost:5820/databases/votes/hasMember
@@ -97,6 +137,13 @@ votes:represents rdf:type owl:ObjectProperty ;
                  rdfs:label "represents"@en .
 
 
+###  http://localhost:5820/databases/votes/upvotes
+votes:upvotes rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf votes:votesOn ;
+              rdfs:domain votes:Voter ;
+              rdfs:range votes:Bill .
+
+
 ###  http://localhost:5820/databases/votes/votesIn
 votes:votesIn rdf:type owl:ObjectProperty ;
               rdfs:domain votes:Voter ;
@@ -104,20 +151,11 @@ votes:votesIn rdf:type owl:ObjectProperty ;
               rdfs:label "votesIn"@en .
 
 
-###  http://localhost:5820/databases/votes/downvotes
-votes:downvotes rdf:type owl:ObjectProperty ;
-               rdfs:subPropertyOf votes:votesOn ;
-               owl:propertyDisjointWith votes:upvotes .
-
-
 ###  http://localhost:5820/databases/votes/votesOn
 votes:votesOn rdf:type owl:ObjectProperty ;
-              rdfs:subPropertyOf votes:reactsToVote .
-
-
-###  http://localhost:5820/databases/votes/upvotes
-votes:upvotes rdf:type owl:ObjectProperty ;
-               rdfs:subPropertyOf votes:votesOn .
+              rdfs:subPropertyOf votes:reactsToVote ;
+              rdfs:domain votes:Voter ;
+              rdfs:range votes:Bill .
 
 
 ###  http://localhost:5820/databases/votes/wikipedia
@@ -130,7 +168,14 @@ votes:wikipedia rdf:type owl:ObjectProperty .
 
 ###  http://dbpedia.org/ontology/birthDate
 dbo:birthDate rdf:type owl:DatatypeProperty ;
-              rdfs:domain dbo:Person .
+              rdfs:domain dbo:Person ;
+              rdfs:range xsd:date .
+
+
+###  http://dbpedia.org/ontology/deathDate
+dbo:deathDate rdf:type owl:DatatypeProperty ;
+              rdfs:domain dbo:Person ;
+              rdfs:range xsd:date .
 
 
 ###  http://localhost:5820/databases/votes/bill_text
@@ -152,13 +197,30 @@ foaf:gender rdf:type owl:DatatypeProperty ,
             rdfs:domain foaf:Agent .
 
 
+###  http://xmlns.com/foaf/0.1/name
+foaf:name rdf:type owl:DatatypeProperty .
+
+
 #################################################################
 #    Classes
 #################################################################
 
+###  http://dbpedia.org/ontology/Legislature
+dbo:Legislature rdf:type owl:Class .
+
+
 ###  http://dbpedia.org/ontology/Person
 dbo:Person rdf:type owl:Class ;
            rdfs:subClassOf votes:Agent .
+
+
+###  http://dbpedia.org/ontology/Place
+dbo:Place rdf:type owl:Class .
+
+
+###  http://dbpedia.org/ontology/PoliticalParty
+dbo:PoliticalParty rdf:type owl:Class ;
+                   owl:equivalentClass votes:Party .
 
 
 ###  http://localhost:5820/databases/votes/Agent
@@ -196,6 +258,31 @@ votes:Federation rdf:type owl:Class ;
 
 ###  http://localhost:5820/databases/votes/FemaleVoter
 votes:FemaleVoter rdf:type owl:Class ;
+                  owl:equivalentClass [ owl:intersectionOf ( dbo:Person
+                                                             [ rdf:type owl:Class ;
+                                                               owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                                               owl:onProperty dbo:gender ;
+                                                                               owl:hasValue dbr:Female
+                                                                             ]
+                                                                             [ rdf:type owl:Restriction ;
+                                                                               owl:onProperty foaf:gender ;
+                                                                               owl:hasValue "female"
+                                                                             ]
+                                                                           )
+                                                             ]
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty votes:reactsToVote ;
+                                                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                               owl:onClass votes:Bill
+                                                             ]
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty votes:votesIn ;
+                                                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                               owl:onClass votes:VotingAssembly
+                                                             ]
+                                                           ) ;
+                                        rdf:type owl:Class
+                                      ] ;
                   rdfs:subClassOf votes:HumanVoter ;
                   rdfs:label "FemaleVoter"@en .
 
@@ -222,13 +309,38 @@ votes:HumanVoter rdf:type owl:Class ;
 
 ###  http://localhost:5820/databases/votes/MaleVoter
 votes:MaleVoter rdf:type owl:Class ;
+                owl:equivalentClass [ owl:intersectionOf ( dbo:Person
+                                                           [ rdf:type owl:Class ;
+                                                             owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                                             owl:onProperty dbo:gender ;
+                                                                             owl:hasValue dbr:Male
+                                                                           ]
+                                                                           [ rdf:type owl:Restriction ;
+                                                                             owl:onProperty foaf:gender ;
+                                                                             owl:hasValue "male"
+                                                                           ]
+                                                                         )
+                                                           ]
+                                                           [ rdf:type owl:Restriction ;
+                                                             owl:onProperty votes:reactsToVote ;
+                                                             owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                             owl:onClass votes:Bill
+                                                           ]
+                                                           [ rdf:type owl:Restriction ;
+                                                             owl:onProperty votes:votesIn ;
+                                                             owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                             owl:onClass votes:VotingAssembly
+                                                           ]
+                                                         ) ;
+                                      rdf:type owl:Class
+                                    ] ;
                 rdfs:subClassOf votes:HumanVoter ;
                 rdfs:label "MaleVoter"@en .
 
 
 ###  http://localhost:5820/databases/votes/MiddleAgedVoter
 votes:MiddleAgedVoter rdf:type owl:Class ;
-                      owl:equivalentClass [ owl:intersectionOf ( votes:HumanVoter
+                      owl:equivalentClass [ owl:intersectionOf ( dbo:Person
                                                                  [ rdf:type owl:Restriction ;
                                                                    owl:onProperty foaf:age ;
                                                                    owl:someValuesFrom [ rdf:type rdfs:Datatype ;
@@ -249,14 +361,18 @@ votes:MiddleAgedVoter rdf:type owl:Class ;
 
 ###  http://localhost:5820/databases/votes/OldVoter
 votes:OldVoter rdf:type owl:Class ;
-               owl:equivalentClass [ rdf:type owl:Restriction ;
-                                     owl:onProperty foaf:age ;
-                                     owl:someValuesFrom [ rdf:type rdfs:Datatype ;
-                                                          owl:onDatatype xsd:integer ;
-                                                          owl:withRestrictions ( [ xsd:minInclusive 60
-                                                                                 ]
-                                                                               )
-                                                        ]
+               owl:equivalentClass [ owl:intersectionOf ( dbo:Person
+                                                          [ rdf:type owl:Restriction ;
+                                                            owl:onProperty foaf:age ;
+                                                            owl:someValuesFrom [ rdf:type rdfs:Datatype ;
+                                                                                 owl:onDatatype xsd:integer ;
+                                                                                 owl:withRestrictions ( [ xsd:minInclusive 60
+                                                                                                        ]
+                                                                                                      )
+                                                                               ]
+                                                          ]
+                                                        ) ;
+                                     rdf:type owl:Class
                                    ] ;
                rdfs:subClassOf votes:HumanVoter ;
                rdfs:label "OldVoter"@en .
@@ -313,14 +429,18 @@ votes:VotingAssembly rdf:type owl:Class ;
 
 ###  http://localhost:5820/databases/votes/YoungVoter
 votes:YoungVoter rdf:type owl:Class ;
-                 owl:equivalentClass [ rdf:type owl:Restriction ;
-                                       owl:onProperty foaf:age ;
-                                       owl:someValuesFrom [ rdf:type rdfs:Datatype ;
-                                                            owl:onDatatype xsd:integer ;
-                                                            owl:withRestrictions ( [ xsd:maxExclusive 40
-                                                                                   ]
-                                                                                 )
-                                                          ]
+                 owl:equivalentClass [ owl:intersectionOf ( dbo:Person
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty foaf:age ;
+                                                              owl:someValuesFrom [ rdf:type rdfs:Datatype ;
+                                                                                   owl:onDatatype xsd:integer ;
+                                                                                   owl:withRestrictions ( [ xsd:maxExclusive 40
+                                                                                                          ]
+                                                                                                        )
+                                                                                 ]
+                                                            ]
+                                                          ) ;
+                                       rdf:type owl:Class
                                      ] ;
                  rdfs:subClassOf votes:HumanVoter ;
                  rdfs:label "YoungVoter"@en .
@@ -328,6 +448,18 @@ votes:YoungVoter rdf:type owl:Class ;
 
 ###  http://xmlns.com/foaf/0.1/Agent
 foaf:Agent rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://dbpedia.org/resource/Female
+dbr:Female rdf:type owl:NamedIndividual .
+
+
+###  http://dbpedia.org/resource/Male
+dbr:Male rdf:type owl:NamedIndividual .
 
 
 ###  Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi

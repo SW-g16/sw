@@ -157,12 +157,13 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
 |code|+|have working prototype|fix govtrack (but this is only a module, not the main program)|
-|code docs|-|describe|put and reference system diagram|
+|code docs|+|describe|put and reference system diagram|
 |screencast|-|show program functionality|needs making|
 |ontology|+|have ontology.ttl with and without sample data||
-|write|~|describe ontology construction methodology|currently spread around. reference system diagram.| // moved here from 'domain and inferencing'
+|write|~|describe ontology construction methodology|done generically for miners, specifically for govtrack, but not specifically for parltrack| // moved here from 'domain and inferencing'
 
 ### Extra points
+
 
 > Groups of 4 have another requirement for another 10 points. 
 > This means that groups of four need to achieve 100 points to be able to get a grade of 10 (instead of 90 points).
@@ -208,6 +209,8 @@ Identified todos are in tables. (Reformulated) tips, guiding questions and other
 
 // We have the framework, data and queries, but fail to glue it together. Our pretties pages are bootstrap tables|
 // we should consider to make a separate fiddle with some visualizations. 
+
+    to develop more interesting visualizations and data views. 
 
 |Category|Grade estimate|Description|Comment|
 |--------|--------------|-----------|------|
