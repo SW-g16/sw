@@ -72,6 +72,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+//TODO MENTION SOMEWHERE THAT WE SWITCHED TO DL TO TAKE ADVANTAGE OF INFERRED CLASSES
+
 # Final Report
 
 *Group 16 - Eirik K. Kultorp (2544992), Ross G. Chadwick (2533539), Ramses IJff (2545868)*
@@ -430,9 +432,11 @@ with (first) and without (second) inferencing.
 
 ![](images/inference_without.png)
 
-*image 5: Inference proof with inferenec disabled*
+*image 5: Inference proof with inference disabled*
 
+#### Enabling inference functionality
 
+During testing, several intended inference functions proved non-functional due to the way the default SL reasoning.type of Stardog handles Equivalence. Only by switching to DL could class membership for, for example, "FemaleVoter" be inferred.
 
 
 ## Data Reuse
@@ -716,6 +720,9 @@ For all goals there is room for practically indefinate refinement -
  we can combine more sources, we can enrich our data further, we can do more analysis, and we can improve our interface. 
 We have successfully established the necessary framework to enable these further refinements. 
  
+### Future Development
+//TODO we're not done and that *these* are the next todos
+
 # Appendix
 
 ## Source
