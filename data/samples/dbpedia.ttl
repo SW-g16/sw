@@ -1,0 +1,98 @@
+@prefix votes:	<http://localhost:5820/databases/votes/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+dbr:United_States_Congress	votes:legalizesFor	dbr:United_States .
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+dbr:United_States_Congress	dbo:houses	dbr:United_States_Senate ,
+		dbr:United_States_House_of_Representatives .
+dbr:Parliament_of_the_Federation_of_Bosnia_and_Herzegovina	votes:legalizesFor	dbr:Bosnia_and_Herzegovina ;
+	dbo:houses	dbr:House_of_Peoples_of_the_Federation_of_Bosnia_and_Herzegovina ,
+		dbr:House_of_Representatives_of_the_Federation_of_Bosnia_and_Herzegovina .
+dbr:Austrian_Parliament	votes:legalizesFor	dbr:Austria ;
+	dbo:houses	<http://dbpedia.org/resource/Federal_Council_(Austria)> ,
+		<http://dbpedia.org/resource/National_Council_(Austria)> .
+dbr:States_General_of_the_Netherlands	votes:legalizesFor	dbr:Netherlands ;
+	dbo:houses	<http://dbpedia.org/resource/Senate_(Netherlands)> ,
+		<http://dbpedia.org/resource/House_of_Representatives_(Netherlands)> .
+dbr:National_Congress_of_Chile	votes:legalizesFor	dbr:Chile ;
+	dbo:houses	dbr:Chamber_of_Deputies_of_Chile ,
+		dbr:Senate_of_Chile .
+dbr:Parliament_of_New_South_Wales	votes:legalizesFor	dbr:Australia ;
+	dbo:houses	dbr:New_South_Wales_Legislative_Assembly ,
+		dbr:New_South_Wales_Legislative_Council .
+dbr:Parliament_of_South_Africa	votes:legalizesFor	dbr:South_Africa ;
+	dbo:houses	dbr:National_Council_of_Provinces ,
+		dbr:National_Assembly_of_South_Africa .
+dbr:Parliament_of_South_Australia	votes:legalizesFor	dbr:Australia ;
+	dbo:houses	dbr:South_Australian_Legislative_Council ,
+		dbr:South_Australian_House_of_Assembly .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+dbr:Somalia	rdf:type	votes:Country .
+dbr:General_Assembly_of_Nova_Scotia	votes:legalizesFor	dbr:Canada ;
+	dbo:houses	dbr:Nova_Scotia_House_of_Assembly ,
+		dbr:Legislative_Council_of_Nova_Scotia ,
+		dbr:Council .
+dbr:Argentina	rdf:type	votes:Country .
+dbr:Australia	rdf:type	votes:Country .
+dbr:Austria	rdf:type	votes:Country .
+dbr:Bosnia_and_Herzegovina	rdf:type	votes:Country .
+dbr:Brazil	rdf:type	votes:Country .
+dbr:Canada	rdf:type	votes:Country .
+dbr:Chile	rdf:type	votes:Country .
+dbr:India	rdf:type	votes:Country .
+dbr:Kenya	rdf:type	votes:Country .
+dbr:Malaysia	rdf:type	votes:Country .
+dbr:Netherlands	rdf:type	votes:Country .
+dbr:Romania	rdf:type	votes:Country .
+dbr:South_Africa	rdf:type	votes:Country .
+dbr:Spain	rdf:type	votes:Country .
+dbr:Thailand	rdf:type	votes:Country .
+dbr:United_Kingdom	rdf:type	votes:Country .
+dbr:United_States	rdf:type	votes:Country .
+dbr:National_Assembly_of_Thailand	votes:legalizesFor	dbr:Thailand ;
+	dbo:houses	"National Legislative Assembly"@en .
+dbr:Saskatchewan_Legislature	votes:legalizesFor	dbr:Canada ;
+	dbo:houses	dbr:Legislative_Assembly_of_Saskatchewan .
+dbr:Parliament_of_Queensland	votes:legalizesFor	dbr:Australia ;
+	dbo:houses	dbr:Legislative_Assembly_of_Queensland .
+dbr:Parliament_of_Victoria	votes:legalizesFor	dbr:Australia ;
+	dbo:houses	dbr:Victorian_Legislative_Assembly ,
+		"Legislative Council"@en .
+dbr:Parliament_of_Kenya	votes:legalizesFor	dbr:Kenya ;
+	dbo:houses	dbr:Senate_of_Kenya ,
+		"National Assembly"@en .
+dbr:Legislature_of_Yukon	votes:legalizesFor	dbr:Canada ;
+	dbo:houses	dbr:Yukon_Territorial_Council ,
+		dbr:Yukon_Legislative_Assembly .
+dbr:Parliament_of_the_United_Kingdom	votes:legalizesFor	dbr:United_Kingdom ;
+	dbo:houses	dbr:House_of_Lords ,
+		dbr:House_of_Commons_of_the_United_Kingdom .
+dbr:Parliament_of_India	votes:legalizesFor	dbr:India ;
+	dbo:houses	dbr:Rajya_Sabha ,
+		dbr:Lok_Sabha .
+dbr:General_Assembly_of_Prince_Edward_Island	votes:legalizesFor	dbr:Canada ;
+	dbo:houses	dbr:House_of_Assembly_of_Prince_Edward_Island ,
+		dbr:Legislative_Assembly_of_Prince_Edward_Island ,
+		dbr:Legislative_Council_of_Prince_Edward_Island .
+dbr:National_Congress_of_Argentina	votes:legalizesFor	dbr:Argentina ;
+	dbo:houses	dbr:Argentine_Chamber_of_Deputies ,
+		dbr:Argentine_Senate .
+dbr:Federal_Parliament_of_Somalia	votes:legalizesFor	dbr:Somalia ;
+	dbo:houses	"Upper house"@en ,
+		"Lower house"@en .
+dbr:Alberta_Legislature	votes:legalizesFor	dbr:Canada ;
+	dbo:houses	dbr:Legislative_Assembly_of_Alberta .
+dbr:Cortes_Generales	votes:legalizesFor	dbr:Spain ;
+	dbo:houses	dbr:Senate_of_Spain ,
+		<http://dbpedia.org/resource/Congress_of_Deputies_(Spain)> .
+dbr:Parliament_of_Malaysia	votes:legalizesFor	dbr:Malaysia ;
+	dbo:houses	dbr:Dewan_Negara ,
+		dbr:Dewan_Rakyat .
+dbr:National_Congress_of_Brazil	votes:legalizesFor	dbr:Brazil ;
+	dbo:houses	dbr:Federal_Senate ,
+		"Chamber of Deputies"@en .
+dbr:Parliament_of_Romania	votes:legalizesFor	dbr:Romania ;
+	dbo:houses	dbr:Senate_of_Romania ,
+		<http://dbpedia.org/resource/Chamber_of_Deputies_(Romania)> .
+dbr:New_Brunswick_Legislature	votes:legalizesFor	dbr:Canada ;
+	dbo:houses	dbr:Legislative_Council_of_New_Brunswick ,
+		dbr:Legislative_Assembly_of_New_Brunswick .
