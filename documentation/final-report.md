@@ -261,7 +261,7 @@ as it allows for communicating more information at once.
 
 ### Domain
 
-he domain of our ontology is the set of Voting Assemblies' Voters votes on Bills around the world, and other immediately relevant and interesting data related to this. Our data is imported from the political entities in question, and is then fused into a single, combined ontology. Without inferring, this allows the program to see who voted for what, and 
+The domain of our ontology is the set of Voting Assemblies' Voters votes on Bills around the world, and other immediately relevant and interesting data related to this. Our data is imported from the political entities in question, and is then fused into a single, combined ontology. 
 
 Assertions we are interested include
  - Who votes for what?
@@ -280,9 +280,9 @@ then being applied to the relevant polity.
 
 ### Scope
 Due to the quantity and variety of data available on various political entities, the potential of this project is vast.
-For that reason, we are currently limiting our ontology to the data of a single political entity (The US Government).
-Mapping it to geographic and demographic information about politicians.
-The majority of mapping and inferencing will be based on the backgrounds of the politicians and their parties.
+For that reason, we are currently limiting our ontology to the data of but two political entities: The US government, and the European Council.
+Extracted data is mapped to geographic and demographic information about politicians.
+The majority of mapping and inferencing is based on the backgrounds of the politicians and their parties.
 
 ### Mapping and Inferencing Between Political entities
 If our ontology proves to be robust, we will expand our mapping to be between multiple political entities, creating a higher level of inferencing by comparing the entities themselves.
@@ -434,11 +434,6 @@ with (first) and without (second) inferencing.
 
 *image 5: Inference proof with inference disabled*
 
-#### Enabling inference functionality
-
-During testing, several intended inference functions proved non-functional due to the way the default SL reasoning.type of Stardog handles Equivalence. Only by switching to DL could class membership for, for example, "FemaleVoter" be inferred.
-
-
 ## Data Reuse
 
     // bits, were spread around, now dumped here. todo integrate
@@ -558,12 +553,12 @@ This is a description of the query.
 This diagram illustrates the main structure of our code. 
 
 `__main__.py` is run by a system administrator, who is prompted whether to 
-    - (re)start the stardog dbms
-    - reset the database,
-    - download new data from the data sources, 
-    - mine(produce/construct/convert) new data from the source data
-    - initiate LDR 
-    - initiate the temporary interface
+- (re)start the stardog dbms
+- reset the database,
+- download new data from the data sources, 
+- mine(produce/construct/convert) new data from the source data
+- initiate LDR 
+- initiate the temporary interface
 
 `interface.py` is a python script using flask to manage `interface.html`. 
 `interface.html` is visited by end users, and contains visualizations 
@@ -608,7 +603,7 @@ up to 50 billion triples is feasible for our database software (stardog).
      
 #### Miners 
 
-Our target datasets needs custom miners, because they are differently formatted. 
+The target datasets each needs custom miners, because they are differently formatted. 
 From the developers' point of view, the process of mining involves getting the data, inspecting the target datastructure, 
 
 For implementation details, see the miner source codes [in our repository](http://github.com/SW-g16/sw/mine). 
@@ -617,7 +612,7 @@ For implementation details, see the miner source codes [in our repository](http:
     
 The Govtrack miner iterates through a very large amount of json files nested in a folder tree. 
 The data is organized in Sections of Congress, and Congress is an entity which consists of the two 
-voting assemblies House and Senate. We manually define that they both legislate for USA. 
+voting assemblies; House and Senate. We manually define that they both legislate for the USA. 
 
 The data tree (in which govtrack.us exports their data) has this structure:  
 
@@ -630,26 +625,28 @@ The data tree (in which govtrack.us exports their data) has this structure:
                         
 Data about voters is available in a separate `.csv` file. 
 Mining this is necessary, as the id used in the voting data (above tree) is only referenced in this file. 
-It is also where to find personalia. So it is a necessity for enriching our dataset with voter data. 
+It is also where to find personalia. Therefore it is a prerequisite for enriching our dataset with voter data. 
+
+##### Parltrack
+//TODO PARLTRACK description
 
 ###### Mining Efficiency
 
 The task of mining is desiged to be executed only once for each session of congress. 
 This means some inefficiency is tolerable, but it's still an interesting challenge to write an efficient data miner. 
 We experimented with multithreading and different channels from python to stardog, but in the end found that
-our performance was bottlenecked by our hardware. On one common laptop the miner was tested on, we 
-had initial stable multithreaded mining, as shows in the screenshot. 
+performance was bottlenecked by available hardware. On one common laptop the miner was tested on, initial stable multithreaded mining was achieved, as shown in the screenshot. 
 
 ![](images/govtrack_multithread.png)
 
 *image 7: multithreaded mining performance on common laptop*
 
 However it would soon slow down significantly, and only one processor core would be active at a time. 
-We're sure stardog is not the bottleck, as it claims 300k triples per second. 
-If stardog was the bottleneck them mining process would take 23m triples / 300k triples per second = 83 seconds, 
-but for our test laptop it took approximately 50 minutes. 
-This leads us to suspect that the bottleneck is our hardware, 
-but until we've tested it on a more powerful system we can't confirm this. 
+Stardog is not the bottleck, as it claims 300k triples per second. 
+If stardog was the bottleneck the, mining process would take 23m triples / 300k triples per second = 83 seconds, 
+but for the test laptop it took approximately 50 minutes. 
+This leads to the suspicion that the bottleneck is the hardware on which the test was performed, 
+but until this is tested it on a more powerful system this cannot be confirmed.
   
 ###### Implementation issues
 
@@ -660,7 +657,10 @@ but not on the govtrack data, and that this would occur when adding `(2/3 as ?va
 Further, when this query was called stardog would throw a "Divide by 0" error. 
 We could not make sense of this behavior, but assume it's due to some unintended feature of the govtrack semantic output. 
 
-##### Parltrack
+###### Enabling inference functionality
+
+During testing, several intended inference functions proved non-functional due to the way the default SL reasoning.type of Stardog handles Equivalence. Only by switching to DL could class membership for, for example, "FemaleVoter" be inferred.
+
 
 ### User Interface
 
@@ -674,29 +674,26 @@ See them in action in the screencast, and the code on github.
   
 ## Bonus Assignments
 
-We evaluate to which extent we fulfilled the bonus requirements. 
+The following section details the degree to which bonus assignments have been fulfilled.
 
 ### Linked Data Star
 
-We have an endpoint containing previously non-existent triples running on localhost, 
-    and are able to access them with queries from anywhere on the computer, 
-    and we have an interface that involves dereferencing URIs. 
-Our data is in principle publishable, but work on security and further refinement of the ontology would come first. 
+The project produces an endpoint containing previously non-existent triples running on localhost, and is able to access them with queries from anywhere on the computer, as well as providing an interface that involves dereferencing URIs. 
+The data is in principle publishable, but work on security and further refinement of the ontology would come first. 
 
 ### Linked Data Producer
 
-We use existing external vocabularies and our own vocabulary to construct new semantic data from non-semantic data. 
+Existing external vocabularies is used with a custom vocabulary in order to construct new semantic data from non-semantic data. 
 
 ### Owl Wizzard
 
-We have some inference, but we're not wizards. 
+While there is some interference, it does not fit the 'wizard' requirement.
 
 ### Interaction Guru
-
-We enable users to browse data, filtered through both our custom data views and LD'Rs default generic views.
-We inherit the neat design of LD-R, and bootstrap our non-ldr component for aestethic appeal. 
-We perform some basic visualization (line plots). 
-While what we currently do is not on the Guru-level, we have opened up the interface needed
+Users have the ability view data filtered through both our custom data views and LD'Rs default generic views.
+Our program inherits the design functionality of LD-R, as well as bootstrapping non-ldr component for aestethic appeal. 
+The program includes some basic visualization in the form line plots.
+While the program currently does not function at the Guru-level, the interface needed has opened up.
   
 ## Conclusion
 
@@ -721,7 +718,7 @@ For all goals there is room for practically indefinate refinement -
 We have successfully established the necessary framework to enable these further refinements. 
  
 ### Future Development
-//TODO we're not done and that *these* are the next todos
+//TODO Future developments
 
 # Appendix
 
