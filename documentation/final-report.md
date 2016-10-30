@@ -83,11 +83,8 @@
 *[latest version of this document on GitHub](https://github.com/SW-g16/sw/blob/master/documentation/final-report.md).*
 
 ## Abstract
-//TODO IMPROVE
-
-An increasing amount of data on elected representative's votes on bills are being made freely available online,
-but they are mostly in different formats. 
-This report documents a framework and some instance components for combining these sources into a single ontology, 
+An increasing amount of data on elected representative's votes on bills are being made freely available online, but they do not share a common format.
+This report documents a framework and several instance components for combining these sources into a single ontology, 
 making it easier to perform data analysis across the data of several different voting assemblies. 
 The system integrates data miners, UIs, and a semantic database, 
 forming a functioning system ready to be expanded to include more data sources, more sophisticated data analysis, 
@@ -102,32 +99,30 @@ identifying the potential users, determine how we are going to design it, and gi
 ## Goals
 
 // |write|6:8|define goals of application|goals were written weeks ago. needs update.|
+// Updated for formal language, very little contents. 
 
 ### Primary Goals
-Our goal for the project was to provide an application capable of vizualizing the internal votes of legislative assemblies, providing users with oversight and the tools with which to analyze this data through filters. For this to work, we need to achieve the following sub-goals:
- - We need to provide an endpoint that combines the open voting data from several sources.
- - We need to enhance said endpoint as to achieve 5 TimBL-stars
- - The data in the endpoint needs to have several meaningful Data Views for humans defined.
- - These Data Views need to be output to LD-R UI components
+The goal of this project was to provide an application capable of vizualizing the internal votes of legislative assemblies, providing users with oversight and the tools with which to analyze this data through filters. To achieve this, the following sub-goals needed to be achieved:
+ - The creation of an endpoint that combines the open voting data from a number of legislative assemblies.
+ - The enhancement of this endpoint until it fits the 5-TimBL star requirements.
+ - Definining several meaningful Data Views for this endpoint.
+ - Outputting these Data Views to a suitable user interface.
+ - Integrating UI elements that allow users to select and apply filters to the data.
 
 ### Secondary Goals
-As additional goals, we also considered trying to achieve the following:
+The following goals were also considered part of the project. However, as they did not pertain to core functionality, they were relegated to secondary status.
  - Integrating a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists.
  - Analyzing the data using machine learning techniques for semantic data.
- - Defining Data Views for viewing statistics and interesting output of analyzing machiness.
+ - Defining Data Views for viewing statistics and other interesting output of analyzing machiness.
  - Adding LD-R UI functionality so standard plots and charts could be used to vizualize statistics and the output of the analyzer.
 
 ## Application 
-
 ### Description
-
 #### Open Endpoint
-
-Upon employment, we'd make openly available a read-only SPARQL endpoint, releasing our produced data to the semantic web.
+Upon application deployment, a read-only SPARQL endpoint would be made publicly, releasing the project data to the semantic web.
 
 #### Technical Requirements
-//TODO label tabel
-The Satisfaction requirements imply the following Technical Requirements
+The goals and project requirements imply the following Technical Requirements
 
 |TR_id|is essential|description|
 |---|---|---|
@@ -138,12 +133,11 @@ The Satisfaction requirements imply the following Technical Requirements
 |TR_5|no|Visualize trivial statistics|
 |TR_6|no|Perform non-trivial analysis on voting data to |
 |TR_7|no|Visualize results of non-trivial analysis|
+[Table 1: Technical requirements and their level of essentiality]
 
 ## Users
-
-### Satistfaction Requirements
-
-To design this program, we needed to know who we were desigining this for, and what these people would want out of the program. As such, we defined the following satisfaction requirements: 
+### Satisfaction Requirements
+For description of the application's target groups, the following satisfaction requirements were defined
 
  - **Facts**: The ability of the program to provide the users with certain facts. Who voted for what? What passed and what failed, and with what margin?
  - **Analysis**: The ability of the program to allow the user to analyze the data. What patterns exist in the behavior of voters, parties and voting assembles? How do entities cluster and how do values correlate?
@@ -152,18 +146,16 @@ To design this program, we needed to know who we were desigining this for, and w
  - **Documentation**: The degree to which the program is documented, and the documentation is clear.
  - **Code accessibility**: The degree to which our code is open and accessible. 
 
-We have also defined several target groups.
-
-
 ### Target groups by Satistfaction Requirements
 
-|write|6:8|define target groups|is elaborate but needs updating|
+//|write|6:8|define target groups|is elaborate but needs updating|
 
 |Target Group|Fact|Analysis|Sharability|Visualization|Documentation|Code Accessibility|
 |---|---|---|---|---|---|---|
 |TG_1|1|1|1|1|0|0|
 |TG_2|1|1|1|1|1|1|
 |TG_3|0|1|1|1|0|0|
+[Table 2: Target Groups and projected satisfaction requirements]
 
 #### Target group 1: People with domain interest
 These users are interested in the data itself, and in any patterns that can be found in said data.
@@ -177,25 +169,21 @@ They inherit the needs of all other users.
 These users may skip past explanatory text to look at visualizations, regardless of the domain.
 They want to understand as much information as efficiently as possible from data visualizations.
 
-### Satisfaction Requirements per Target Group
-//TODO label tabel
-The Target Groups have these Satisfaction Requirements, presented in no particular order.
-
 ## Interface Design // corresponds to 'Design and Walkthrough'
+### Walkthrough
+//TODO this is outdated, but does include suggested future work.
 
-    
-    // walkthrough is merged with the description of the interface already. does it need a separate section? it would be bound to be repetitive
+//old walkthrough
+Upon initialization, the user is presented with the default page, providing him with an overview of the data, as well as links to acess to acess the data of the various political entities. Clicking one of these will bring up all the relevant data (as defined by a Data View) taken from that source, associated with that source through interlinking of endpoints, or inferred about that source. The user may also click additional buttons for the generation of graphs and statistics. If a user finds this data interesting enough to share, he can do so by copying the URL currently in the address bar, and sharing that URL. Any other user who opens that link will see the same data in the same way as the first use.
 
-    // this is outdated, but does include suggested future work. todo extract future work bits
-    // ### Walkthrough
-    // Upon initialization, the user is presented with the default page, providing him with an overview of the data, as well as links to acess to acess the data of the various political entities. Clicking one of these will bring up all the relevant data (as defined by a Data View) taken from that source, associated with that source through interlinking of endpoints, or inferred about that source. The user may also click additional buttons for the generation of graphs and statistics. If a user finds this data interesting enough to share, he can do so by copying the URL currently in the address bar, and sharing that URL. Any other user who opens that link will see the same data in the same way as the first use.
-    // Users can also generate a graph of the data defined by applying their own user-defined filters on the dataset. A user may select filters such as only showing bills from a specific period, only showing people that voted a specific way on a specific bill or only showing politicians that fit a particular profile (such as wealth, level of education, nation of birth or gender). Upon selecting these filters, the user presses 'submit'. If the amount of data that is called is sufficiently large, the user is provided with a warning prompt, giving him a chance to cancel, upon which the user can modify their filter and retry. Upon submission, a semantic graph is returned, sent to the application's WebVowl component for visualization.
-    
-    //TODO HEADER CULLING. The amount of sub-headers in this section is excessive and does not make for a good report when there is a new header every other sentence.
+//old walkthrough
+Users can also generate a graph of the data defined by applying their own user-defined filters on the dataset. A user may select filters such as only showing bills from a specific period, only showing people that voted a specific way on a specific bill or only showing politicians that fit a particular profile (such as wealth, level of education, nation of birth or gender). Upon selecting these filters, the user presses 'submit'. If the amount of data that is called is sufficiently large, the user is provided with a warning prompt, giving him a chance to cancel, upon which the user can modify their filter and retry. Upon submission, a semantic graph is returned, sent to the application's WebVowl component for visualization.
 
+//old interface
 In this section we describe our interface in terms of what components it consists of, 
 what tasks it performs, and how it interacts with other components.
 
+//old interface
 The interface includes the LD-R browser, a highly configureable semantic web browser. 
 LD-R is suitable for our application, but unfortunately we did not succeed in configuring it in time for the deadline of this project. 
 Instead we are including a fiddle which performs some of the tasks we intended for LD-R (and our intended extentions to it) to do. 
@@ -203,22 +191,24 @@ Instead we are including a fiddle which performs some of the tasks we intended f
 ### Data Views
 
 Data views are implictly defined by queries generated from user's uri lookups, implemented through GET requests. 
-The data views are different, and may or may not include statistics on the requested data. 
+The data views are varied, and may or may not include statistics on the requested data. 
 We've only implemented two views, but have the framework to increase this number indefinitely. 
 In both views, the column headers of the screenshot together explicitly define the data view. 
 
 #### Party View
 
 This view gives a summary of a specific party. Note the uri as value of `bill` in the url bar, 
-which is dereference by the interface. 
+which is dereferenced by the interface. 
 
 ![](images/party.png)
+[Image 1: Party View]
 
 #### Parties View
 
 This view gives a summary of a set of parties. It takes no input. 
 
 ![](images/parties.png)
+[Image 2: Parties View]
 
 #### Statistics in Data Views
 
@@ -230,7 +220,6 @@ The statistics computed are `proportion of abstaining party members`
 and ´unity = (number of upvoters - number of downvoters) / (number of upvoters + number of downvoters)´. 
 
 #### Visualization 
-
 
 As evidenced in the screenshot at [Party View](#Party-View), we perform some basic visualization of the some data. 
 Here, we plot the values of the statistics defined above across time. 
@@ -425,8 +414,10 @@ These are screenshots of the results of the same query to the same stardog datab
 with (first) and without (second) inferencing. 
 
 ![](images/inference_with.png)
+[image 3: Inference proof with inference enabled]
 
 ![](images/inference_without.png)
+[image 3: Inference proof with inferenec disabled]
 
 
 
@@ -544,6 +535,7 @@ This is a description of the query.
 ### Overview
 
 ![](images/designdiagram.png)
+[image 5: Overview of program structure]
 
 ### Data Mining
 
@@ -666,14 +658,15 @@ We wrote scripts to automize setup of our dependencies and source code.
 
 |goal is met|goal|
 |-----------|----|
-|+|provide an endpoint that combines voting data from several sources|
-|+|achieve 5 TimBL-stars|
-|+|semantify non-semantic data|
-|~|The data in the endpoint needs to have several meaningful Data Views for humans defined|
-|~|Output to LD-R UI components|
-|~|Analyzing the data |
-|+|Present analysis results in a clear and meaningful way|
-|-|Integrate a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists.|
+|yes|provide an endpoint that combines voting data from several sources|
+|yes|achieve 5 TimBL-stars|
+|yes|semantify non-semantic data|
+|partially|The data in the endpoint needs to have several meaningful Data Views for humans defined|
+|partially|Output to LD-R UI components|
+|yes|Analyzing the data |
+|partially|Present analysis results in a clear and meaningful way|
+|no|Integrate a visual network graph data browser as a LD-R UI component, or apply one if such a component already exists.|
+[table 3: project goals and their fulfilment]
 
 We achieved most of our goals with partial success. 
 For all goals there is room for practically indefinate refinement - 
