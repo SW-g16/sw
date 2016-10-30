@@ -28,10 +28,39 @@ ORDER BY ?totalVotes
 ### 2. http://data.consilium.europa.eu/sparql
   1. **Get the act and what each country voted on said act:**
 
+	```
+	# MILDLY FUCKED...
+
+	# This is here b/c I was experimenting with select first
+	CONSTRUCT {
+		?country votes:
+		eucovote:votedinfavour
+	}
+
+	PREFIX eucodim: <http://data.consilium.europa.eu/data/public_voting/qb/dimensionproperty/>
+	PREFIX eucoprop: <http://data.consilium.europa.eu/data/public_voting/qb/measureproperty/>
+	PREFIX eucovote: <http://data.consilium.europa.eu/data/public_voting/consilium/vote/>
+	PREFIX votes: <http://localhost:5820/votes/query>
+
+	SELECT ?votedinfavour ?votedagainst ?abstained
+	FROM <http://data.consilium.europa.eu/id/dataset/votingresults>
+	WHERE {
+		?observation eucodim:act ?act .
+		?act <http://www.w3.org/2004/02/skos/core#definition> ?description .
+	  ?observation eucodim:country ?country .
+		?observation eucoprop:vote ?vote .
+	  ?vote eucovote:votedinfavour ?votedinfavour .
+		?vote eucovote:votedagainst ?votedagainst .
+		?vote eucovote:abstained ?abstained .
+	}
+	ORDER BY DESC(?country)
+	```
+
 ```
 PREFIX eucodim: <http://data.consilium.europa.eu/data/public_voting/qb/dimensionproperty/>
 PREFIX eucoprop: <http://data.consilium.europa.eu/data/public_voting/qb/measureproperty/>
 PREFIX eucovote: <http://data.consilium.europa.eu/data/public_voting/consilium/vote/>
+
 
 SELECT (STR(?actnumber) as ?actnumber) (STR(?description) as ?description) (STR(?countryName) as ?countryName) (STR(?voted) as ?voted)
 from <http://data.consilium.europa.eu/id/dataset/votingresults>
