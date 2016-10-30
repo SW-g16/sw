@@ -23,8 +23,9 @@ forming a functioning system ready to be expanded to include more data sources, 
 and more intuition-friendly ways of visualizing the data and analysis results. 
 
 ## Introduction
-This report was made for the course 'Semanatic Web', at the Vrije Universiteit of Amsterdam, in which students were tasked with creating a semantic web application of their own choice. For this task, our group chose to tackle politics. We had learned that many legislative assemblies have been making parliamentary informatics available, but we could find no tool that allowed for analysis and oversight of such parliamentary informatics. As such, we decided to make one of our own. Specifically, we decided to create a modular tool for visualizing and filtering the voting-related data from a small set of legislative assemblies.
-ctrl+z? 
+
+This report was made for the course 'Semanatic Web', at the Vrije Universiteit of Amsterdam, in which students were tasked with creating a semantic web application, with relatively free bounds. For this task, our group chose to tackle politics. We had learned that many legislative assemblies have been making parliamentary informatics available, but we could find no tool that allowed for analysis and oversight of such parliamentary informatics. As such, we decided to make one of our own. Specifically, we decided to create a modular tool for visualizing and filtering the voting-related data from a small set of legislative assemblies.
+
 This report covers the creation of that tool.
 
 This report is structured according to the milestones set for the course. In the first milestone we will talk about planning the application design, establishing the goals, 
@@ -643,6 +644,7 @@ How do voters and party cluster?
 
 Bill texts contain desirable but non-semantic information. 
 Tools exist for constructing IRIs to popular graphs like dbpedia from natural lang sentences.  
+This would help us to further enrich data
 
 # Appendix
 
