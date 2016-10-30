@@ -55,13 +55,7 @@
   - [Application Functionality](#application-functionality)
     - [Overview](#overview)
     - [Data Mining](#data-mining)
-      - [Space Complexity](#space-complexity)
-        - [Scalability Issues?](#scalability-issues)
-      - [Miners](#miners)
-        - [Govtrack](#govtrack)
-          - [Mining Efficiency](#mining-efficiency)
-          - [Implementation issues](#implementation-issues)
-        - [Parltrack](#parltrack)
+      - [Govtrack](#govtrack)
     - [User Interface](#user-interface)
     - [Developer environment working scripts](#developer-environment-working-scripts)
     - [Developer environment setup](#developer-environment-setup)
@@ -73,7 +67,8 @@
   - [Conclusion](#conclusion)
     - [Goals met](#goals-met)
 - [Appendix](#appendix)
-  - [Source](#source)
+  - [Ontology](#ontology-1)
+  - [Code Base](#code-base)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -86,6 +81,8 @@
 *Keywords: semantic web, data mining, sparql querying, inferencing parliamentary informatics, government data, open data* 
 
 *[latest version of this document on GitHub](https://github.com/SW-g16/sw/blob/master/documentation/final-report.md).*
+
+*screenshots are taken on a small test dataset*
 
 ## Abstract
 //TODO IMPROVE
@@ -247,6 +244,9 @@ We were bottlenecked by inability to configure data views with it.
 Until we succeed in this, we only use the default configurations of LD-R. 
 LD-R is still a useful interface, even without customization,
 as it allows us to semantically browse our data and inferences made from it. 
+Below is a screenshot of LD-R listing our entities.
+
+![](images/ldr_list.png)
 
 ### Network Graph Browser
 
@@ -552,6 +552,21 @@ This is a description of the query.
 
 This diagram illustrates the main structure of our code. 
 
+`__main__.py` is run by a system administrator, who is prompted whether to 
+    - (re)start the stardog dbms
+    - reset the database,
+    - download new data from the data sources, 
+    - mine(produce/construct/convert) new data from the source data
+    - initiate LDR 
+    - initiate the temporary interface
+
+`interface.py` is a python script using flask to manage `interface.html`. 
+`interface.html` is visited by end users, and contains visualizations 
+and some pages for certain dataviews. It also links to `LD-R`, through which users
+can browse all our data through LD-R's generic data view. 
+
+`database.ttl` is queryable from anywhere by sending a get requests to the endpoint managed by stardog. 
+
 ### Data Mining
 
 The process of generating semantic triples from non-semantic sources. 
@@ -643,25 +658,38 @@ We could not make sense of this behavior, but assume it's due to some unintended
 ### User Interface
 
 We partially integrated LD-R and we wrote an interface with python with flask, html and js. 
+See the screenshots of this report, the appended screencast, and the code on github. 
 
 ### Developer environment working scripts
 
 We wrote scripts to automize task sequences that reoccured during development. 
-
-### Developer environment setup
-  
-We wrote scripts to automize setup of our dependencies and source code. 
+See them in action in the screencast, and the code on github. 
   
 ## Bonus Assignments
 
+We evaluate to which extent we fulfilled the bonus requirements. 
+
 ### Linked Data Star
+
+We have an endpoint containing previously non-existent triples running on localhost, 
+    and are able to access them with queries from anywhere on the computer, 
+    and we have an interface that involves dereferencing URIs. 
+Our data is in principle publishable, but work on security and further refinement of the ontology would come first. 
 
 ### Linked Data Producer
 
+We use existing external vocabularies and our own vocabulary to construct new semantic data from non-semantic data. 
 
 ### Owl Wizzard
 
+We have some inference, but we're not wizards. 
+
 ### Interaction Guru
+
+We enable users to browse data, filtered through both our custom data views and LD'Rs default generic views.
+We inherit the neat design of LD-R, and bootstrap our non-ldr component for aestethic appeal. 
+We perform some basic visualization (line plots). 
+While what we currently do is not on the Guru-level, we have opened up the interface needed
   
 ## Conclusion
 
