@@ -1,15 +1,11 @@
-import traceback
-from pprint import pprint
+from flask import Flask, render_template, request
+import sys
 
-from flask import Flask, render_template, request, jsonify
-
-import constants as c
-
-from SPARQLWrapper import SPARQLWrapper
-from flask import json
+assert len(sys.argv)==2, 'bad arguments, usage: %s <database_name>' % sys.argv[0]
+ENDPOINT = 'http://localhost:5820/%s/query'
+DB_NAME = sys.argv[1]
 
 app = Flask(__name__)
-
 
 def get_data(endpoint,query):
 
@@ -30,10 +26,11 @@ def parties():
     import os
     filename = os.path.join(os.path.dirname(__file__)+ '/../queries/party_statistics_across_bills.rq')
     with file(filename) as f: query = f.read()
-    results = get_data(c.ENDPOINT,query)
+    results = get_data(ENDPOINT % DB_NAME, query)
     stats = results['results']['bindings']
     parties = {}
     for row in stats:
+        print row
         party_view = {}
         for key in row:
             print row[key]
@@ -132,7 +129,7 @@ def party():
 
 """
     print query
-    results = get_data(c.ENDPOINT,query)
+    results = get_data(ENDPOINT % DB_NAME, query)
     stats = results['results']['bindings']
     party_history = []
     for row in stats:

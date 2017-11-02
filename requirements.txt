@@ -1,0 +1,6 @@
+rdflib==4.2.2
+requests==2.9.1
+ijson==2.3
+psutil==5.4.0
+Flask==0.12.2
+SPARQLWrapper==1.8.0

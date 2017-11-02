@@ -68,6 +68,13 @@ votes:abstains rdf:type owl:ObjectProperty ;
                rdfs:range votes:Bill .
 
 
+###  http://localhost:5820/databases/votes/present
+votes:present  rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf votes:reactsToVote ;
+               rdfs:domain votes:Voter ;
+               rdfs:range votes:Bill .
+
+
 ###  http://localhost:5820/databases/votes/appliesTo
 votes:appliesTo rdf:type owl:ObjectProperty ;
                 rdfs:domain votes:Bill ;
